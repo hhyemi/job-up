@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // reactstrap components
 import { Container, Row, Col } from 'reactstrap';
 
@@ -7,7 +7,7 @@ import AuthNavbar from '../components/Navbars/AuthNavbar';
 import Footer from '../components/Footers/Footer';
 
 function Auth(props) {
-  React.useEffect(() => {
+  useEffect(() => {
     document.body.classList.add('bg-default');
     // Specify how to clean up after this effect:
     return function cleanup() {
@@ -23,7 +23,7 @@ function Auth(props) {
             <div className="header-body text-center mb-5">
               <Row className="justify-content-center">
                 <Col lg="5" md="6">
-                  <h1 className="text-white">LOGIN</h1>
+                  <h1 className="text-white">{props.children.type.name}</h1>
                 </Col>
               </Row>
             </div>
