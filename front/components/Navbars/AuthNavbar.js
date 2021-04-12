@@ -1,17 +1,7 @@
-import React from "react";
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
 // reactstrap components
-import {
-  UncontrolledCollapse,
-  NavbarBrand,
-  Navbar,
-  NavItem,
-  NavLink,
-  Nav,
-  Container,
-  Row,
-  Col,
-} from "reactstrap";
+import { UncontrolledCollapse, NavbarBrand, Navbar, NavItem, NavLink, Nav, Container, Row, Col } from 'reactstrap';
 
 function AdminNavbar() {
   return (
@@ -21,10 +11,7 @@ function AdminNavbar() {
           <Link href="/admin/dashboard">
             <span>
               <NavbarBrand href="#pablo">
-                <img
-                  alt="..."
-                  src={require("assets/img/brand/nextjs_argon_white.png")}
-                />
+                <img alt="..." src={require('assets/img/brand/nextjs_argon_white.png')} />
               </NavbarBrand>
             </span>
           </Link>
@@ -36,10 +23,7 @@ function AdminNavbar() {
               <Row>
                 <Col className="collapse-brand" xs="6">
                   <Link href="/admin/dashboard">
-                    <img
-                      alt="..."
-                      src={require("assets/img/brand/nextjs_argon_black.png")}
-                    />
+                    <img alt="..." src={require('assets/img/brand/nextjs_argon_black.png')} />
                   </Link>
                 </Col>
                 <Col className="collapse-close" xs="6">

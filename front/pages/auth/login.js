@@ -1,6 +1,4 @@
-import React from 'react';
-
-// reactstrap components
+import React, { useCallback, useEffect } from 'react';
 import {
   Button,
   Card,
@@ -15,10 +13,36 @@ import {
   Row,
   Col
 } from 'reactstrap';
-// layout for this page
-import Auth from 'layouts/Auth.js';
+import Router from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
 
-function Login() {
+import Auth from '../../layouts/Auth';
+import useInput from '../../hooks/useInput';
+import { loginRequestAction } from '../../reducers/user';
+
+const Login = () => {
+  const dispatch = useDispatch();
+  const [email, onChangeEmail] = useInput('');
+  const [password, onChangePassword] = useInput('');
+  const { me } = useSelector((state) => state.user);
+
+  // 로그인 성공
+  useEffect(() => {
+    if (me) {
+      Router.replace('/');
+    }
+  }, [me]);
+
+  // 로그인 버튼 클릭
+  const onSubmitForm = useCallback(
+    (e) => {
+      e.preventDefault();
+      console.log(email, password);
+      dispatch(loginRequestAction({ email, password }));
+    },
+    [email, password]
+  );
+
   return (
     <>
       <Col lg="5" md="7">
@@ -53,7 +77,7 @@ function Login() {
             </div>
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
-            <Form role="form">
+            <Form role="form" onSubmit={onSubmitForm}>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
@@ -61,7 +85,15 @@ function Login() {
                       <i className="ni ni-email-83" />
                     </InputGroupText>
                   </InputGroupAddon>
-                  <Input placeholder="Email" type="email" autoComplete="new-email" />
+                  <Input
+                    placeholder="Email"
+                    name="user-email"
+                    type="email"
+                    value={email}
+                    onChange={onChangeEmail}
+                    required
+                    autoComplete="new-email"
+                  />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -71,11 +103,19 @@ function Login() {
                       <i className="ni ni-lock-circle-open" />
                     </InputGroupText>
                   </InputGroupAddon>
-                  <Input placeholder="Password" type="password" autoComplete="new-password" />
+                  <Input
+                    placeholder="Password"
+                    name="user-password"
+                    type="password"
+                    value={password}
+                    onChange={onChangePassword}
+                    required
+                    autoComplete="new-password"
+                  />
                 </InputGroup>
               </FormGroup>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button className="my-4" color="primary" type="submit">
                   LOGIN
                 </Button>
               </div>
@@ -97,7 +137,7 @@ function Login() {
       </Col>
     </>
   );
-}
+};
 
 Login.layout = Auth;
 

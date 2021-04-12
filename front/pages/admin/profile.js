@@ -1,22 +1,11 @@
-import React from "react";
+import React from 'react';
 
 // reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  FormGroup,
-  Form,
-  Input,
-  Container,
-  Row,
-  Col,
-} from "reactstrap";
+import { Button, Card, CardHeader, CardBody, FormGroup, Form, Input, Container, Row, Col } from 'reactstrap';
 // layout for this page
-import Admin from "layouts/Admin.js";
+import Admin from 'layouts/Admin.js';
 // core components
-import UserHeader from "components/Headers/UserHeader.js";
+import UserHeader from 'components/Headers/UserHeader.js';
 
 function Profile() {
   return (
@@ -31,24 +20,14 @@ function Profile() {
                 <Col className="order-lg-2" lg="3">
                   <div className="card-profile-image">
                     <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                      <img
-                        alt="..."
-                        className="rounded-circle"
-                        src={require("assets/img/theme/team-4-800x800.jpg")}
-                      />
+                      <img alt="..." className="rounded-circle" src={require('assets/img/theme/team-4-800x800.jpg')} />
                     </a>
                   </div>
                 </Col>
               </Row>
               <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                 <div className="d-flex justify-content-between">
-                  <Button
-                    className="mr-4"
-                    color="info"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                    size="sm"
-                  >
+                  <Button className="mr-4" color="info" href="#pablo" onClick={(e) => e.preventDefault()} size="sm">
                     Connect
                   </Button>
                   <Button
@@ -83,7 +62,7 @@ function Profile() {
                 </Row>
                 <div className="text-center">
                   <h3>
-                    Jessica Jones
+                    Jessica Jones222
                     <span className="font-weight-light">, 27</span>
                   </h3>
                   <div className="h5 font-weight-300">
@@ -100,9 +79,8 @@ function Profile() {
                   </div>
                   <hr className="my-4" />
                   <p>
-                    Ryan — the name taken by Melbourne-raised, Brooklyn-based
-                    Nick Murphy — writes, performs and records all of his own
-                    music.
+                    Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records
+                    all of his own music.
                   </p>
                   <a href="#pablo" onClick={(e) => e.preventDefault()}>
                     Show more
@@ -119,12 +97,7 @@ function Profile() {
                     <h3 className="mb-0">My account</h3>
                   </Col>
                   <Col className="text-right" xs="4">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
+                    <Button color="primary" href="#pablo" onClick={(e) => e.preventDefault()} size="sm">
                       Settings
                     </Button>
                   </Col>
@@ -132,17 +105,12 @@ function Profile() {
               </CardHeader>
               <CardBody>
                 <Form>
-                  <h6 className="heading-small text-muted mb-4">
-                    User information
-                  </h6>
+                  <h6 className="heading-small text-muted mb-4">User information</h6>
                   <div className="pl-lg-4">
                     <Row>
                       <Col lg="6">
                         <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-username"
-                          >
+                          <label className="form-control-label" htmlFor="input-username">
                             Username
                           </label>
                           <Input
@@ -156,10 +124,7 @@ function Profile() {
                       </Col>
                       <Col lg="6">
                         <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-email"
-                          >
+                          <label className="form-control-label" htmlFor="input-email">
                             Email address
                           </label>
                           <Input
@@ -174,10 +139,7 @@ function Profile() {
                     <Row>
                       <Col lg="6">
                         <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-first-name"
-                          >
+                          <label className="form-control-label" htmlFor="input-first-name">
                             First name
                           </label>
                           <Input
@@ -191,10 +153,7 @@ function Profile() {
                       </Col>
                       <Col lg="6">
                         <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-last-name"
-                          >
+                          <label className="form-control-label" htmlFor="input-last-name">
                             Last name
                           </label>
                           <Input
@@ -210,17 +169,12 @@ function Profile() {
                   </div>
                   <hr className="my-4" />
                   {/* Address */}
-                  <h6 className="heading-small text-muted mb-4">
-                    Contact information
-                  </h6>
+                  <h6 className="heading-small text-muted mb-4">Contact information</h6>
                   <div className="pl-lg-4">
                     <Row>
                       <Col md="12">
                         <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-address"
-                          >
+                          <label className="form-control-label" htmlFor="input-address">
                             Address
                           </label>
                           <Input
@@ -236,10 +190,7 @@ function Profile() {
                     <Row>
                       <Col lg="4">
                         <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-city"
-                          >
+                          <label className="form-control-label" htmlFor="input-city">
                             City
                           </label>
                           <Input
@@ -253,10 +204,7 @@ function Profile() {
                       </Col>
                       <Col lg="4">
                         <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-country"
-                          >
+                          <label className="form-control-label" htmlFor="input-country">
                             Country
                           </label>
                           <Input
@@ -270,10 +218,7 @@ function Profile() {
                       </Col>
                       <Col lg="4">
                         <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-country"
-                          >
+                          <label className="form-control-label" htmlFor="input-country">
                             Postal code
                           </label>
                           <Input

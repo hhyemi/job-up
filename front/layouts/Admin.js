@@ -2,12 +2,13 @@ import React from 'react';
 import { useRouter } from 'next/router';
 // reactstrap components
 import { Container } from 'reactstrap';
-// core components
-import AdminNavbar from 'components/Navbars/AdminNavbar.js';
-import Footer from 'components/Footers/Footer';
-import Sidebar from 'components/Sidebar/Sidebar.js';
-
 import routes from 'routes.js';
+
+// core components
+import AdminNavbar from 'components/Navbars/AdminNavbar';
+import AuthNavbar from '../components/Navbars/AuthNavbar';
+import Footer from 'components/Footers/Footer';
+import Sidebar from 'components/Sidebar/Sidebar';
 
 function Admin(props) {
   // used for checking current route
@@ -38,7 +39,8 @@ function Admin(props) {
         }}
       />
       <div className="main-content" ref={mainContentRef}>
-        <AdminNavbar {...props} brandText={getBrandText()} />
+        {/* <AdminNavbar {...props} brandText={getBrandText()} /> */}
+        <AuthNavbar />
         {props.children}
         <Container fluid>
           <Footer />
