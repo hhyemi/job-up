@@ -1,24 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-// reactstrap components
 import { Container } from 'reactstrap';
-import routes from 'routes.js';
+import { useSelector } from 'react-redux';
 
-// core components
-import AdminNavbar from 'components/Navbars/AdminNavbar';
+import AdminNavbar from '../components/Navbars/AdminNavbar';
 import AuthNavbar from '../components/Navbars/AuthNavbar';
-import Footer from 'components/Footers/Footer';
-import Sidebar from 'components/Sidebar/Sidebar';
+import Footer from '../components/Footers/Footer';
+import Sidebar from '../components/Sidebar/Sidebar';
+import routes from '../routes';
 
 function Admin(props) {
-  // used for checking current route
   const router = useRouter();
+  const { me } = useSelector((state) => state.user);
+
   let mainContentRef = React.createRef();
-  React.useEffect(() => {
+  useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainContentRef.current.scrollTop = 0;
   }, []);
+
   const getBrandText = () => {
     for (let i = 0; i < routes.length; i++) {
       if (router.route.indexOf(routes[i].layout + routes[i].path) !== -1) {
@@ -39,8 +40,7 @@ function Admin(props) {
         }}
       />
       <div className="main-content" ref={mainContentRef}>
-        {/* <AdminNavbar {...props} brandText={getBrandText()} /> */}
-        <AuthNavbar />
+        {me ? <AdminNavbar {...props} brandText={getBrandText()} /> : <AuthNavbar />}
         {props.children}
         <Container fluid>
           <Footer />

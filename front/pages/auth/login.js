@@ -25,13 +25,7 @@ const Login = () => {
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const { me } = useSelector((state) => state.user);
-
-  // 로그인 성공
-  useEffect(() => {
-    if (me) {
-      Router.replace('/');
-    }
-  }, [me]);
+  const { logInLoading, logInError } = useSelector((state) => state.user);
 
   // 로그인 버튼 클릭
   const onSubmitForm = useCallback(
@@ -42,6 +36,20 @@ const Login = () => {
     },
     [email, password]
   );
+
+  // 로그인 성공
+  useEffect(() => {
+    if (me) {
+      Router.replace('/');
+    }
+  }, [me]);
+
+  // 로그인 실패
+  useEffect(() => {
+    if (logInError) {
+      alert(logInError);
+    }
+  }, [logInError]);
 
   return (
     <>

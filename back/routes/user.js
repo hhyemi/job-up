@@ -33,4 +33,91 @@ router.post('/signUp', async (req, res, next) => {
   }
 });
 
+// POST /user/login : 로그인
+router.post('/login', isNotLoggedIn, (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    if (info) {
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, async (loginErr) => {
+      if (loginErr) {
+        // 혹시 몰라 체크
+        console.error(loginErr);
+        return next(loginErr);
+      }
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: user.id },
+        attributes: {
+          exclude: ['password']
+        }
+        // include: [
+        //   {
+        //     model: Post,
+        //     attributes: ['id']
+        //   },
+        //   {
+        //     model: User,
+        //     as: 'Followings',
+        //     attributes: ['id']
+        //   },
+        //   {
+        //     model: User,
+        //     as: 'Followers',
+        //     attributes: ['id']
+        //   }
+        // ]
+      });
+      return res.status(200).json(fullUserWithoutPassword);
+    });
+  })(req, res, next);
+});
+
+// POST /user/logout : 로그아웃
+router.post('/logout', isLoggedIn, async (req, res, next) => {
+  req.logout();
+  req.session.destroy();
+  res.send('ok');
+});
+
+// 로그인 유지
+router.get('/', async (req, res, next) => {
+  console.log(req.headers);
+  try {
+    if (req.user) {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.user.id },
+        attributes: {
+          exclude: ['password']
+        }
+        //     {
+        //         include: [
+        //         model: Post,
+        //         attributes: ['id'] // 데이터 개수만 가져오기 위한 (내용은 필요없음 )
+        //       },
+        //       {
+        //         model: User,
+        //         as: 'Followings',
+        //         attributes: ['id']
+        //       },
+        //       {
+        //         model: User,
+        //         as: 'Followers',
+        //         attributes: ['id']
+        //       }
+        //     ]
+      });
+      res.status(200).json(fullUserWithoutPassword);
+    } else {
+      res.status(200).json(null);
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;

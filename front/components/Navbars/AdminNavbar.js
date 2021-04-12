@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import PropTypes from 'prop-types';
 import Link from 'next/link';
-// reactstrap components
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   DropdownMenu,
   DropdownItem,
@@ -17,8 +19,16 @@ import {
   Container,
   Media
 } from 'reactstrap';
+import { logoutRequestAction } from '../../reducers/user';
 
-function AdminNavbar({ brandText }) {
+const AdminNavbar = ({ brandText }) => {
+  const dispatch = useDispatch();
+
+  const onLogOut = useCallback((e) => {
+    e.preventDefault();
+    dispatch(logoutRequestAction());
+  }, []);
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -26,7 +36,7 @@ function AdminNavbar({ brandText }) {
           <Link href="/admin/dashboard">
             <a className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">{brandText}</a>
           </Link>
-          {/* <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+          <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <FormGroup className="mb-0">
               <InputGroup className="input-group-alternative">
                 <InputGroupAddon addonType="prepend">
@@ -37,7 +47,7 @@ function AdminNavbar({ brandText }) {
                 <Input placeholder="Search" type="text" />
               </InputGroup>
             </FormGroup>
-          </Form> */}
+          </Form>
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
@@ -79,9 +89,9 @@ function AdminNavbar({ brandText }) {
                   </DropdownItem>
                 </Link>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem href="#pablo" onClick={onLogOut}>
                   <i className="ni ni-user-run" />
-                  <span>Logout</span>
+                  <span>로그아웃</span>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
@@ -90,6 +100,10 @@ function AdminNavbar({ brandText }) {
       </Navbar>
     </>
   );
-}
+};
+
+AdminNavbar.propTypes = {
+  brandText: PropTypes.string.isRequired
+};
 
 export default AdminNavbar;

@@ -28,18 +28,6 @@ var routes = [
     name: '이력서',
     icon: 'ni ni-badge text-red',
     layout: '/admin'
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    icon: 'ni ni-key-25 text-info',
-    layout: '/auth'
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    icon: 'ni ni-circle-08 text-pink',
-    layout: '/auth'
   }
 ];
 export default routes;
