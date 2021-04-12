@@ -40,7 +40,11 @@ function Admin(props) {
         }}
       />
       <div className="main-content" ref={mainContentRef}>
-        {me ? <AdminNavbar {...props} brandText={getBrandText()} /> : <AuthNavbar />}
+        {me ? (
+          <AdminNavbar {...props} brandText={getBrandText()} />
+        ) : (
+          <AuthNavbar {...props} brandText={getBrandText()} />
+        )}
         {props.children}
         <Container fluid>
           <Footer />

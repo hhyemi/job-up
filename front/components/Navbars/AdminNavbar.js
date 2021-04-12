@@ -23,7 +23,9 @@ import { logoutRequestAction } from '../../reducers/user';
 
 const AdminNavbar = ({ brandText }) => {
   const dispatch = useDispatch();
+  const { me } = useSelector((state) => state.user);
 
+  // 로그아웃 버튼
   const onLogOut = useCallback((e) => {
     e.preventDefault();
     dispatch(logoutRequestAction());
