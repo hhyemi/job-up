@@ -85,13 +85,13 @@ const Login = () => {
               <small>다른계정으로 로그인</small>
             </div>
             <div className="btn-wrapper text-center">
-              <KakaoLogin
+              {/* <KakaoLogin
                 jsKey="3d235081a3a76692fbaf5e0ee73134f4"
                 buttonText="KaKao"
                 onSuccess={responseKaKao}
                 onFailure={responseFail}
                 getProfile
-              />
+              /> */}
               <GoogleLogin
                 clientId={process.env.GOOGLE_KEY}
                 buttonText="Google"

@@ -1,136 +1,162 @@
-import React from 'react';
-
-// reactstrap components
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Card, CardHeader, CardBody, FormGroup, Form, Input, Container, Row, Col } from 'reactstrap';
-// layout for this page
-import Admin from 'layouts/Admin.js';
-// core components
-import UserHeader from 'components/Headers/UserHeader.js';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 
-function Profile() {
+import Admin from '../../layouts/Admin';
+import UserHeader from '../../components/Headers/UserHeader';
+import useInput from '../../hooks/useInput';
+import { UPDATE_MY_INFO_REQUEST } from '../../reducers/user';
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 80%;
+`;
+
+const Profile = () => {
+  const dispatch = useDispatch();
+  const { me } = useSelector((state) => state.user);
+  const [name, setName] = useState(me?.name || '');
+  const [email, onChangeEmail] = useInput(me?.email || '');
+  const [password, setPassword] = useState(me?.password || '');
+
+  const [nameError, setNameError] = useState('');
+  const [passwordNotError, setPasswordNotError] = useState('');
+
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const { updateMyInfoError, updateMyInfoDone } = useSelector((state) => state.user);
+
+  // 비밀번호 , 비밀번호 확인 체크
+  const onChangePasswordCheck = useCallback(
+    (e) => {
+      setPasswordCheck(e.target.value);
+      setPasswordError(e.target.value !== password);
+    },
+    [password]
+  );
+
+  // 이름입력창
+  const onChangeName = useCallback(
+    (e) => {
+      e.preventDefault();
+      setNameError(false);
+      setName(e.target.value);
+    },
+    [name]
+  );
+  // 비밀번호입력창
+  const onChangePassword = useCallback(
+    (e) => {
+      e.preventDefault();
+      setPasswordNotError(false);
+      setPassword(e.target.value);
+    },
+    [password]
+  );
+
+  // 수정 버튼
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (password !== passwordCheck) {
+        return setPasswordError(true);
+      }
+      if (!name) {
+        return setNameError(true);
+      }
+      if (!password) {
+        return setPasswordNotError(true);
+      }
+
+      dispatch({
+        type: UPDATE_MY_INFO_REQUEST,
+        data: {
+          name,
+          password
+        }
+      });
+    },
+    [name, password, passwordCheck]
+  );
+
+  // 수정 성공
+  useEffect(() => {
+    if (updateMyInfoDone) {
+      alert('내정보가 수정되었습니다.');
+    }
+  }, [updateMyInfoDone]);
+
+  // 수정 실패
+  useEffect(() => {
+    if (updateMyInfoError) {
+      alert(updateMyInfoError);
+    }
+  }, [updateMyInfoError]);
+
   return (
     <>
       <UserHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
-          <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
-            <Card className="card-profile shadow">
-              <Row className="justify-content-center">
-                <Col className="order-lg-2" lg="3">
-                  <div className="card-profile-image">
-                    <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                      <img alt="..." className="rounded-circle" src={require('assets/img/theme/team-4-800x800.jpg')} />
-                    </a>
-                  </div>
-                </Col>
-              </Row>
-              <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                <div className="d-flex justify-content-between">
-                  <Button className="mr-4" color="info" href="#pablo" onClick={(e) => e.preventDefault()} size="sm">
-                    Connect
-                  </Button>
-                  <Button
-                    className="float-right"
-                    color="default"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                    size="sm"
-                  >
-                    Message
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardBody className="pt-0 pt-md-4">
-                <Row>
-                  <div className="col">
-                    <div className="card-profile-stats d-flex justify-content-center mt-md-5">
-                      <div>
-                        <span className="heading">22</span>
-                        <span className="description">Friends</span>
-                      </div>
-                      <div>
-                        <span className="heading">10</span>
-                        <span className="description">Photos</span>
-                      </div>
-                      <div>
-                        <span className="heading">89</span>
-                        <span className="description">Comments</span>
-                      </div>
-                    </div>
-                  </div>
-                </Row>
-                <div className="text-center">
-                  <h3>
-                    Jessica Jones222
-                    <span className="font-weight-light">, 27</span>
-                  </h3>
-                  <div className="h5 font-weight-300">
-                    <i className="ni location_pin mr-2" />
-                    Bucharest, Romania
-                  </div>
-                  <div className="h5 mt-4">
-                    <i className="ni business_briefcase-24 mr-2" />
-                    Solution Manager - Creative Tim Officer
-                  </div>
-                  <div>
-                    <i className="ni education_hat mr-2" />
-                    University of Computer Science
-                  </div>
-                  <hr className="my-4" />
-                  <p>
-                    Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records
-                    all of his own music.
-                  </p>
-                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    Show more
-                  </a>
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col className="order-xl-1" xl="8">
+          <Col className="order-xl-1">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
-                <Row className="align-items-center">
-                  <Col xs="8">
-                    <h3 className="mb-0">My account</h3>
+                <Row className="justify-content-center">
+                  <Col className="order-lg-2" lg="3">
+                    <div className="card-profile-image">
+                      <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                        <img
+                          alt="..."
+                          className="rounded-circle"
+                          src={require('assets/img/theme/team-4-800x800.jpg')}
+                        />
+                      </a>
+                    </div>
                   </Col>
+                </Row>
+                <Row className="align-items-center">
+                  <Col xs="8" />
                   <Col className="text-right" xs="4">
-                    <Button color="primary" href="#pablo" onClick={(e) => e.preventDefault()} size="sm">
-                      Settings
+                    <Button color="primary" href="#pablo" onClick={onSubmit} size="sm">
+                      수정
                     </Button>
                   </Col>
                 </Row>
               </CardHeader>
               <CardBody>
                 <Form>
-                  <h6 className="heading-small text-muted mb-4">User information</h6>
+                  <h6 className="heading-small text-muted mb-4 mt-4">User information</h6>
                   <div className="pl-lg-4">
                     <Row>
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-username">
-                            Username
+                            이름
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="lucky.jesse"
+                            value={name}
+                            onChange={onChangeName}
                             id="input-username"
-                            placeholder="Username"
+                            placeholder="이름"
                             type="text"
                           />
+                          {nameError && <ErrorMessage>이름을 입력해주세요.</ErrorMessage>}
                         </FormGroup>
                       </Col>
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-email">
-                            Email address
+                            이메일
                           </label>
                           <Input
+                            disabled
                             className="form-control-alternative"
                             id="input-email"
-                            placeholder="jesse@example.com"
+                            value={email}
+                            placeholder="이메일"
                             type="email"
                           />
                         </FormGroup>
@@ -140,112 +166,36 @@ function Profile() {
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-first-name">
-                            First name
+                            비밀번호
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="Lucky"
+                            value={password}
+                            onChange={onChangePassword}
+                            placeholder="비밀번호"
                             id="input-first-name"
-                            placeholder="First name"
-                            type="text"
+                            type="password"
                           />
+                          {passwordNotError && <ErrorMessage>비밀번호를 입력해주세요.</ErrorMessage>}
                         </FormGroup>
                       </Col>
                       <Col lg="6">
                         <FormGroup>
                           <label className="form-control-label" htmlFor="input-last-name">
-                            Last name
+                            비밀번호확인
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="Jesse"
+                            value={passwordCheck}
+                            onChange={onChangePasswordCheck}
                             id="input-last-name"
-                            placeholder="Last name"
-                            type="text"
+                            placeholder="비밀번호 확인을 입력해주세요."
+                            type="password"
                           />
+                          {passwordError && <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>}
                         </FormGroup>
                       </Col>
                     </Row>
-                  </div>
-                  <hr className="my-4" />
-                  {/* Address */}
-                  <h6 className="heading-small text-muted mb-4">Contact information</h6>
-                  <div className="pl-lg-4">
-                    <Row>
-                      <Col md="12">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor="input-address">
-                            Address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                            id="input-address"
-                            placeholder="Home Address"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor="input-city">
-                            City
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="New York"
-                            id="input-city"
-                            placeholder="City"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor="input-country">
-                            Country
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="United States"
-                            id="input-country"
-                            placeholder="Country"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="4">
-                        <FormGroup>
-                          <label className="form-control-label" htmlFor="input-country">
-                            Postal code
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-postal-code"
-                            placeholder="Postal code"
-                            type="number"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </div>
-                  <hr className="my-4" />
-                  {/* Description */}
-                  <h6 className="heading-small text-muted mb-4">About me</h6>
-                  <div className="pl-lg-4">
-                    <FormGroup>
-                      <label>About Me</label>
-                      <Input
-                        className="form-control-alternative"
-                        placeholder="A few words about you ..."
-                        rows="4"
-                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                          Open Source."
-                        type="textarea"
-                      />
-                    </FormGroup>
                   </div>
                 </Form>
               </CardBody>
@@ -255,7 +205,7 @@ function Profile() {
       </Container>
     </>
   );
-}
+};
 
 Profile.layout = Admin;
 

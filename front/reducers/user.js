@@ -11,9 +11,12 @@ export const initialState = {
   signUpLoading: false, // 회원가입 시도중
   signUpDone: false,
   signUpError: null,
-  loadMyInfoLoading: false, // 나의정보 가져오기 시도중
+  loadMyInfoLoading: false, // 내정보 가져오기 시도중
   loadMyInfoDone: false,
-  loadMyInfoError: null
+  loadMyInfoError: null,
+  updateMyInfoLoading: false, // 내정보 수정하기 시도중
+  updateMyInfoDone: false,
+  updateMyInfoError: null
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -31,6 +34,10 @@ export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
 export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
 export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
+
+export const UPDATE_MY_INFO_REQUEST = 'UPDATE_MY_INFO_REQUEST';
+export const UPDATE_MY_INFO_SUCCESS = 'UPDATE_MY_INFO_SUCCESS';
+export const UPDATE_MY_INFO_FAILURE = 'UPDATE_MY_INFO_FAILURE';
 
 // action creator
 export const loginRequestAction = (data) => ({
@@ -100,6 +107,20 @@ const reducer = (state = initialState, action) =>
       case LOAD_MY_INFO_FAILURE:
         draft.loadMyInfoLoading = false;
         draft.loadMyInfoError = action.error;
+        break;
+      case UPDATE_MY_INFO_REQUEST:
+        draft.updateMyInfoLoading = true;
+        draft.updateMyInfoError = null;
+        draft.updateMyInfoDone = false;
+        break;
+      case UPDATE_MY_INFO_SUCCESS:
+        draft.me = action.data;
+        draft.updateMyInfoLoading = false;
+        draft.updateMyInfoDone = true;
+        break;
+      case UPDATE_MY_INFO_FAILURE:
+        draft.updateMyInfoLoading = false;
+        draft.updateMyInfoError = action.error;
         break;
       default:
         break;

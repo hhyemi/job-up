@@ -134,4 +134,28 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// PATCH /user/update : 내정보 수정
+router.patch('/update', isLoggedIn, async (req, res, next) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10); // 비밀번호 암호화 (해시화) , 숫자 클수록 보안강화
+    await User.update(
+      {
+        name: req.body.name,
+        password: hashedPassword
+      },
+      { where: { id: req.user.id } }
+    );
+    const fullUserWithoutPassword = await User.findOne({
+      where: { id: req.user.id },
+      attributes: {
+        exclude: ['password']
+      }
+    });
+    res.status(200).json(fullUserWithoutPassword);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;

@@ -69,7 +69,7 @@ const AdminNavbar = ({ brandText }) => {
                 <Link href="/admin/profile">
                   <DropdownItem>
                     <i className="ni ni-single-02" />
-                    <span>My profile</span>
+                    <span>내 정보</span>
                   </DropdownItem>
                 </Link>
                 <Link href="/admin/profile">

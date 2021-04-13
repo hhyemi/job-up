@@ -12,7 +12,10 @@ import {
   LOG_OUT_SUCCESS,
   SIGN_UP_FAILURE,
   SIGN_UP_REQUEST,
-  SIGN_UP_SUCCESS
+  SIGN_UP_SUCCESS,
+  UPDATE_MY_INFO_FAILURE,
+  UPDATE_MY_INFO_REQUEST,
+  UPDATE_MY_INFO_SUCCESS
 } from '../reducers/user';
 
 // 로그인
@@ -97,6 +100,26 @@ function* loadMyInfo() {
   }
 }
 
+// 내정보 수정하기
+function updateMyInfoAPI(data) {
+  return axios.patch('/user/update', data);
+}
+
+function* updateMyInfo(action) {
+  try {
+    const result = yield call(updateMyInfoAPI, action.data);
+    yield put({
+      type: UPDATE_MY_INFO_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPDATE_MY_INFO_FAILURE,
+      error: err.response.data
+    });
+  }
+}
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
@@ -113,6 +136,10 @@ function* watchLoadMyInfo() {
   yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
 }
 
+function* watchUpdateMyInfo() {
+  yield takeLatest(UPDATE_MY_INFO_REQUEST, updateMyInfo);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLogIn), fork(watchLogOut), fork(watchSignUp), fork(watchLoadMyInfo)]);
+  yield all([fork(watchLogIn), fork(watchLogOut), fork(watchSignUp), fork(watchLoadMyInfo), fork(watchUpdateMyInfo)]);
 }

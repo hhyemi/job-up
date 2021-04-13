@@ -15,11 +15,11 @@ import {
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import Router from 'next/router';
+import GoogleLogin from 'react-google-login';
 
 import useInput from '../../hooks/useInput';
 import Auth from '../../layouts/Auth';
 import { SIGN_UP_REQUEST, SOCIAL_LOG_IN_REQUEST } from '../../reducers/user';
-import GoogleLogin from 'react-google-login';
 
 // styled
 const ErrorMessage = styled.div`
