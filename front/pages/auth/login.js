@@ -15,18 +15,18 @@ import {
 } from 'reactstrap';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import KakaoLogin from 'react-kakao-login';
+import GitHubLogin from 'react-github-login';
 import GoogleLogin from 'react-google-login';
 
 import Auth from '../../layouts/Auth';
 import useInput from '../../hooks/useInput';
-import { loginRequestAction, LOG_IN_REQUEST } from '../../reducers/user';
+import { GIT_LOG_IN_REQUEST, loginRequestAction, LOG_IN_REQUEST } from '../../reducers/user';
 
 const Login = () => {
   const dispatch = useDispatch();
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
-  const { me } = useSelector((state) => state.user);
+  const { me, git } = useSelector((state) => state.user);
   const { logInLoading, logInError } = useSelector((state) => state.user);
 
   // 로그인 버튼 클릭
@@ -62,14 +62,26 @@ const Login = () => {
     });
   };
 
-  // Kakao 로그인
-  const responseKaKao = (res) => {
-    console.log(res);
-    // dispatch({
-    //   type: LOG_IN_REQUEST,
-    //   data: { email: res.profileObj.email, password: res.profileObj.googleId, social: true }
-    // });
+  // Github 로그인
+  const responseGithub = async (res) => {
+    console.log(res.code);
+
+    dispatch({
+      type: GIT_LOG_IN_REQUEST,
+      data: { code: res.code }
+    });
   };
+
+  // Github 정보 받기
+  useEffect(async () => {
+    if (git) {
+      console.log(git);
+      dispatch({
+        type: LOG_IN_REQUEST,
+        data: { email: git.email, password: git.id, social: true }
+      });
+    }
+  }, [git]);
 
   // 소셜 로그인 실패
   const responseFail = (err) => {
@@ -85,13 +97,19 @@ const Login = () => {
               <small>다른계정으로 로그인</small>
             </div>
             <div className="btn-wrapper text-center">
-              {/* <KakaoLogin
-                jsKey="3d235081a3a76692fbaf5e0ee73134f4"
-                buttonText="KaKao"
-                onSuccess={responseKaKao}
+              <GitHubLogin
+                clientId={process.env.GITHUB_KEY}
+                redirectUri="http://localhost:3000"
+                buttonText="Github"
+                onSuccess={responseGithub}
                 onFailure={responseFail}
-                getProfile
-              /> */}
+                className="btn-neutral btn-icon mr-4 btn btn-default"
+              >
+                <span className="btn-inner--icon">
+                  <img alt="..." src={require('assets/img/icons/common/github.svg')} />
+                </span>
+                <span className="btn-inner--text">Github</span>
+              </GitHubLogin>
               <GoogleLogin
                 clientId={process.env.GOOGLE_KEY}
                 buttonText="Google"

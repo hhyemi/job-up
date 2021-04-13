@@ -1,6 +1,9 @@
 import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
 import axios from 'axios';
 import {
+  GIT_LOG_IN_FAILURE,
+  GIT_LOG_IN_REQUEST,
+  GIT_LOG_IN_SUCCESS,
   LOAD_MY_INFO_FAILURE,
   LOAD_MY_INFO_REQUEST,
   LOAD_MY_INFO_SUCCESS,
@@ -34,6 +37,27 @@ function* logIn(action) {
     console.error(err);
     yield put({
       type: LOG_IN_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
+// GIT 로그인
+function gitLogInAPI(data) {
+  return axios.post('/user/gitLogIn', data);
+}
+
+function* gitLogIn(action) {
+  try {
+    const result = yield call(gitLogInAPI, action.data);
+    yield put({
+      type: GIT_LOG_IN_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: GIT_LOG_IN_FAILURE,
       error: err.response.data
     });
   }
@@ -124,6 +148,10 @@ function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
 
+function* watchGitLogIn() {
+  yield takeLatest(GIT_LOG_IN_REQUEST, gitLogIn);
+}
+
 function* watchLogOut() {
   yield takeLatest(LOG_OUT_REQUEST, logOut);
 }
@@ -141,5 +169,12 @@ function* watchUpdateMyInfo() {
 }
 
 export default function* userSaga() {
-  yield all([fork(watchLogIn), fork(watchLogOut), fork(watchSignUp), fork(watchLoadMyInfo), fork(watchUpdateMyInfo)]);
+  yield all([
+    fork(watchLogIn),
+    fork(watchGitLogIn),
+    fork(watchLogOut),
+    fork(watchSignUp),
+    fork(watchLoadMyInfo),
+    fork(watchUpdateMyInfo)
+  ]);
 }

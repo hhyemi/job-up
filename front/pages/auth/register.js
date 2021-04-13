@@ -15,11 +15,12 @@ import {
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import Router from 'next/router';
+import GitHubLogin from 'react-github-login';
 import GoogleLogin from 'react-google-login';
 
 import useInput from '../../hooks/useInput';
 import Auth from '../../layouts/Auth';
-import { SIGN_UP_REQUEST, SOCIAL_LOG_IN_REQUEST } from '../../reducers/user';
+import { GIT_LOG_IN_REQUEST, SIGN_UP_REQUEST } from '../../reducers/user';
 
 // styled
 const ErrorMessage = styled.div`
@@ -33,7 +34,7 @@ const Register = () => {
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const { signUpLoading, signUpDone, signUpError } = useSelector((state) => state.user);
-  const { me } = useSelector((state) => state.user);
+  const { me, git } = useSelector((state) => state.user);
 
   // 약관
   const [term, setTerm] = useState('');
@@ -92,6 +93,27 @@ const Register = () => {
     console.error(err);
   };
 
+  // Github 로그인
+  const responseGithub = async (res) => {
+    console.log(res.code);
+
+    dispatch({
+      type: GIT_LOG_IN_REQUEST,
+      data: { code: res.code }
+    });
+  };
+
+  // Github 정보 받기
+  useEffect(async () => {
+    if (git) {
+      console.log(git);
+      dispatch({
+        type: SIGN_UP_REQUEST,
+        data: { email: git.email, password: git.id, name: git.name, social: true }
+      });
+    }
+  }, [git]);
+
   return (
     <>
       <Col lg="6" md="8">
@@ -101,17 +123,19 @@ const Register = () => {
               <small>다른 계정으로 회원가입하기</small>
             </div>
             <div className="text-center">
-              <Button
-                className="btn-neutral btn-icon mr-4"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
+              <GitHubLogin
+                clientId={process.env.GITHUB_KEY}
+                redirectUri="http://localhost:3000"
+                buttonText="Github"
+                onSuccess={responseGithub}
+                onFailure={responseFail}
+                className="btn-neutral btn-icon mr-4 btn btn-default"
               >
                 <span className="btn-inner--icon">
                   <img alt="..." src={require('assets/img/icons/common/github.svg')} />
                 </span>
                 <span className="btn-inner--text">Github</span>
-              </Button>
+              </GitHubLogin>
               <GoogleLogin
                 clientId={process.env.GOOGLE_KEY}
                 buttonText="Google"

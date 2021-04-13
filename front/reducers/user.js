@@ -2,9 +2,13 @@ import produce from '../util/produce';
 
 export const initialState = {
   me: null,
+  git: null,
   logInLoading: false, // 로그인 시도중
   logInDone: false,
   logInError: null,
+  gitLogInLoading: false, // 깃 로그인 시도중
+  gitLogInDone: false,
+  gitLogInError: null,
   logOutLoading: false, // 로그아웃 시도중
   logOutDone: false,
   logOutError: null,
@@ -22,6 +26,10 @@ export const initialState = {
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
+
+export const GIT_LOG_IN_REQUEST = 'GIT_LOG_IN_REQUEST';
+export const GIT_LOG_IN_SUCCESS = 'GIT_LOG_IN_SUCCESS';
+export const GIT_LOG_IN_FAILURE = 'GIT_LOG_IN_FAILURE';
 
 export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
@@ -64,6 +72,20 @@ const reducer = (state = initialState, action) =>
         draft.logInDone = true;
         break;
       case LOG_IN_FAILURE:
+        draft.logInLoading = false;
+        draft.logInError = action.error;
+        break;
+      case GIT_LOG_IN_REQUEST:
+        draft.logInLoading = true;
+        draft.logInError = null;
+        draft.logInDone = false;
+        break;
+      case GIT_LOG_IN_SUCCESS:
+        draft.logInLoading = false;
+        draft.git = action.data;
+        draft.logInDone = true;
+        break;
+      case GIT_LOG_IN_FAILURE:
         draft.logInLoading = false;
         draft.logInError = action.error;
         break;

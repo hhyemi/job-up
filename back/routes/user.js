@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { Op } = require('sequelize');
+const axios = require('axios');
 
 const { User } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
@@ -61,6 +62,34 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
       return res.status(200).json(fullUserWithoutPassword);
     });
   })(req, res, next);
+});
+
+// POST /user/gitLogIn : GIT 로그인
+router.post('/gitLogIn', isNotLoggedIn, async (req, res, next) => {
+  const { code } = req.body;
+  const client_id = process.env.GIT_CLIENT_ID;
+  const client_secret = process.env.GTI_CLIENT_SECRET;
+
+  const response = await axios.post(
+    'https://github.com/login/oauth/access_token',
+    {
+      code,
+      client_id, // 내 APP의 정보
+      client_secret // 내 APP의 정보
+    },
+    {
+      headers: {
+        accept: 'application/json'
+      }
+    }
+  );
+
+  const { data } = await axios.get('https://api.github.com/user', {
+    headers: {
+      Authorization: `token ${response.data.access_token}`
+    }
+  });
+  res.status(200).json(data);
 });
 
 // POST /user/logout : 로그아웃
