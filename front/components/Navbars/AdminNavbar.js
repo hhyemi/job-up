@@ -19,6 +19,8 @@ import {
   Container,
   Media
 } from 'reactstrap';
+import Router from 'next/router';
+
 import { logoutRequestAction } from '../../reducers/user';
 
 const AdminNavbar = ({ brandText }) => {
@@ -29,6 +31,7 @@ const AdminNavbar = ({ brandText }) => {
   const onLogOut = useCallback((e) => {
     e.preventDefault();
     dispatch(logoutRequestAction());
+    Router.replace('/');
   }, []);
 
   return (
