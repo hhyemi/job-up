@@ -18,7 +18,8 @@ import Router from 'next/router';
 
 import useInput from '../../hooks/useInput';
 import Auth from '../../layouts/Auth';
-import { SIGN_UP_REQUEST } from '../../reducers/user';
+import { SIGN_UP_REQUEST, SOCIAL_LOG_IN_REQUEST } from '../../reducers/user';
+import GoogleLogin from 'react-google-login';
 
 // styled
 const ErrorMessage = styled.div`
@@ -78,6 +79,19 @@ const Register = () => {
     }
   }, [signUpError]);
 
+  // Google Login
+  const responseGoogle = (res) => {
+    console.log(res);
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { name: res.profileObj.name, email: res.profileObj.email, password: res.profileObj.googleId, social: true }
+    });
+  };
+  // Google Login Fail
+  const responseFail = (err) => {
+    console.error(err);
+  };
+
   return (
     <>
       <Col lg="6" md="8">
@@ -98,17 +112,12 @@ const Register = () => {
                 </span>
                 <span className="btn-inner--text">Github</span>
               </Button>
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img alt="..." src={require('assets/img/icons/common/google.svg')} />
-                </span>
-                <span className="btn-inner--text">Google</span>
-              </Button>
+              <GoogleLogin
+                clientId={process.env.GOOGLE_KEY}
+                buttonText="Google"
+                onSuccess={responseGoogle}
+                onFailure={responseFail}
+              />
             </div>
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">

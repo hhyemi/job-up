@@ -20,7 +20,11 @@ router.post('/signUp', async (req, res, next) => {
       return res.status(403).send('이미 사용중인 이메일입니다.');
     }
 
-    const hashedPassword = await bcrypt.hash(req.body.password, 10); // 비밀번호 암호화 (해시화) , 숫자 클수록 보안강화
+    let hashedPassword = req.body.password;
+    if (!req.body.social) {
+      // 소셜로그인이 아닐때
+      hashedPassword = await bcrypt.hash(req.body.password, 10); // 비밀번호 암호화 (해시화) , 숫자 클수록 보안강화
+    }
     await User.create({
       email: req.body.email,
       name: req.body.name,
@@ -45,7 +49,6 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
     }
     return req.login(user, async (loginErr) => {
       if (loginErr) {
-        // 혹시 몰라 체크
         console.error(loginErr);
         return next(loginErr);
       }
@@ -74,6 +77,17 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
       return res.status(200).json(fullUserWithoutPassword);
     });
   })(req, res, next);
+});
+
+// POST /user/socialLogIn : 소셜로그인
+router.post('/socialLogIn', isNotLoggedIn, async (req, res, next) => {
+  const fullUserWithoutPassword = await User.findOne({
+    where: { email: req.body.email },
+    attributes: {
+      exclude: ['password']
+    }
+  });
+  return res.status(200).json(fullUserWithoutPassword);
 });
 
 // POST /user/logout : 로그아웃

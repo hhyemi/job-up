@@ -15,10 +15,12 @@ import {
 } from 'reactstrap';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import KakaoLogin from 'react-kakao-login';
+import GoogleLogin from 'react-google-login';
 
 import Auth from '../../layouts/Auth';
 import useInput from '../../hooks/useInput';
-import { loginRequestAction } from '../../reducers/user';
+import { loginRequestAction, LOG_IN_REQUEST } from '../../reducers/user';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -51,37 +53,51 @@ const Login = () => {
     }
   }, [logInError]);
 
+  // Google 로그인
+  const responseGoogle = (res) => {
+    console.log(res);
+    dispatch({
+      type: LOG_IN_REQUEST,
+      data: { email: res.profileObj.email, password: res.profileObj.googleId, social: true }
+    });
+  };
+
+  // Kakao 로그인
+  const responseKaKao = (res) => {
+    console.log(res);
+    // dispatch({
+    //   type: LOG_IN_REQUEST,
+    //   data: { email: res.profileObj.email, password: res.profileObj.googleId, social: true }
+    // });
+  };
+
+  // 소셜 로그인 실패
+  const responseFail = (err) => {
+    console.error(err);
+  };
+
   return (
     <>
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
           <CardHeader className="bg-transparent pb-5">
             <div className="text-muted text-center mt-2 mb-3">
-              <small>Sign in with</small>
+              <small>다른계정으로 로그인</small>
             </div>
             <div className="btn-wrapper text-center">
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img alt="..." src={require('assets/img/icons/common/github.svg')} />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </Button>
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img alt="..." src={require('assets/img/icons/common/google.svg')} />
-                </span>
-                <span className="btn-inner--text">Google</span>
-              </Button>
+              <KakaoLogin
+                jsKey="3d235081a3a76692fbaf5e0ee73134f4"
+                buttonText="KaKao"
+                onSuccess={responseKaKao}
+                onFailure={responseFail}
+                getProfile
+              />
+              <GoogleLogin
+                clientId={process.env.GOOGLE_KEY}
+                buttonText="Google"
+                onSuccess={responseGoogle}
+                onFailure={responseFail}
+              />
             </div>
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">

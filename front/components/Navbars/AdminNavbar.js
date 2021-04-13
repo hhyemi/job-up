@@ -58,7 +58,7 @@ const AdminNavbar = ({ brandText }) => {
                     <img alt="..." src={require('assets/img/theme/team-4-800x800.jpg')} />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
-                    <span className="mb-0 text-sm font-weight-bold">Jessica Jones</span>
+                    <span className="mb-0 text-sm font-weight-bold">{me.name}</span>
                   </Media>
                 </Media>
               </DropdownToggle>
@@ -102,10 +102,6 @@ const AdminNavbar = ({ brandText }) => {
       </Navbar>
     </>
   );
-};
-
-AdminNavbar.propTypes = {
-  brandText: PropTypes.string.isRequired
 };
 
 export default AdminNavbar;
