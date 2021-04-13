@@ -57,37 +57,10 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         attributes: {
           exclude: ['password']
         }
-        // include: [
-        //   {
-        //     model: Post,
-        //     attributes: ['id']
-        //   },
-        //   {
-        //     model: User,
-        //     as: 'Followings',
-        //     attributes: ['id']
-        //   },
-        //   {
-        //     model: User,
-        //     as: 'Followers',
-        //     attributes: ['id']
-        //   }
-        // ]
       });
       return res.status(200).json(fullUserWithoutPassword);
     });
   })(req, res, next);
-});
-
-// POST /user/socialLogIn : 소셜로그인
-router.post('/socialLogIn', isNotLoggedIn, async (req, res, next) => {
-  const fullUserWithoutPassword = await User.findOne({
-    where: { email: req.body.email },
-    attributes: {
-      exclude: ['password']
-    }
-  });
-  return res.status(200).json(fullUserWithoutPassword);
 });
 
 // POST /user/logout : 로그아웃
@@ -107,22 +80,6 @@ router.get('/', async (req, res, next) => {
         attributes: {
           exclude: ['password']
         }
-        //     {
-        //         include: [
-        //         model: Post,
-        //         attributes: ['id'] // 데이터 개수만 가져오기 위한 (내용은 필요없음 )
-        //       },
-        //       {
-        //         model: User,
-        //         as: 'Followings',
-        //         attributes: ['id']
-        //       },
-        //       {
-        //         model: User,
-        //         as: 'Followers',
-        //         attributes: ['id']
-        //       }
-        //     ]
       });
       res.status(200).json(fullUserWithoutPassword);
     } else {
