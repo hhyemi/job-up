@@ -17,8 +17,8 @@ const ErrorMessage = styled.div`
 
 const UploadImg = styled.img`
   width: 50px;
-  top: 80px !important;
-  left: 210px !important;
+  top: 95px !important;
+  left: 225px !important;
   cursor: pointer;
 `;
 
@@ -146,7 +146,11 @@ const Profile = () => {
                         className="rounded-circle"
                         alt="..."
                       />
-                      <UploadImg alt="..." src={require('assets/img/icons/plus.png')} onClick={onClickProfileImg} />
+                      <UploadImg
+                        alt="..."
+                        src={require('assets/img/icons/user/plus.png')}
+                        onClick={onClickProfileImg}
+                      />
                     </div>
                   </Col>
                 </Row>

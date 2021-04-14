@@ -18,7 +18,7 @@ function AuthNavbar({ brandText }) {
                 <Row>
                   <Col className="collapse-brand" xs="6">
                     <Link href="/admin/dashboard">
-                      <img alt="..." src={require('assets/img/brand/nextjs_argon_black.png')} />
+                      <img alt="..." src={require('assets/img/brand/logo.png')} />
                     </Link>
                   </Col>
                   <Col className="collapse-close" xs="6">
