@@ -18,6 +18,10 @@ module.exports = class User extends Model {
         password: {
           type: DataTypes.STRING(100),
           allowNull: false // 필수
+        },
+        src: {
+          type: DataTypes.STRING(200),
+          allowNull: true
         }
       },
       {

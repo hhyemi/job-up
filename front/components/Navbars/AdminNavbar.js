@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-
 import {
   DropdownMenu,
   DropdownItem,
@@ -21,6 +20,7 @@ import {
 } from 'reactstrap';
 import Router from 'next/router';
 
+import { backUrl } from '../../config/config';
 import { logoutRequestAction } from '../../reducers/user';
 
 const AdminNavbar = ({ brandText }) => {
@@ -58,7 +58,7 @@ const AdminNavbar = ({ brandText }) => {
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
                   <span className="avatar avatar-sm rounded-circle">
-                    <img alt="..." src={require('assets/img/theme/team-4-800x800.jpg')} />
+                    <img alt="..." src={me && me.src && `${backUrl}/${me.src}`} />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">{me.name}</span>
@@ -105,6 +105,14 @@ const AdminNavbar = ({ brandText }) => {
       </Navbar>
     </>
   );
+};
+
+AdminNavbar.defaultProps = {
+  brandText: ''
+};
+
+AdminNavbar.propTypes = {
+  brandText: PropTypes.string
 };
 
 export default AdminNavbar;

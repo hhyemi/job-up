@@ -1,21 +1,31 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Button, Card, CardHeader, CardBody, FormGroup, Form, Input, Container, Row, Col } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import Router from 'next/router';
 
+import { backUrl } from '../../config/config';
 import Admin from '../../layouts/Admin';
 import UserHeader from '../../components/Headers/UserHeader';
 import useInput from '../../hooks/useInput';
-import { UPDATE_MY_INFO_REQUEST } from '../../reducers/user';
+import { UPDATE_MY_INFO_REQUEST, UPLOAD_IMG_REQUEST } from '../../reducers/user';
 
 const ErrorMessage = styled.div`
   color: red;
   font-size: 80%;
 `;
 
+const UploadImg = styled.img`
+  width: 50px;
+  top: 80px !important;
+  left: 210px !important;
+  cursor: pointer;
+`;
+
 const Profile = () => {
   const dispatch = useDispatch();
-  const { me } = useSelector((state) => state.user);
+  const imageInput = useRef();
+  const { me, imagePaths } = useSelector((state) => state.user);
   const [name, setName] = useState(me?.name || '');
   const [email, onChangeEmail] = useInput(me?.email || '');
   const [password, setPassword] = useState(me?.password || '');
@@ -26,6 +36,29 @@ const Profile = () => {
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const { updateMyInfoError, updateMyInfoDone } = useSelector((state) => state.user);
+
+  // 로그인 풀리면
+  useEffect(() => {
+    if (!me) {
+      Router.replace('/');
+    }
+  }, [me]);
+
+  // 프로필 사진 변경
+  const onClickProfileImg = useCallback(() => {
+    imageInput.current.click();
+  }, [imageInput.current]);
+  // 프로필 사진 업로드
+  const onChangeImages = useCallback((e) => {
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (f) => {
+      imageFormData.append('image', f);
+    });
+    dispatch({
+      type: UPLOAD_IMG_REQUEST,
+      data: imageFormData
+    });
+  });
 
   // 비밀번호 , 비밀번호 확인 체크
   const onChangePasswordCheck = useCallback(
@@ -73,11 +106,12 @@ const Profile = () => {
         type: UPDATE_MY_INFO_REQUEST,
         data: {
           name,
-          password
+          password,
+          src: imagePaths[0]
         }
       });
     },
-    [name, password, passwordCheck]
+    [name, password, passwordCheck, imagePaths]
   );
 
   // 수정 성공
@@ -105,14 +139,14 @@ const Profile = () => {
               <CardHeader className="bg-white border-0">
                 <Row className="justify-content-center">
                   <Col className="order-lg-2" lg="3">
-                    <div className="card-profile-image">
-                      <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                        <img
-                          alt="..."
-                          className="rounded-circle"
-                          src={require('assets/img/theme/team-4-800x800.jpg')}
-                        />
-                      </a>
+                    <div className="card-profile-image" style={{ position: 'relative' }}>
+                      <input type="file" name="image" multiple hidden ref={imageInput} onChange={onChangeImages} />
+                      <img
+                        src={imagePaths ? `${backUrl}/${imagePaths}` : me && me.src && `${backUrl}/${me.src}`}
+                        className="rounded-circle"
+                        alt="..."
+                      />
+                      <UploadImg alt="..." src={require('assets/img/icons/plus.png')} onClick={onClickProfileImg} />
                     </div>
                   </Col>
                 </Row>

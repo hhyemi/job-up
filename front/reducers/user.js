@@ -1,8 +1,8 @@
 import produce from '../util/produce';
 
 export const initialState = {
-  me: null,
-  git: null,
+  me: null, // 내 정보
+  git: null, // 깃허브 정보
   logInLoading: false, // 로그인 시도중
   logInDone: false,
   logInError: null,
@@ -20,7 +20,10 @@ export const initialState = {
   loadMyInfoError: null,
   updateMyInfoLoading: false, // 내정보 수정하기 시도중
   updateMyInfoDone: false,
-  updateMyInfoError: null
+  updateMyInfoError: null,
+  uploadImgLoading: false, // 프로필 사진 업로드
+  uploadImgDone: false,
+  uploadImgError: null
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -46,6 +49,10 @@ export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 export const UPDATE_MY_INFO_REQUEST = 'UPDATE_MY_INFO_REQUEST';
 export const UPDATE_MY_INFO_SUCCESS = 'UPDATE_MY_INFO_SUCCESS';
 export const UPDATE_MY_INFO_FAILURE = 'UPDATE_MY_INFO_FAILURE';
+
+export const UPLOAD_IMG_REQUEST = 'UPLOAD_IMG_REQUEST';
+export const UPLOAD_IMG_SUCCESS = 'UPLOAD_IMG_SUCCESS';
+export const UPLOAD_IMG_FAILURE = 'UPLOAD_IMG_FAILURE';
 
 // action creator
 export const loginRequestAction = (data) => ({
@@ -143,6 +150,20 @@ const reducer = (state = initialState, action) =>
       case UPDATE_MY_INFO_FAILURE:
         draft.updateMyInfoLoading = false;
         draft.updateMyInfoError = action.error;
+        break;
+      case UPLOAD_IMG_REQUEST:
+        draft.uploadImgLoading = true;
+        draft.uploadImgError = null;
+        draft.uploadImgDone = false;
+        break;
+      case UPLOAD_IMG_SUCCESS:
+        draft.imagePaths = action.data;
+        draft.uploadImgLoading = false;
+        draft.uploadImgDone = true;
+        break;
+      case UPLOAD_IMG_FAILURE:
+        draft.uploadImgLoading = false;
+        draft.uploadImgError = action.error;
         break;
       default:
         break;

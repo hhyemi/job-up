@@ -18,7 +18,10 @@ import {
   SIGN_UP_SUCCESS,
   UPDATE_MY_INFO_FAILURE,
   UPDATE_MY_INFO_REQUEST,
-  UPDATE_MY_INFO_SUCCESS
+  UPDATE_MY_INFO_SUCCESS,
+  UPLOAD_IMG_FAILURE,
+  UPLOAD_IMG_REQUEST,
+  UPLOAD_IMG_SUCCESS
 } from '../reducers/user';
 
 // 로그인
@@ -144,6 +147,28 @@ function* updateMyInfo(action) {
     });
   }
 }
+
+// 프로필 사진 업로드
+function uploadImgAPI(data) {
+  return axios.post('/user/images', data);
+}
+
+function* uploadImg(action) {
+  try {
+    const result = yield call(uploadImgAPI, action.data);
+    yield put({
+      type: UPLOAD_IMG_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPLOAD_IMG_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
@@ -168,6 +193,10 @@ function* watchUpdateMyInfo() {
   yield takeLatest(UPDATE_MY_INFO_REQUEST, updateMyInfo);
 }
 
+function* watchUploadImg() {
+  yield takeLatest(UPLOAD_IMG_REQUEST, uploadImg);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
@@ -175,6 +204,7 @@ export default function* userSaga() {
     fork(watchLogOut),
     fork(watchSignUp),
     fork(watchLoadMyInfo),
-    fork(watchUpdateMyInfo)
+    fork(watchUpdateMyInfo),
+    fork(watchUploadImg)
   ]);
 }

@@ -4,7 +4,7 @@ import Link from 'next/link';
 // reactstrap components
 import { UncontrolledCollapse, Navbar, NavItem, NavLink, Nav, Container, Row, Col } from 'reactstrap';
 
-function AdminNavbar({ brandText }) {
+function AuthNavbar({ brandText }) {
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -55,8 +55,12 @@ function AdminNavbar({ brandText }) {
   );
 }
 
-AdminNavbar.propTypes = {
-  brandText: PropTypes.string.isRequired
+AuthNavbar.defaultProps = {
+  brandText: ''
 };
 
-export default AdminNavbar;
+AuthNavbar.propTypes = {
+  brandText: PropTypes.string
+};
+
+export default AuthNavbar;

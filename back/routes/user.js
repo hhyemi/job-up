@@ -3,11 +3,36 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { Op } = require('sequelize');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
 
 const { User } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
+
+try {
+  fs.accessSync('uploads'); // 폴더 검사
+} catch (error) {
+  console.log('uploads 폴더가 없으므로 생성합니다.');
+  fs.mkdirSync('uploads');
+}
+
+// 하드디스크에 저장
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      done(null, basename + '_' + new Date().getTime() + ext); // 겹치는 이름 방지
+    }
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 } // 20MB
+});
 
 // POST /user/signUp : 회원가입
 router.post('/signUp', async (req, res, next) => {
@@ -29,7 +54,8 @@ router.post('/signUp', async (req, res, next) => {
     await User.create({
       email: req.body.email,
       name: req.body.name,
-      password: hashedPassword
+      password: hashedPassword,
+      src: 'profile-default.png'
     });
     res.status(201).send('ok');
   } catch (error) {
@@ -127,7 +153,8 @@ router.patch('/update', isLoggedIn, async (req, res, next) => {
     await User.update(
       {
         name: req.body.name,
-        password: hashedPassword
+        password: hashedPassword,
+        src: req.body.src
       },
       { where: { id: req.user.id } }
     );
@@ -142,6 +169,13 @@ router.patch('/update', isLoggedIn, async (req, res, next) => {
     console.error(error);
     next(error);
   }
+});
+
+// POST /user/images : 프로필사진 업로드
+router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => {
+  // 이미지올린 후
+  console.log(req.files);
+  res.json(req.files.map((v) => v.filename));
 });
 
 module.exports = router;
