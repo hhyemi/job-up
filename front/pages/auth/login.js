@@ -128,7 +128,7 @@ const Login = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
-                    placeholder="Email"
+                    placeholder="이메일"
                     name="user-email"
                     type="email"
                     value={email}
@@ -146,7 +146,7 @@ const Login = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
-                    placeholder="Password"
+                    placeholder="비밀번호"
                     name="user-password"
                     type="password"
                     value={password}
@@ -160,22 +160,14 @@ const Login = () => {
                 <Button className="my-4" color="primary" type="submit">
                   LOGIN
                 </Button>
+                <br />
+                <a className="text-muted" href="#pablo" onClick={(e) => e.preventDefault()}>
+                  <small>비밀번호 찾기</small>
+                </a>
               </div>
             </Form>
           </CardBody>
         </Card>
-        <Row className="mt-3">
-          <Col xs="6">
-            <a className="text-light" href="#pablo" onClick={(e) => e.preventDefault()}>
-              <small>비밀번호 찾기</small>
-            </a>
-          </Col>
-          <Col className="text-right" xs="6">
-            <a className="text-light" href="#pablo" onClick={(e) => e.preventDefault()}>
-              <small>회원가입</small>
-            </a>
-          </Col>
-        </Row>
       </Col>
     </>
   );
