@@ -186,7 +186,6 @@ router.post('/email', async (req, res, next) => {
   let authCode = Math.random().toString().substr(2, 6); // 랜덤 인증번호 생성
   let authEmail;
   ejs.renderFile(appDir + '/template/authEmail.ejs', { authCode }, function (err, data) {
-    // form 불러오기
     if (err) {
       console.log(err);
     }
@@ -217,6 +216,65 @@ router.post('/email', async (req, res, next) => {
     res.status(200).json(authCode);
     transporter.close();
   });
+});
+
+// POST /user/password : 비밀번호 찾기 (이메일로)
+router.post('/password', async (req, res, next) => {
+  try {
+    const exUser = await User.findOne({
+      where: {
+        email: req.body.email,
+        name: req.body.name
+      }
+    });
+    if (!exUser) {
+      return res.status(403).send('해당 사용자 정보가 없습니다.');
+    }
+
+    let authCode = Math.random().toString().substr(2, 6); // 랜덤 인증번호 생성
+    let authPassword;
+    ejs.renderFile(appDir + '/template/authPassword.ejs', { authCode }, function (err, data) {
+      if (err) {
+        console.log(err);
+      }
+      authPassword = data;
+    });
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASS
+      }
+    });
+    let mailOptions = {
+      from: 'jobup@gmail.com',
+      to: req.body.email,
+      subject: '[JobUp] 임시 비밀번호를 알려드립니다.',
+      html: authPassword
+    };
+
+    transporter.sendMail(mailOptions, async function (error, info) {
+      if (error) {
+        console.log(error);
+      }
+      // 임시비밀번호로 수정
+      hashedPassword = await bcrypt.hash(authCode, 10); // 비밀번호 암호화 (해시화) , 숫자 클수록 보안강화
+      await User.update(
+        {
+          password: hashedPassword
+        },
+        { where: { email: req.body.email } }
+      );
+      res.status(200).send('ok');
+      transporter.close();
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 module.exports = router;

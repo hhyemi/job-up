@@ -10,7 +10,6 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Row,
   Col
 } from 'reactstrap';
 import Router from 'next/router';
@@ -88,6 +87,12 @@ const Login = () => {
     console.error(err);
   };
 
+  // 비밀번호 찾기
+  const onClickFindPassword = useCallback((e) => {
+    e.preventDefault();
+    Router.replace('/auth/findpassword');
+  }, []);
+
   return (
     <>
       <Col lg="5" md="7">
@@ -161,7 +166,7 @@ const Login = () => {
                   LOGIN
                 </Button>
                 <br />
-                <a className="text-muted" href="#pablo" onClick={(e) => e.preventDefault()}>
+                <a className="text-muted" href="#pablo" onClick={onClickFindPassword}>
                   <small>비밀번호 찾기</small>
                 </a>
               </div>

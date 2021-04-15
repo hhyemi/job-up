@@ -1,6 +1,9 @@
 import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
 import axios from 'axios';
 import {
+  FIND_PASSWORD_FAILURE,
+  FIND_PASSWORD_REQUEST,
+  FIND_PASSWORD_SUCCESS,
   GIT_LOG_IN_FAILURE,
   GIT_LOG_IN_REQUEST,
   GIT_LOG_IN_SUCCESS,
@@ -193,6 +196,25 @@ function* sendEmail(action) {
   }
 }
 
+// 이메일 인증
+function findPasswordAPI(data) {
+  return axios.post('/user/password', data);
+}
+
+function* findPassword(action) {
+  try {
+    yield call(findPasswordAPI, action.data);
+    yield put({
+      type: FIND_PASSWORD_SUCCESS
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: FIND_PASSWORD_FAILURE,
+      error: err.response.data
+    });
+  }
+}
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
@@ -225,6 +247,10 @@ function* watchSendEmail() {
   yield takeLatest(SEND_EMAIL_REQUEST, sendEmail);
 }
 
+function* watchFindPassword() {
+  yield takeLatest(FIND_PASSWORD_REQUEST, findPassword);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
@@ -234,6 +260,7 @@ export default function* userSaga() {
     fork(watchLoadMyInfo),
     fork(watchUpdateMyInfo),
     fork(watchUploadImg),
-    fork(watchSendEmail)
+    fork(watchSendEmail),
+    fork(watchFindPassword)
   ]);
 }

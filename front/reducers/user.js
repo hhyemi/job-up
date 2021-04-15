@@ -27,7 +27,10 @@ export const initialState = {
   uploadImgError: null,
   sendEmailLoading: false, // 이메일 인증
   sendEmailDone: false,
-  sendEmailError: null
+  sendEmailError: null,
+  findPasswordLoading: false, // 비밀번호 찾기 이메일 인증
+  findPasswordDone: false,
+  findPasswordError: null
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -61,6 +64,10 @@ export const UPLOAD_IMG_FAILURE = 'UPLOAD_IMG_FAILURE';
 export const SEND_EMAIL_REQUEST = 'SEND_EMAIL_REQUEST';
 export const SEND_EMAIL_SUCCESS = 'SEND_EMAIL_SUCCESS';
 export const SEND_EMAIL_FAILURE = 'SEND_EMAIL_FAILURE';
+
+export const FIND_PASSWORD_REQUEST = 'FIND_PASSWORD_REQUEST';
+export const FIND_PASSWORD_SUCCESS = 'FIND_PASSWORD_SUCCESS';
+export const FIND_PASSWORD_FAILURE = 'FIND_PASSWORD_FAILURE';
 
 // action creator
 export const loginRequestAction = (data) => ({
@@ -186,6 +193,19 @@ const reducer = (state = initialState, action) =>
       case SEND_EMAIL_FAILURE:
         draft.sendEmailLoading = false;
         draft.sendEmailError = action.error;
+        break;
+      case FIND_PASSWORD_REQUEST:
+        draft.findPasswordLoading = true;
+        draft.findPasswordError = null;
+        draft.findPasswordDone = false;
+        break;
+      case FIND_PASSWORD_SUCCESS:
+        draft.findPasswordLoading = false;
+        draft.findPasswordDone = true;
+        break;
+      case FIND_PASSWORD_FAILURE:
+        draft.findPasswordLoading = false;
+        draft.findPasswordError = action.error;
         break;
       default:
         break;
