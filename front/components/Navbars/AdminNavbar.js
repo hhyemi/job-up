@@ -31,7 +31,6 @@ const AdminNavbar = ({ brandText }) => {
   const onLogOut = useCallback((e) => {
     e.preventDefault();
     dispatch(logoutRequestAction());
-    Router.replace('/');
   }, []);
 
   return (
