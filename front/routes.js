@@ -1,31 +1,31 @@
 var routes = [
   {
     path: '/dashboard',
-    name: '메인',
+    name: 'Main',
     icon: 'ni ni-tv-2 text-primary',
     layout: '/admin'
   },
   {
     path: '/icons',
-    name: '일정',
+    name: 'Calendar',
     icon: 'ni ni-calendar-grid-58 text-blue',
     layout: '/admin'
   },
   {
     path: '/maps',
-    name: '할일',
+    name: 'TodoList',
     icon: 'ni ni-bullet-list-67 text-orange',
     layout: '/admin'
   },
   {
     path: '/profile',
-    name: '메모',
+    name: 'Memo',
     icon: 'ni ni-book-bookmark text-yellow',
     layout: '/admin'
   },
   {
     path: '/tables',
-    name: '이력서',
+    name: 'Resume',
     icon: 'ni ni-badge text-red',
     layout: '/admin'
   }

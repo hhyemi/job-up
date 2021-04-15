@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { UncontrolledCollapse, Navbar, NavItem, NavLink, Nav, Container, Row, Col } from 'reactstrap';
 
 function AuthNavbar({ brandText }) {
+  brandText = brandText || 'Main';
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
         <Container fluid>
           <Link href="/admin/dashboard">
-            <a className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">{brandText}</a>
+            <a className="h4 mb-0 text-white d-none d-lg-inline-block">{brandText}</a>
           </Link>
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledCollapse navbar toggler="#navbar-collapse-main">
