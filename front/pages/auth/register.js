@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import {
   Button,
@@ -10,7 +10,8 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col
+  Col,
+  Input
 } from 'reactstrap';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +21,7 @@ import GoogleLogin from 'react-google-login';
 
 import useInput from '../../hooks/useInput';
 import Auth from '../../layouts/Auth';
-import { GIT_LOG_IN_REQUEST, SIGN_UP_REQUEST } from '../../reducers/user';
+import { GIT_LOG_IN_REQUEST, SEND_EMAIL_REQUEST, SIGN_UP_REQUEST } from '../../reducers/user';
 
 // styled
 const ErrorMessage = styled.div`
@@ -31,10 +32,14 @@ const ErrorMessage = styled.div`
 const Register = () => {
   const dispatch = useDispatch();
   const [name, onChangeName] = useInput('');
-  const [email, onChangeEmail] = useInput('');
+  const [email, onChangeEmail] = useInput(''); // 이메일
+  const [emailCheck, onChangeEmailCheck] = useInput(''); // 이메일 인증번호
   const [password, onChangePassword] = useInput('');
-  const { signUpLoading, signUpDone, signUpError } = useSelector((state) => state.user);
-  const { me, git } = useSelector((state) => state.user);
+  const [emailVisible, setEmailVisible] = useState(false); // 인증번호 입력창 숨김처리 (f:숨김, t:보여줌)
+  const [emailPass, setEmailPass] = useState(false); // 인증번호 성공
+  const { me, git, emailCode, signUpLoading, signUpDone, signUpError, sendEmailDone } = useSelector(
+    (state) => state.user
+  );
 
   // 약관
   const [term, setTerm] = useState('');
@@ -49,6 +54,10 @@ const Register = () => {
     if (!term) {
       return setTermError(true);
     }
+    if (!emailPass) {
+      alert('이메일 인증을 해주세요.');
+      return;
+    }
     dispatch({
       type: SIGN_UP_REQUEST,
       data: {
@@ -57,7 +66,7 @@ const Register = () => {
         password
       }
     });
-  }, [name, email, password, term]);
+  }, [name, email, password, term, emailPass]);
 
   // 로그인일때 회원가입 막기
   useEffect(() => {
@@ -80,7 +89,7 @@ const Register = () => {
     }
   }, [signUpError]);
 
-  // Google Login
+  // Google 로그인
   const responseGoogle = (res) => {
     console.log(res);
     dispatch({
@@ -88,15 +97,10 @@ const Register = () => {
       data: { name: res.profileObj.name, email: res.profileObj.email, password: res.profileObj.googleId, social: true }
     });
   };
-  // Google Login Fail
-  const responseFail = (err) => {
-    console.error(err);
-  };
 
   // Github 로그인
   const responseGithub = async (res) => {
     console.log(res.code);
-
     dispatch({
       type: GIT_LOG_IN_REQUEST,
       data: { code: res.code }
@@ -113,6 +117,49 @@ const Register = () => {
       });
     }
   }, [git]);
+
+  // 소셜 로그인 실패
+  const responseFail = (err) => {
+    console.error(err);
+  };
+
+  // 이메일 인증번호 전송
+  const sendEmail = useCallback(async (e) => {
+    e.preventDefault();
+    if (!email) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    setEmailVisible(true);
+    dispatch({
+      type: SEND_EMAIL_REQUEST,
+      data: { email }
+    });
+    alert('이메일을 전송했습니다.');
+  });
+
+  // 이메일 인증번호 전송 성공
+  useEffect(() => {
+    if (sendEmailDone) {
+      console.log(emailCode);
+    }
+  }, [sendEmailDone, emailCode]);
+
+  // 이메일 인증버튼
+  const checkEmail = useCallback((e) => {
+    e.preventDefault();
+    if (!emailCheck) {
+      alert('인증번호를 입력해주세요.');
+      return;
+    }
+    if (emailCheck === emailCode) {
+      alert('인증되었습니다.');
+      setEmailVisible(false);
+      setEmailPass(true);
+    } else {
+      alert('인증번호가 일치하지 않습니다.');
+    }
+  });
 
   return (
     <>
@@ -184,6 +231,27 @@ const Register = () => {
                     }}
                   />
                 </InputGroup>
+              </FormGroup>
+              <Button type="button" onClick={sendEmail} style={{ marginBottom: '10px' }}>
+                이메일 인증
+              </Button>
+              <FormGroup>
+                {emailVisible && (
+                  <InputGroup className="input-group-alternative mb-3">
+                    <Input
+                      placeholder="인증번호"
+                      name="emailCheck"
+                      value={emailCheck}
+                      onChange={onChangeEmailCheck}
+                      validate={{
+                        required: { value: true, errorMessage: '인증번호를 입력해주세요.' }
+                      }}
+                    />
+                    <Button type="button" onClick={checkEmail}>
+                      인증확인
+                    </Button>
+                  </InputGroup>
+                )}
               </FormGroup>
               <FormGroup>
                 <InputGroup className="input-group-alternative">

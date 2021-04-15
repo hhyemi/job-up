@@ -6,6 +6,9 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+var appDir = path.dirname(require.main.filename);
 
 const { User } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
@@ -176,6 +179,44 @@ router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => {
   // 이미지올린 후
   console.log(req.files);
   res.json(req.files.map((v) => v.filename));
+});
+
+// POST /user/email : 이메일 인증
+router.post('/email', async (req, res, next) => {
+  let authCode = Math.random().toString().substr(2, 6); // 랜덤 인증번호 생성
+  let authEmail;
+  ejs.renderFile(appDir + '/template/authEmail.ejs', { authCode }, function (err, data) {
+    // form 불러오기
+    if (err) {
+      console.log(err);
+    }
+    authEmail = data;
+  });
+
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.NODEMAILER_USER,
+      pass: process.env.NODEMAILER_PASS
+    }
+  });
+  let mailOptions = {
+    from: 'jobup@gmail.com',
+    to: req.body.email,
+    subject: '[JobUp] 회원가입을 위한 인증번호를 입력해주세요.',
+    html: authEmail
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    }
+    res.status(200).json(authCode);
+    transporter.close();
+  });
 });
 
 module.exports = router;

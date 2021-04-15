@@ -3,6 +3,7 @@ import produce from '../util/produce';
 export const initialState = {
   me: null, // 내 정보
   git: null, // 깃허브 정보
+  emailCode: null, // 이메일 코드
   logInLoading: false, // 로그인 시도중
   logInDone: false,
   logInError: null,
@@ -23,7 +24,10 @@ export const initialState = {
   updateMyInfoError: null,
   uploadImgLoading: false, // 프로필 사진 업로드
   uploadImgDone: false,
-  uploadImgError: null
+  uploadImgError: null,
+  sendEmailLoading: false, // 이메일 인증
+  sendEmailDone: false,
+  sendEmailError: null
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -53,6 +57,10 @@ export const UPDATE_MY_INFO_FAILURE = 'UPDATE_MY_INFO_FAILURE';
 export const UPLOAD_IMG_REQUEST = 'UPLOAD_IMG_REQUEST';
 export const UPLOAD_IMG_SUCCESS = 'UPLOAD_IMG_SUCCESS';
 export const UPLOAD_IMG_FAILURE = 'UPLOAD_IMG_FAILURE';
+
+export const SEND_EMAIL_REQUEST = 'SEND_EMAIL_REQUEST';
+export const SEND_EMAIL_SUCCESS = 'SEND_EMAIL_SUCCESS';
+export const SEND_EMAIL_FAILURE = 'SEND_EMAIL_FAILURE';
 
 // action creator
 export const loginRequestAction = (data) => ({
@@ -164,6 +172,20 @@ const reducer = (state = initialState, action) =>
       case UPLOAD_IMG_FAILURE:
         draft.uploadImgLoading = false;
         draft.uploadImgError = action.error;
+        break;
+      case SEND_EMAIL_REQUEST:
+        draft.sendEmailLoading = true;
+        draft.sendEmailError = null;
+        draft.sendEmailDone = false;
+        break;
+      case SEND_EMAIL_SUCCESS:
+        draft.emailCode = action.data;
+        draft.sendEmailLoading = false;
+        draft.sendEmailDone = true;
+        break;
+      case SEND_EMAIL_FAILURE:
+        draft.sendEmailLoading = false;
+        draft.sendEmailError = action.error;
         break;
       default:
         break;

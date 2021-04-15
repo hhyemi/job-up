@@ -13,6 +13,9 @@ import {
   LOG_OUT_FAILURE,
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
+  SEND_EMAIL_FAILURE,
+  SEND_EMAIL_REQUEST,
+  SEND_EMAIL_SUCCESS,
   SIGN_UP_FAILURE,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
@@ -169,6 +172,27 @@ function* uploadImg(action) {
   }
 }
 
+// 이메일 인증
+function sendEmailAPI(data) {
+  return axios.post('/user/email', data);
+}
+
+function* sendEmail(action) {
+  try {
+    const result = yield call(sendEmailAPI, action.data);
+    yield put({
+      type: SEND_EMAIL_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: SEND_EMAIL_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
@@ -197,6 +221,10 @@ function* watchUploadImg() {
   yield takeLatest(UPLOAD_IMG_REQUEST, uploadImg);
 }
 
+function* watchSendEmail() {
+  yield takeLatest(SEND_EMAIL_REQUEST, sendEmail);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
@@ -205,6 +233,7 @@ export default function* userSaga() {
     fork(watchSignUp),
     fork(watchLoadMyInfo),
     fork(watchUpdateMyInfo),
-    fork(watchUploadImg)
+    fork(watchUploadImg),
+    fork(watchSendEmail)
   ]);
 }
