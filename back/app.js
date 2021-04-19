@@ -10,6 +10,8 @@ const hpp = require('hpp');
 const helmet = require('helmet');
 
 const userRouter = require('./routes/user');
+const calRouter = require('./routes/calendar');
+
 const db = require('./models');
 const passportConfig = require('./passport');
 
@@ -58,6 +60,7 @@ app.use(passport.session());
 // });
 
 app.use('/user', userRouter);
+app.use('/cal', calRouter);
 
 // 에러 처리 미들웨어 (기본적으로 내장되어 있는데 바꾸고싶으면 따로 만들어줌)
 app.use((err, req, res, next) => {});

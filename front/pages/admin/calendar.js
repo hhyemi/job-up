@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { Container } from 'reactstrap';
 import styled from 'styled-components';
 
@@ -9,6 +9,8 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 
 import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
+import Modal from '../../components/Modal/Modal';
+import Category from '../../components/Calendar/category';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
@@ -84,6 +86,7 @@ const RenderDateSpan = styled.span`
 const Calendar = () => {
   const cal = useRef(null);
   const [renderDate, setRenderDate] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   const onClickSchedule = useCallback((e) => {
     const { calendarId, id } = e.schedule;
@@ -205,6 +208,16 @@ const Calendar = () => {
     renderChange();
   });
 
+  // 카테고리 추가
+  const addCategory = useCallback((e) => {
+    e.preventDefault();
+    setModalOpen(true);
+  });
+  // 모달창 닫기
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <>
       <Header />
@@ -221,9 +234,12 @@ const Calendar = () => {
               <i className="ni ni-bold-right" />
             </button>
             <RenderDateSpan>{renderDate}</RenderDateSpan>
-            <button type="button" className="btn btn-warning btn-sm" style={{ float: 'right' }} onClick={moveNext}>
+            <button type="button" className="btn btn-warning btn-sm" style={{ float: 'right' }} onClick={addCategory}>
               카테고리 추가
             </button>
+            <Modal open={modalOpen} close={closeModal} header="카테고리 추가">
+              <Category />
+            </Modal>
           </span>
         </div>
         <TuiCalendar
