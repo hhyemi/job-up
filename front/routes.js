@@ -6,7 +6,7 @@ var routes = [
     layout: '/admin'
   },
   {
-    path: '/icons',
+    path: '/calendar',
     name: 'Calendar',
     icon: 'ni ni-calendar-grid-58 text-blue',
     layout: '/admin'
