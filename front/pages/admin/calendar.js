@@ -10,7 +10,7 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
 import Modal from '../../components/Modal/Modal';
-import Category from '../../components/Calendar/category';
+import Category from '../../components/Calendar/Category';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));

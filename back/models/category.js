@@ -1,7 +1,7 @@
 const DataTypes = require('sequelize');
 const { Model } = DataTypes;
 
-module.exports = class CalPurpose extends Model {
+module.exports = class Category extends Model {
   static init(sequelize) {
     return super.init(
       {
@@ -16,8 +16,8 @@ module.exports = class CalPurpose extends Model {
         }
       },
       {
-        modelName: 'CalPurpose',
-        tableName: 'cal_prps',
+        modelName: 'Category',
+        tableName: 'category',
         charset: 'utf8',
         collate: 'utf8_general_ci',
         sequelize
@@ -25,6 +25,7 @@ module.exports = class CalPurpose extends Model {
     );
   }
   static associate(db) {
-    db.CalPurpose.hasMany(db.CalSchedule);
+    db.Category.hasMany(db.Calendar);
+    db.Category.belongsTo(db.User);
   }
 };

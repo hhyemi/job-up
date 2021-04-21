@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const user = require('./user');
-const calPurpose = require('./calPurpose');
-const calSchedule = require('./calSchedule');
+const category = require('./category');
+const calendar = require('./calendar');
 
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
@@ -12,8 +12,8 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
 // 함수를 실행해줌
 db.User = user;
-db.CalPurpose = calPurpose;
-db.CalSchedule = calSchedule;
+db.Category = category;
+db.Calendar = calendar;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);

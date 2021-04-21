@@ -1,7 +1,7 @@
 const DataTypes = require('sequelize');
 const { Model } = DataTypes;
 
-module.exports = class CalSchedule extends Model {
+module.exports = class Calendar extends Model {
   static init(sequelize) {
     return super.init(
       {
@@ -31,8 +31,8 @@ module.exports = class CalSchedule extends Model {
         }
       },
       {
-        modelName: 'CalSchedule',
-        tableName: 'cal_sch',
+        modelName: 'Calendar',
+        tableName: 'calendar',
         charset: 'utf8',
         collate: 'utf8_general_ci',
         sequelize
@@ -40,7 +40,7 @@ module.exports = class CalSchedule extends Model {
     );
   }
   static associate(db) {
-    db.CalSchedule.belongsTo(db.CalPurpose);
-    db.CalSchedule.belongsTo(db.User);
+    db.Calendar.belongsTo(db.Category);
+    db.Calendar.belongsTo(db.User);
   }
 };

@@ -30,10 +30,10 @@ const Modal = (props) => {
 };
 
 Modal.propTypes = {
-  open: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   header: PropTypes.string.isRequired,
-  children: PropTypes.string.isRequired
+  children: PropTypes.object.isRequired
 };
 
 export default Modal;

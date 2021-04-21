@@ -34,6 +34,7 @@ module.exports = class User extends Model {
     );
   }
   static associate(db) {
-    db.User.hasMany(db.CalSchedule);
+    db.User.hasMany(db.Calendar);
+    db.User.hasMany(db.Category);
   }
 };
