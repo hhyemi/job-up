@@ -3,29 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Input, Table } from 'reactstrap';
 
 import useInput from '../../hooks/useInput';
-import { ADD_CATEGORY_REQUEST, DEL_CATEGORY_REQUEST, LOAD_CATEGORY_REQUEST } from '../../reducers/category';
+import { ADD_CATEGORY_REQUEST, DEL_CATEGORY_REQUEST } from '../../reducers/category';
 import CategoryList from './CategoryList';
 
 const Category = () => {
   const dispatch = useDispatch();
-  const { loadCategoryError, addCategoryError, addCategoryDone, categories } = useSelector((state) => state.category);
+  const { addCategoryError, addCategoryDone, categories } = useSelector((state) => state.category);
   const [color, onChangeColor, setColor] = useInput('');
   const [name, onChangeName, setName] = useInput('');
   const [checkItems, setCheckItems] = useState([]);
-
-  // 카테고리 가져오기
-  useEffect(() => {
-    dispatch({
-      type: LOAD_CATEGORY_REQUEST
-    });
-  }, []);
-
-  // 카테고리 가져오기 실패
-  useEffect(() => {
-    if (loadCategoryError) {
-      alert(loadCategoryError);
-    }
-  }, [loadCategoryError]);
 
   // 카테고리 추가
   const addCategory = useCallback(

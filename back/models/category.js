@@ -5,12 +5,26 @@ module.exports = class Category extends Model {
   static init(sequelize) {
     return super.init(
       {
+        id: {
+          type: DataTypes.STRING(30),
+          allowNull: false,
+          unique: true,
+          primaryKey: true
+        },
         name: {
           type: DataTypes.STRING(30),
           allowNull: false,
           unique: true
         },
-        color: {
+        bgColor: {
+          type: DataTypes.STRING(30),
+          allowNull: false
+        },
+        borderColor: {
+          type: DataTypes.STRING(30),
+          allowNull: false
+        },
+        dragBgColor: {
           type: DataTypes.STRING(30),
           allowNull: false
         }

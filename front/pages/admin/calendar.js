@@ -1,6 +1,7 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { Container } from 'reactstrap';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
 import TuiCalendar from '@toast-ui/react-calendar';
 import 'tui-calendar/dist/tui-calendar.css';
@@ -11,6 +12,7 @@ import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
 import Modal from '../../components/Modal/Modal';
 import Category from '../../components/Calendar/Category';
+import { LOAD_CATEGORY_REQUEST } from '../../reducers/category';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
@@ -48,32 +50,6 @@ const schedules = [
   }
 ];
 
-const calendars = [
-  {
-    id: '1',
-    name: 'My Calendar',
-    color: '#ffffff',
-    bgColor: '#9e5fff',
-    dragBgColor: '#9e5fff',
-    borderColor: '#9e5fff'
-  },
-  {
-    id: '2',
-    name: 'Company',
-    color: '#ffffff',
-    bgColor: '#00a9ff',
-    dragBgColor: '#00a9ff',
-    borderColor: '#00a9ff'
-  },
-  {
-    id: '3',
-    name: 'Company',
-    color: '#ffffff',
-    bgColor: '#fc590e',
-    dragBgColor: '#fc590e',
-    borderColor: '#fc590e'
-  }
-];
 // styled
 const RenderDateSpan = styled.span`
   color: white;
@@ -85,8 +61,24 @@ const RenderDateSpan = styled.span`
 
 const Calendar = () => {
   const cal = useRef(null);
+  const dispatch = useDispatch();
   const [renderDate, setRenderDate] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const { categories, loadCategoryError } = useSelector((state) => state.category);
+
+  // 카테고리 가져오기
+  useEffect(() => {
+    dispatch({
+      type: LOAD_CATEGORY_REQUEST
+    });
+  }, []);
+
+  // 카테고리 가져오기 실패
+  useEffect(() => {
+    if (loadCategoryError) {
+      alert(loadCategoryError);
+    }
+  }, [loadCategoryError]);
 
   const onClickSchedule = useCallback((e) => {
     const { calendarId, id } = e.schedule;
@@ -97,7 +89,7 @@ const Calendar = () => {
 
   // 일정 등록
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
-    console.log(scheduleData);
+    // console.log(scheduleData);
 
     const schedule = {
       id: String(Math.random()),
@@ -181,7 +173,7 @@ const Calendar = () => {
   // 초기 세팅 (일정, 현재날짜)
   const templates = {
     time(schedule) {
-      console.log(schedule);
+      // console.log(schedule);
       renderChange();
       return _getTimeTemplate(schedule, false);
     }
@@ -249,7 +241,7 @@ const Calendar = () => {
           useCreationPopup
           useDetailPopup
           template={templates}
-          calendars={calendars}
+          calendars={categories}
           schedules={schedules}
           onClickSchedule={onClickSchedule}
           onBeforeCreateSchedule={onBeforeCreateSchedule}

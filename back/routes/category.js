@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { Op } = require('sequelize');
 const axios = require('axios');
+const db = require('../models');
 
 const { Calendar, Category } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
@@ -29,12 +30,20 @@ router.get('/', isLoggedIn, async (req, res, next) => {
 // POST /cat/add : 카테고리 추가
 router.post('/add', isLoggedIn, async (req, res, next) => {
   try {
-    const category = await Category.create({
-      name: req.body.name,
-      color: req.body.color,
-      UserId: req.user.id
+    await Category.findAll({
+      attributes: [[db.sequelize.fn('MAX', db.sequelize.col('id')), 'maxId']],
+      raw: true
+    }).then(async function (result) {
+      const category = await Category.create({
+        id: String(result[0].maxId * 1 + 1),
+        name: req.body.name,
+        bgColor: req.body.color,
+        borderColor: req.body.color,
+        dragBgColor: req.body.color,
+        UserId: req.user.id
+      });
+      res.status(201).json(category);
     });
-    res.status(201).json(category);
   } catch (error) {
     console.error(error);
     next(error);
