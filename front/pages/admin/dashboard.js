@@ -1,9 +1,6 @@
 import React from 'react';
-// node.js library that concatenates classes (strings)
 import classnames from 'classnames';
-// javascipt plugin for creating charts
 import Chart from 'chart.js';
-// react plugin used to create charts
 import { Line, Bar } from 'react-chartjs-2';
 import {
   Button,
@@ -19,10 +16,14 @@ import {
   Row,
   Col
 } from 'reactstrap';
+import axios from 'axios';
+import { END } from 'redux-saga';
 
+import wrapper from '../../store/configureStore';
 import { chartOptions, parseOptions, chartExample1, chartExample2 } from '../../variables/charts';
 import Header from '../../components/Headers/Header';
 import Admin from '../../layouts/Admin';
+import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 
 const Dashboard = (props) => {
   const [activeNav, setActiveNav] = React.useState(1);
@@ -276,5 +277,21 @@ const Dashboard = (props) => {
 };
 
 Dashboard.layout = Admin;
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  console.log('getServerSideProps start');
+  const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST
+  });
+
+  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
+  console.log('getServerSideProps end');
+  await context.store.sagaTask.toPromise(); // 이건..사용방법 하라고
+});
 
 export default Dashboard;
