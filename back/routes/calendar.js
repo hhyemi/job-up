@@ -39,14 +39,6 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
       CategoryId: req.body.calendarId,
       UserId: req.user.id
     });
-    // let query = `SELECT
-    //               calendar.* , category.color, category.bgColor, category.borderColor , category.dragBgColor
-    //             FROM category, calendar
-    //             WHERE calendar.calendarId = category.id AND calendar.id = ${calendar.id};`;
-    // const fullCalendar = await db.sequelize.query(query, {
-    //   type: db.Sequelize.QueryTypes.SELECT,
-    //   raw: true
-    // });
     res.status(201).json(calendar);
   } catch (error) {
     console.error(error);
@@ -55,16 +47,16 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
 });
 
 // DELETE /cal/del : 달력 삭제
-// router.delete('/del', isLoggedIn, async (req, res, next) => {
-//   try {
-//     await Category.destroy({
-//       where: { id: req.body.checkItems }
-//     });
-//     res.status(201).json({ id: req.body.checkItems });
-//   } catch (error) {
-//     console.error(error);
-//     next(error);
-//   }
-// });
+router.delete('/del/:calId', isLoggedIn, async (req, res, next) => {
+  try {
+    await Calendar.destroy({
+      where: { id: req.params.calId }
+    });
+    res.status(201).json({ CalId: parseInt(req.params.calId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 
 module.exports = router;

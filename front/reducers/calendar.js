@@ -63,7 +63,7 @@ const reducer = (state = initialState, action) =>
       case DEL_CALENDAR_SUCCESS:
         draft.delCalendarLoading = false;
         draft.delCalendarDone = true;
-        draft.calendars = draft.calendars.filter((v) => !action.data.id.includes(v.id));
+        draft.calendars = draft.calendars.filter((v) => v.id !== action.data.CalId);
         break;
       case DEL_CALENDAR_FAILURE:
         draft.delCalendarLoading = false;

@@ -56,7 +56,7 @@ function* addCalendar(action) {
 
 // 달력 삭제
 function delCalendarAPI(data) {
-  return axios.delete('/cal/del', { data });
+  return axios.delete(`/cal/del/${data}`);
 }
 
 function* delCalendar(action) {

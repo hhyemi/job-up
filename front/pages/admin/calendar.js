@@ -2,55 +2,22 @@ import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { END } from 'redux-saga';
 
 import TuiCalendar from '@toast-ui/react-calendar';
 import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 
+import wrapper from '../../store/configureStore';
 import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
 import Modal from '../../components/Modal/Modal';
 import Category from '../../components/Calendar/Category';
 import { LOAD_CATEGORY_REQUEST } from '../../reducers/category';
-import { ADD_CALENDAR_REQUEST, LOAD_CALENDAR_REQUEST } from '../../reducers/calendar';
-
-const start = new Date();
-const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
-
-const schedules = [
-  {
-    id: 1,
-    calendarId: '2',
-    category: 'time',
-    isVisible: true,
-    title: 'Study',
-    body: 'Test',
-    start,
-    end
-  },
-  {
-    id: 2,
-    calendarId: '1',
-    category: 'time',
-    isVisible: true,
-    title: 'Meeting',
-    body: 'Description',
-    start: '2021-04-22 08:20:46',
-    end: new Date(new Date().setHours(start.getHours() + 2))
-  },
-  {
-    id: 3,
-    calendarId: '1',
-    category: 'allday',
-    isVisible: true,
-    title: 'Meeting22',
-    location: 'dddd',
-    state: 'Free',
-    start: '2021-04-22 08:20:46',
-    end: new Date(new Date().setHours(start.getHours() + 2))
-  }
-];
+import { ADD_CALENDAR_REQUEST, DEL_CALENDAR_REQUEST, LOAD_CALENDAR_REQUEST } from '../../reducers/calendar';
+import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 
 // styled
 const RenderDateSpan = styled.span`
@@ -134,6 +101,11 @@ const Calendar = () => {
     console.log(res);
 
     const { id, calendarId } = res.schedule;
+
+    dispatch({
+      type: DEL_CALENDAR_REQUEST,
+      data: id
+    });
 
     cal.current.calendarInst.deleteSchedule(id, calendarId);
   }, []);
@@ -273,5 +245,22 @@ const Calendar = () => {
 };
 
 Calendar.layout = Admin;
+
+// element오류 ㅠㅠ
+// export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+//   console.log('getServerSideProps start');
+//   const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
+//   axios.defaults.headers.Cookie = '';
+//   if (context.req && cookie) {
+//     axios.defaults.headers.Cookie = cookie;
+//   }
+//   context.store.dispatch({
+//     type: LOAD_MY_INFO_REQUEST
+//   });
+
+//   context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
+//   console.log('getServerSideProps end');
+//   await context.store.sagaTask.toPromise(); // 이건..사용방법 하라고
+// });
 
 export default Calendar;
