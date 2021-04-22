@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Table } from 'reactstrap';
 
 import useInput from '../../hooks/useInput';
-import { ADD_CATEGORY_REQUEST, LOAD_CATEGORY_REQUEST } from '../../reducers/category';
+import { ADD_CATEGORY_REQUEST, DEL_CATEGORY_REQUEST, LOAD_CATEGORY_REQUEST } from '../../reducers/category';
 import CategoryList from './CategoryList';
 
 const Category = () => {
@@ -11,6 +11,7 @@ const Category = () => {
   const { loadCategoryError, addCategoryError, addCategoryDone, categories } = useSelector((state) => state.category);
   const [color, onChangeColor, setColor] = useInput('');
   const [name, onChangeName, setName] = useInput('');
+  const [checkItems, setCheckItems] = useState([]);
 
   // 카테고리 가져오기
   useEffect(() => {
@@ -56,6 +57,39 @@ const Category = () => {
     }
   }, [addCategoryError]);
 
+  // 체크박스 단일 개체 선택
+  const handleSingleCheck = (checked, id) => {
+    if (checked) {
+      setCheckItems([...checkItems, id]);
+    } else {
+      setCheckItems(checkItems.filter((el) => el !== id));
+    }
+  };
+
+  // 체크박스 전체 선택
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      const idArray = [];
+      categories.forEach((el) => idArray.push(el.id));
+      setCheckItems(idArray);
+    } else {
+      setCheckItems([]);
+    }
+  };
+
+  // 카테고리 삭제
+  const deleteCategory = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch({
+        type: DEL_CATEGORY_REQUEST,
+        data: { checkItems }
+      });
+      console.log(checkItems);
+    },
+    [checkItems]
+  );
+
   return (
     <>
       <Input type="color" className="inputColorCss" value={color} onChange={onChangeColor} />
@@ -81,7 +115,13 @@ const Category = () => {
           <tr>
             <th scope="col">
               <div className="custom-control custom-control-alternative custom-checkbox">
-                <input className="custom-control-input" type="checkbox" id="customCheckRegister" />
+                <input
+                  className="custom-control-input"
+                  type="checkbox"
+                  id="customCheckRegister"
+                  onChange={(e) => handleAllCheck(e.target.checked)}
+                  checked={checkItems.length === categories.length}
+                />
                 <label className="custom-control-label" htmlFor="customCheckRegister" />
               </div>
             </th>
@@ -101,12 +141,18 @@ const Category = () => {
           </colgroup>
           <tbody className="cat-tbody">
             {categories.map((category, i) => (
-              <CategoryList key={category.id} category={category} index={categories.length - 1 - i} />
+              <CategoryList
+                key={category.id}
+                category={category}
+                index={categories.length - 1 - i}
+                checkItems={checkItems}
+                handleSingleCheck={handleSingleCheck}
+              />
             ))}
           </tbody>
         </Table>
       </div>
-      <button type="button" className="btn btn-danger btn-sm mb-2">
+      <button type="button" className="btn btn-danger btn-sm mb-2" onClick={deleteCategory}>
         삭제
       </button>
     </>

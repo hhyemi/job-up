@@ -26,8 +26,8 @@ router.get('/', isLoggedIn, async (req, res, next) => {
   }
 });
 
-// POST /cat/category : 카테고리 추가
-router.post('/category', isLoggedIn, async (req, res, next) => {
+// POST /cat/add : 카테고리 추가
+router.post('/add', isLoggedIn, async (req, res, next) => {
   try {
     const category = await Category.create({
       name: req.body.name,
@@ -35,6 +35,19 @@ router.post('/category', isLoggedIn, async (req, res, next) => {
       UserId: req.user.id
     });
     res.status(201).json(category);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// DELETE /cat/del : 카테고리 삭제
+router.delete('/del', isLoggedIn, async (req, res, next) => {
+  try {
+    await Category.destroy({
+      where: { id: req.body.checkItems }
+    });
+    res.status(201).json({ id: req.body.checkItems });
   } catch (error) {
     console.error(error);
     next(error);
