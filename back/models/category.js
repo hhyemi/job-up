@@ -13,8 +13,7 @@ module.exports = class Category extends Model {
         },
         name: {
           type: DataTypes.STRING(30),
-          allowNull: false,
-          unique: true
+          allowNull: false
         },
         bgColor: {
           type: DataTypes.STRING(30),
