@@ -1,8 +1,4 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
-const passport = require('passport');
-const { Op } = require('sequelize');
-const axios = require('axios');
 const db = require('../models');
 
 const { Calendar, Category } = require('../models');

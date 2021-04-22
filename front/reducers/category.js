@@ -64,7 +64,6 @@ const reducer = (state = initialState, action) =>
       case DEL_CATEGORY_SUCCESS:
         draft.delCategoryLoading = false;
         draft.delCategoryDone = true;
-        console.log(action.data, action.data.id);
         draft.categories = draft.categories.filter((v) => !action.data.id.includes(v.id));
         break;
       case DEL_CATEGORY_FAILURE:
