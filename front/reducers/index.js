@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 
 import user from './user';
 import category from './category';
+import calendar from './calendar';
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -12,7 +13,8 @@ const rootReducer = (state, action) => {
     default: {
       const combineReducer = combineReducers({
         user,
-        category
+        category,
+        calendar
       });
       return combineReducer(state, action);
     }

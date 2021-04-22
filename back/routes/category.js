@@ -1,8 +1,8 @@
 const express = require('express');
 const db = require('../models');
 
-const { Calendar, Category } = require('../models');
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const { Category } = require('../models');
+const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
@@ -15,7 +15,6 @@ router.get('/', isLoggedIn, async (req, res, next) => {
         ['createdAt', 'DESC'] //  생성일 먼저
       ]
     });
-    console.log(category);
     res.status(201).json(category);
   } catch (error) {
     console.error(error);
@@ -27,12 +26,14 @@ router.get('/', isLoggedIn, async (req, res, next) => {
 router.post('/add', isLoggedIn, async (req, res, next) => {
   try {
     await Category.findAll({
+      // id 최대값 찾기
       attributes: [[db.sequelize.fn('MAX', db.sequelize.col('id')), 'maxId']],
       raw: true
     }).then(async function (result) {
       const category = await Category.create({
         id: String(result[0].maxId * 1 + 1),
         name: req.body.name,
+        color: '#000',
         bgColor: req.body.color,
         borderColor: req.body.color,
         dragBgColor: req.body.color,

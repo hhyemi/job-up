@@ -13,13 +13,14 @@ import Header from '../../components/Headers/Header';
 import Modal from '../../components/Modal/Modal';
 import Category from '../../components/Calendar/Category';
 import { LOAD_CATEGORY_REQUEST } from '../../reducers/category';
+import { ADD_CALENDAR_REQUEST, LOAD_CALENDAR_REQUEST } from '../../reducers/calendar';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
 
 const schedules = [
   {
-    id: '1',
+    id: 1,
     calendarId: '2',
     category: 'time',
     isVisible: true,
@@ -29,23 +30,24 @@ const schedules = [
     end
   },
   {
-    id: '2',
-    calendarId: '2',
+    id: 2,
+    calendarId: '1',
     category: 'time',
     isVisible: true,
     title: 'Meeting',
     body: 'Description',
-    start: new Date(new Date().setHours(start.getHours() + 1)),
+    start: '2021-04-22 08:20:46',
     end: new Date(new Date().setHours(start.getHours() + 2))
   },
   {
-    id: '3',
-    calendarId: '3',
-    category: 'time',
+    id: 3,
+    calendarId: '1',
+    category: 'allday',
     isVisible: true,
-    title: 'Meeting',
-    body: 'Description',
-    start: new Date(new Date().setHours(start.getHours() + 1)),
+    title: 'Meeting22',
+    location: 'dddd',
+    state: 'Free',
+    start: '2021-04-22 08:20:46',
     end: new Date(new Date().setHours(start.getHours() + 2))
   }
 ];
@@ -65,13 +67,20 @@ const Calendar = () => {
   const [renderDate, setRenderDate] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const { categories, loadCategoryError } = useSelector((state) => state.category);
+  const { calendars, loadCalendarError, addCalendarDone } = useSelector((state) => state.calendar);
 
-  // 카테고리 가져오기
+  // 카테고리, 달력 가져오기
   useEffect(() => {
     dispatch({
       type: LOAD_CATEGORY_REQUEST
     });
   }, []);
+
+  useEffect(() => {
+    dispatch({
+      type: LOAD_CALENDAR_REQUEST
+    });
+  }, [addCalendarDone]);
 
   // 카테고리 가져오기 실패
   useEffect(() => {
@@ -80,24 +89,29 @@ const Calendar = () => {
     }
   }, [loadCategoryError]);
 
+  // 달력 가져오기 실패
+  useEffect(() => {
+    if (loadCalendarError) {
+      alert(loadCalendarError);
+    }
+  }, [loadCalendarError]);
+
   const onClickSchedule = useCallback((e) => {
     const { calendarId, id } = e.schedule;
     const el = cal.current.calendarInst.getElement(id, calendarId);
 
-    console.log(e, el.getBoundingClientRect());
+    // console.log(e, el.getBoundingClientRect());
   }, []);
 
   // 일정 등록
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
-    // console.log(scheduleData);
-
     const schedule = {
       id: String(Math.random()),
       calendarId: scheduleData.calendarId,
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
-      start: scheduleData.start,
-      end: scheduleData.end,
+      start: scheduleData.start._date,
+      end: scheduleData.end._date,
       category: scheduleData.isAllDay ? 'allday' : 'time',
       dueDateClass: '',
       location: scheduleData.location,
@@ -106,6 +120,11 @@ const Calendar = () => {
       },
       state: scheduleData.state
     };
+
+    dispatch({
+      type: ADD_CALENDAR_REQUEST,
+      data: schedule
+    });
 
     cal.current.calendarInst.createSchedules([schedule]);
   }, []);
@@ -242,7 +261,7 @@ const Calendar = () => {
           useDetailPopup
           template={templates}
           calendars={categories}
-          schedules={schedules}
+          schedules={calendars}
           onClickSchedule={onClickSchedule}
           onBeforeCreateSchedule={onBeforeCreateSchedule}
           onBeforeDeleteSchedule={onBeforeDeleteSchedule}

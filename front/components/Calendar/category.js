@@ -71,7 +71,6 @@ const Category = () => {
         type: DEL_CATEGORY_REQUEST,
         data: { checkItems }
       });
-      console.log(checkItems);
     },
     [checkItems]
   );

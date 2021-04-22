@@ -6,7 +6,7 @@ module.exports = class Calendar extends Model {
     return super.init(
       {
         calendarId: {
-          type: DataTypes.INTEGER(10),
+          type: DataTypes.STRING(10),
           allowNull: false
         },
         category: {
@@ -18,7 +18,15 @@ module.exports = class Calendar extends Model {
           allowNull: false
         },
         title: {
-          type: DataTypes.INTEGER(30),
+          type: DataTypes.STRING(30),
+          allowNull: false
+        },
+        location: {
+          type: DataTypes.STRING(50),
+          allowNull: false
+        },
+        state: {
+          type: DataTypes.STRING(10),
           allowNull: false
         },
         start: {

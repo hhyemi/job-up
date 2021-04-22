@@ -15,6 +15,10 @@ module.exports = class Category extends Model {
           type: DataTypes.STRING(30),
           allowNull: false
         },
+        color: {
+          type: DataTypes.STRING(30),
+          allowNull: false
+        },
         bgColor: {
           type: DataTypes.STRING(30),
           allowNull: false
