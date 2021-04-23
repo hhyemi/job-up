@@ -106,14 +106,15 @@ const Profile = () => {
       if (!password) {
         return setPasswordNotError(true);
       }
+      const data = {
+        name,
+        password,
+        src: imagePaths && imagePaths[0]
+      };
 
       dispatch({
         type: UPDATE_MY_INFO_REQUEST,
-        data: {
-          name,
-          password,
-          src: imagePaths[0]
-        }
+        data
       });
     },
     [name, password, passwordCheck, imagePaths]
