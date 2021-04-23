@@ -16,7 +16,12 @@ import Header from '../../components/Headers/Header';
 import Modal from '../../components/Modal/Modal';
 import Category from '../../components/Calendar/Category';
 import { LOAD_CATEGORY_REQUEST } from '../../reducers/category';
-import { ADD_CALENDAR_REQUEST, DEL_CALENDAR_REQUEST, LOAD_CALENDAR_REQUEST } from '../../reducers/calendar';
+import {
+  ADD_CALENDAR_REQUEST,
+  DEL_CALENDAR_REQUEST,
+  LOAD_CALENDAR_REQUEST,
+  UPT_CALENDAR_REQUEST
+} from '../../reducers/calendar';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 
 // styled
@@ -34,20 +39,25 @@ const Calendar = () => {
   const [renderDate, setRenderDate] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const { categories, loadCategoryError } = useSelector((state) => state.category);
-  const { calendars, loadCalendarError, addCalendarDone } = useSelector((state) => state.calendar);
+  const { calendars, loadCalendarError, addCalendarDone, uptCalendarDone } = useSelector((state) => state.calendar);
 
   // 카테고리, 달력 가져오기
   useEffect(() => {
+    dispatch({
+      type: LOAD_CALENDAR_REQUEST
+    });
     dispatch({
       type: LOAD_CATEGORY_REQUEST
     });
   }, []);
 
   useEffect(() => {
-    dispatch({
-      type: LOAD_CALENDAR_REQUEST
-    });
-  }, [addCalendarDone]);
+    if (addCalendarDone || uptCalendarDone) {
+      dispatch({
+        type: LOAD_CALENDAR_REQUEST
+      });
+    }
+  }, [addCalendarDone, uptCalendarDone]);
 
   // 카테고리 가져오기 실패
   useEffect(() => {
@@ -63,20 +73,16 @@ const Calendar = () => {
     }
   }, [loadCalendarError]);
 
-  const onClickSchedule = useCallback((e) => {
-    const { calendarId, id } = e.schedule;
-    const el = cal.current.calendarInst.getElement(id, calendarId);
-
-    // console.log(e, el.getBoundingClientRect());
-  }, []);
-
   // 일정 등록
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
+    if (scheduleData.calendarId == null) {
+      alert('한개 이상의 카테고리를 추가하여 주세요.');
+      return;
+    }
     const schedule = {
       id: String(Math.random()),
       calendarId: scheduleData.calendarId,
       title: scheduleData.title,
-      isAllDay: scheduleData.isAllDay,
       start: scheduleData.start._date,
       end: scheduleData.end._date,
       category: scheduleData.isAllDay ? 'allday' : 'time',
@@ -98,10 +104,7 @@ const Calendar = () => {
 
   // 일정 삭제
   const onBeforeDeleteSchedule = useCallback((res) => {
-    console.log(res);
-
     const { id, calendarId } = res.schedule;
-
     dispatch({
       type: DEL_CALENDAR_REQUEST,
       data: id
@@ -112,9 +115,23 @@ const Calendar = () => {
 
   // 일정 수정
   const onBeforeUpdateSchedule = useCallback((e) => {
-    console.log(e);
-
     const { schedule, changes } = e;
+    const data = {
+      id: schedule.id,
+      calendarId: changes.calendarId && changes.calendarId,
+      title: changes.title && changes.title,
+      isAllDay: changes.isAllDay,
+      start: changes.start?._date,
+      end: changes.end?._date,
+      category: changes.isAllDay ? 'allday' : 'time',
+      location: changes.location && changes.location,
+      state: changes.state && changes.state
+    };
+
+    dispatch({
+      type: UPT_CALENDAR_REQUEST,
+      data
+    });
 
     cal.current.calendarInst.updateSchedule(schedule.id, schedule.calendarId, changes);
   }, []);
@@ -234,7 +251,6 @@ const Calendar = () => {
           template={templates}
           calendars={categories}
           schedules={calendars}
-          onClickSchedule={onClickSchedule}
           onBeforeCreateSchedule={onBeforeCreateSchedule}
           onBeforeDeleteSchedule={onBeforeDeleteSchedule}
           onBeforeUpdateSchedule={onBeforeUpdateSchedule}

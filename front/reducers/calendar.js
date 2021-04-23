@@ -10,7 +10,10 @@ export const initialState = {
   addCalendarError: null,
   delCalendarLoading: false, // 달력 삭제
   delCalendarDone: false,
-  delCalendarError: null
+  delCalendarError: null,
+  uptCalendarLoading: false, // 달력 수정
+  uptCalendarDone: false,
+  uptCalendarError: null
 };
 
 export const LOAD_CALENDAR_REQUEST = 'LOAD_CALENDAR_REQUEST';
@@ -24,6 +27,10 @@ export const ADD_CALENDAR_FAILURE = 'ADD_CALENDAR_FAILURE';
 export const DEL_CALENDAR_REQUEST = 'DEL_CALENDAR_REQUEST';
 export const DEL_CALENDAR_SUCCESS = 'DEL_CALENDAR_SUCCESS';
 export const DEL_CALENDAR_FAILURE = 'DEL_CALENDAR_FAILURE';
+
+export const UPT_CALENDAR_REQUEST = 'UPT_CALENDAR_REQUEST';
+export const UPT_CALENDAR_SUCCESS = 'UPT_CALENDAR_SUCCESS';
+export const UPT_CALENDAR_FAILURE = 'UPT_CALENDAR_FAILURE';
 
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
@@ -68,6 +75,19 @@ const reducer = (state = initialState, action) =>
       case DEL_CALENDAR_FAILURE:
         draft.delCalendarLoading = false;
         draft.delCalendarError = action.error;
+        break;
+      case UPT_CALENDAR_REQUEST:
+        draft.uptCalendarLoading = true;
+        draft.uptCalendarError = null;
+        draft.uptCalendarDone = false;
+        break;
+      case UPT_CALENDAR_SUCCESS:
+        draft.uptCalendarLoading = false;
+        draft.uptCalendarDone = true;
+        break;
+      case UPT_CALENDAR_FAILURE:
+        draft.uptCalendarLoading = false;
+        draft.uptCalendarError = action.error;
         break;
       default:
         break;

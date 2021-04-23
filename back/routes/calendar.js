@@ -59,4 +59,28 @@ router.delete('/del/:calId', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// PATCH /cal/upt : 달력 수정
+router.patch('/upt', isLoggedIn, async (req, res, next) => {
+  try {
+    await Calendar.update(
+      {
+        calendarId: req.body.calendarId,
+        category: req.body.category,
+        isVisible: true,
+        title: req.body.title,
+        location: req.body.location,
+        state: req.body.state,
+        start: req.body.start,
+        end: req.body.end,
+        CategoryId: req.body.calendarId
+      },
+      { where: { id: req.body.id, UserId: req.user.id } }
+    );
+    res.status(201).send('ok');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;

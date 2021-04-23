@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../models');
 
-const { Category } = require('../models');
+const { Category, Calendar } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -53,6 +53,12 @@ router.delete('/del', isLoggedIn, async (req, res, next) => {
     await Category.destroy({
       where: { id: req.body.checkItems }
     });
+    await Calendar.update(
+      {
+        calendarId: '1'
+      },
+      { where: { calendarId: req.body.checkItems, UserId: req.user.id } }
+    );
     res.status(201).json({ id: req.body.checkItems });
   } catch (error) {
     console.error(error);

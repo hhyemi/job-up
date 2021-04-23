@@ -9,7 +9,10 @@ import {
   DEL_CALENDAR_SUCCESS,
   LOAD_CALENDAR_FAILURE,
   LOAD_CALENDAR_REQUEST,
-  LOAD_CALENDAR_SUCCESS
+  LOAD_CALENDAR_SUCCESS,
+  UPT_CALENDAR_FAILURE,
+  UPT_CALENDAR_REQUEST,
+  UPT_CALENDAR_SUCCESS
 } from '../reducers/calendar';
 
 // 달력 가져오기
@@ -75,6 +78,27 @@ function* delCalendar(action) {
   }
 }
 
+// 달력 수정
+function uptCalendarAPI(data) {
+  return axios.patch('/cal/upt/', data);
+}
+
+function* uptCalendar(action) {
+  try {
+    const result = yield call(uptCalendarAPI, action.data);
+    yield put({
+      type: UPT_CALENDAR_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPT_CALENDAR_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
 function* watchLoadCalendar() {
   yield takeLatest(LOAD_CALENDAR_REQUEST, loadCalendar);
 }
@@ -87,6 +111,10 @@ function* watchDelCalendar() {
   yield takeLatest(DEL_CALENDAR_REQUEST, delCalendar);
 }
 
+function* watchUptCalendar() {
+  yield takeLatest(UPT_CALENDAR_REQUEST, uptCalendar);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLoadCalendar), fork(watchAddCalendar), fork(watchDelCalendar)]);
+  yield all([fork(watchLoadCalendar), fork(watchAddCalendar), fork(watchDelCalendar), fork(watchUptCalendar)]);
 }
