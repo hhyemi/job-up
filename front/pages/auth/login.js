@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -16,6 +16,7 @@ import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import GitHubLogin from 'react-github-login';
 import GoogleLogin from 'react-google-login';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import Auth from '../../layouts/Auth';
 import useInput from '../../hooks/useInput';
@@ -27,6 +28,10 @@ const Login = () => {
   const [password, onChangePassword] = useInput('');
   const { me, git } = useSelector((state) => state.user);
   const { logInLoading, logInError } = useSelector((state) => state.user);
+  const { findPasswordDone, findPasswordError } = useSelector((state) => state.user);
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('');
 
   // 로그인 버튼 클릭
   const onSubmitForm = useCallback(
@@ -48,7 +53,9 @@ const Login = () => {
   // 로그인 실패
   useEffect(() => {
     if (logInError) {
-      alert(logInError);
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(logInError);
     }
   }, [logInError]);
 
@@ -174,6 +181,7 @@ const Login = () => {
           </CardBody>
         </Card>
       </Col>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>
   );
 };

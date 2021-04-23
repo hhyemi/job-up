@@ -2,6 +2,7 @@ import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import SweetAlert from 'react-bootstrap-sweetalert';
 import axios from 'axios';
 import { END } from 'redux-saga';
 
@@ -40,6 +41,9 @@ const Calendar = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const { categories, loadCategoryError } = useSelector((state) => state.category);
   const { calendars, loadCalendarError, addCalendarDone, uptCalendarDone } = useSelector((state) => state.calendar);
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('');
 
   // 카테고리, 달력 가져오기
   useEffect(() => {
@@ -62,21 +66,27 @@ const Calendar = () => {
   // 카테고리 가져오기 실패
   useEffect(() => {
     if (loadCategoryError) {
-      alert(loadCategoryError);
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(loadCategoryError);
     }
   }, [loadCategoryError]);
 
   // 달력 가져오기 실패
   useEffect(() => {
     if (loadCalendarError) {
-      alert(loadCalendarError);
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(loadCalendarError);
     }
   }, [loadCalendarError]);
 
   // 일정 등록
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
     if (scheduleData.calendarId == null) {
-      alert('한개 이상의 카테고리를 추가하여 주세요.');
+      setAlertShow(true);
+      setAlertType('warning');
+      setAlertTitle('한개 이상의 카테고리를 추가하여 주세요.');
       return;
     }
     const schedule = {
@@ -256,6 +266,7 @@ const Calendar = () => {
           onBeforeUpdateSchedule={onBeforeUpdateSchedule}
         />
       </Container>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>
   );
 };

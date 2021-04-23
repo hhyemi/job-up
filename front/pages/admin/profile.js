@@ -3,6 +3,7 @@ import { Button, Card, CardHeader, CardBody, FormGroup, Form, Input, Container, 
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Router from 'next/router';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import { backUrl } from '../../config/config';
 import Admin from '../../layouts/Admin';
@@ -36,6 +37,10 @@ const Profile = () => {
   const [passwordCheck, setPasswordCheck] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const { updateMyInfoError, updateMyInfoDone } = useSelector((state) => state.user);
+
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('');
 
   // 로그인 풀리면
   useEffect(() => {
@@ -117,14 +122,18 @@ const Profile = () => {
   // 수정 성공
   useEffect(() => {
     if (updateMyInfoDone) {
-      alert('내정보가 수정되었습니다.');
+      setAlertShow(true);
+      setAlertType('success');
+      setAlertTitle('내정보가 수정되었습니다.');
     }
   }, [updateMyInfoDone]);
 
   // 수정 실패
   useEffect(() => {
     if (updateMyInfoError) {
-      alert(updateMyInfoError);
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(updateMyInfoError);
     }
   }, [updateMyInfoError]);
 
@@ -241,6 +250,7 @@ const Profile = () => {
           </Col>
         </Row>
       </Container>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>
   );
 };

@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Router from 'next/router';
 import GitHubLogin from 'react-github-login';
 import GoogleLogin from 'react-google-login';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import useInput from '../../hooks/useInput';
 import Auth from '../../layouts/Auth';
@@ -40,6 +41,9 @@ const Register = () => {
   const { me, git, emailCode, signUpLoading, signUpDone, signUpError, sendEmailDone } = useSelector(
     (state) => state.user
   );
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('');
 
   // 약관
   const [term, setTerm] = useState('');
@@ -55,7 +59,9 @@ const Register = () => {
       return setTermError(true);
     }
     if (!emailPass) {
-      alert('이메일 인증을 해주세요.');
+      setAlertShow(true);
+      setAlertType('warning');
+      setAlertTitle('이메일 인증을 해주세요.');
       return;
     }
     dispatch({
@@ -85,7 +91,9 @@ const Register = () => {
   // 회원가입 실패
   useEffect(() => {
     if (signUpError) {
-      alert(signUpError);
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(signUpError);
     }
   }, [signUpError]);
 
@@ -127,7 +135,9 @@ const Register = () => {
   const sendEmail = useCallback(async (e) => {
     e.preventDefault();
     if (!email) {
-      alert('이메일을 입력해주세요.');
+      setAlertShow(true);
+      setAlertType('warning');
+      setAlertTitle('이메일을 입력해주세요.');
       return;
     }
     setEmailVisible(true);
@@ -135,7 +145,9 @@ const Register = () => {
       type: SEND_EMAIL_REQUEST,
       data: { email }
     });
-    alert('이메일을 전송했습니다.');
+    setAlertShow(true);
+    setAlertType('info');
+    setAlertTitle('이메일을 전송했습니다.');
   });
 
   // 이메일 인증번호 전송 성공
@@ -149,15 +161,21 @@ const Register = () => {
   const checkEmail = useCallback((e) => {
     e.preventDefault();
     if (!emailCheck) {
-      alert('인증번호를 입력해주세요.');
+      setAlertShow(true);
+      setAlertType('warning');
+      setAlertTitle('인증번호를 입력해주세요.');
       return;
     }
     if (emailCheck === emailCode) {
-      alert('인증되었습니다.');
+      setAlertShow(true);
+      setAlertType('success');
+      setAlertTitle('인증되었습니다');
       setEmailVisible(false);
       setEmailPass(true);
     } else {
-      alert('인증번호가 일치하지 않습니다.');
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle('인증번호가 일치하지 않습니다.');
     }
   });
 
@@ -320,6 +338,7 @@ const Register = () => {
           </CardBody>
         </Card>
       </Col>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>
   );
 };

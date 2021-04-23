@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import Auth from '../../layouts/Auth';
 import useInput from '../../hooks/useInput';
@@ -24,6 +25,9 @@ const FindPassword = () => {
   const [email, onChangeEmail] = useInput('');
   const [name, onChangeName] = useInput('');
   const { findPasswordDone, findPasswordError } = useSelector((state) => state.user);
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('');
 
   // 비밀번호 찾기 버튼
   const onClickForm = useCallback(() => {
@@ -36,14 +40,18 @@ const FindPassword = () => {
   // 비밀번호 찾기 성공
   useEffect(() => {
     if (findPasswordDone) {
-      alert('임시비밀번호를 전송했습니다.');
+      setAlertShow(true);
+      setAlertType('info');
+      setAlertTitle('임시비밀번호를 전송했습니다.');
     }
   }, [findPasswordDone]);
 
   // 비밀번호 찾기 실패
   useEffect(() => {
     if (findPasswordError) {
-      alert(findPasswordError);
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(findPasswordError);
     }
   }, [findPasswordError]);
 
@@ -134,6 +142,7 @@ const FindPassword = () => {
           )}
         </Card>
       </Col>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>
   );
 };

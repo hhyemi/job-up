@@ -107,3 +107,10 @@
   max-height: 300px;
   min-height: 300px;
 }
+
+.sweet-alert h2  {
+  font-size: 1.2em !important;
+}
+.sweet-alert .btn{
+  padding: 0.5rem 1rem !important;
+}

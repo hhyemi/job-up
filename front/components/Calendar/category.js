@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Table } from 'reactstrap';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import useInput from '../../hooks/useInput';
 import { ADD_CATEGORY_REQUEST, DEL_CATEGORY_REQUEST } from '../../reducers/category';
@@ -8,17 +9,24 @@ import CategoryList from './CategoryList';
 
 const Category = () => {
   const dispatch = useDispatch();
-  const { addCategoryError, addCategoryDone, categories } = useSelector((state) => state.category);
+  const { addCategoryError, addCategoryDone, delCategoryDone, categories } = useSelector((state) => state.category);
   const [color, onChangeColor, setColor] = useInput('');
   const [name, onChangeName, setName] = useInput('');
   const [checkItems, setCheckItems] = useState([]);
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('');
+  const [delAlertShow, setDelAlertShow] = useState(false);
 
   // 카테고리 추가
   const addCategory = useCallback(
     (e) => {
       e.preventDefault();
       if (!name || !name.trim()) {
-        return alert('카테고리명을 작성하세요.');
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('카테고리명을 입력해주세요.');
+        return;
       }
       dispatch({
         type: ADD_CATEGORY_REQUEST,
@@ -39,7 +47,9 @@ const Category = () => {
   // 카테고리 추가 실패
   useEffect(() => {
     if (addCategoryError) {
-      alert(addCategoryError);
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(addCategoryError);
     }
   }, [addCategoryError]);
 
@@ -64,16 +74,34 @@ const Category = () => {
   };
 
   // 카테고리 삭제
-  const deleteCategory = useCallback(
+  const deleteCategoryCheck = useCallback(
     (e) => {
       e.preventDefault();
-      dispatch({
-        type: DEL_CATEGORY_REQUEST,
-        data: { checkItems }
-      });
+      if (checkItems.length === 0) {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('삭제할 카테고리를 선택해주세요.');
+        return;
+      }
+      if (categories.length === checkItems.length) {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('한 개 이상의 카테고리는 있어야합니다.');
+        return;
+      }
+      setDelAlertShow(true);
     },
-    [checkItems]
+    [checkItems, categories, delCategoryDone]
   );
+
+  const deleteCategory = useCallback(() => {
+    dispatch({
+      type: DEL_CATEGORY_REQUEST,
+      data: { checkItems }
+    });
+    setDelAlertShow(false);
+    setCheckItems([]);
+  }, [checkItems]);
 
   return (
     <>
@@ -137,9 +165,22 @@ const Category = () => {
           </tbody>
         </Table>
       </div>
-      <button type="button" className="btn btn-danger btn-sm mb-2" onClick={deleteCategory}>
+      <button type="button" className="btn btn-danger btn-sm mb-2" onClick={deleteCategoryCheck}>
         삭제
       </button>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
+      <SweetAlert
+        warning
+        showCancel
+        show={delAlertShow}
+        cancelBtnText="취소"
+        confirmBtnText="삭제"
+        confirmBtnBsStyle="danger"
+        title="해당 카테고리인 일정은 마지막색으로 변합니다."
+        onConfirm={() => deleteCategory()}
+        onCancel={() => setDelAlertShow(false)}
+        focusCancelBtn
+      />
     </>
   );
 };
