@@ -3,10 +3,10 @@ import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import dynamic from 'next/dynamic';
 import axios from 'axios';
 import { END } from 'redux-saga';
 
-import TuiCalendar from '@toast-ui/react-calendar';
 import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
@@ -33,6 +33,12 @@ const RenderDateSpan = styled.span`
   margin-left: 0.5rem;
   margin-right: 1rem;
 `;
+
+// SSR일때 window, document 찾지못하는 문제 해결 (SSR지원안되는 라이브러리사용 시)
+const TuiCalendar = dynamic(() => import('../../components/Calendar/TuiCalendar'), {
+  ssr: false
+});
+const CalendarComponent = React.forwardRef((props, ref) => <TuiCalendar {...props} forwardedRef={ref} />);
 
 const Calendar = () => {
   const cal = useRef(null);
@@ -108,7 +114,6 @@ const Calendar = () => {
       type: ADD_CALENDAR_REQUEST,
       data: schedule
     });
-
     cal.current.calendarInst.createSchedules([schedule]);
   }, []);
 
@@ -252,7 +257,7 @@ const Calendar = () => {
             </Modal>
           </span>
         </div>
-        <TuiCalendar
+        <CalendarComponent
           ref={cal}
           height="800px"
           view="month"
@@ -273,21 +278,19 @@ const Calendar = () => {
 
 Calendar.layout = Admin;
 
-// element오류 ㅠㅠ
-// export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-//   console.log('getServerSideProps start');
-//   const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
-//   axios.defaults.headers.Cookie = '';
-//   if (context.req && cookie) {
-//     axios.defaults.headers.Cookie = cookie;
-//   }
-//   context.store.dispatch({
-//     type: LOAD_MY_INFO_REQUEST
-//   });
-
-//   context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
-//   console.log('getServerSideProps end');
-//   await context.store.sagaTask.toPromise(); // 이건..사용방법 하라고
-// });
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  console.log('getServerSideProps start');
+  const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST
+  });
+  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
+  console.log('getServerSideProps end');
+  await context.store.sagaTask.toPromise(); // 이건..사용방법 하라고
+});
 
 export default Calendar;

@@ -17,6 +17,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
     "@fortawesome/fontawesome-free": "5.15.2",
+    "@next-tools/dynamic": "0.0.11",
     "@next/bundle-analyzer": "^10.1.3",
     "@toast-ui/react-calendar": "^1.0.5",
     "@zeit/next-css": "1.0.1",
