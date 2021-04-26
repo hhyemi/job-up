@@ -4,6 +4,7 @@ import { combineReducers } from 'redux';
 import user from './user';
 import category from './category';
 import calendar from './calendar';
+import todo from './todo';
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -14,7 +15,8 @@ const rootReducer = (state, action) => {
       const combineReducer = combineReducers({
         user,
         category,
-        calendar
+        calendar,
+        todo
       });
       return combineReducer(state, action);
     }

@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Form,
   CardBody,
@@ -8,34 +9,60 @@ import {
   InputGroup,
   Input,
   CustomInput,
-  Label
+  Label,
+  Button
 } from 'reactstrap';
 import DatePicker from 'reactstrap-date-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
 
 import useInput from '../../hooks/useInput';
+import { ADD_TODO_REQUEST } from '../../reducers/todo';
 
-const TodoAdd = () => {
+const TodoAdd = ({ clickCategory }) => {
   const dispatch = useDispatch();
-  const [date, onChangeDate] = useState('');
+  const [category, setCategory] = useState(''); // 카테고리
+  const [title, onChangeTitle] = useInput(''); // 제목
+  const [content, onChangeContent] = useInput(''); // 내용
+  const [date, onChangeDate] = useState(''); // 마감일자
+  const { todos, addTodoDone, addTodoError } = useSelector((state) => state.todo);
 
-  const [email, onChangeEmail] = useInput(''); // 이메일
-  const [emailCheck, onChangeEmailCheck] = useInput(''); // 이메일 인증번호
-  const [password, onChangePassword] = useInput('');
-  const [emailVisible, setEmailVisible] = useState(false); // 인증번호 입력창 숨김처리 (f:숨김, t:보여줌)
-  const [emailPass, setEmailPass] = useState(false); // 인증번호 성공
-  const { me, git, emailCode, signUpLoading, signUpDone, signUpError, sendEmailDone } = useSelector(
-    (state) => state.user
-  );
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('');
 
-  // 로그인 버튼 클릭
-  const onSubmitForm = useCallback((e) => {
-    e.preventDefault();
+  // 선택한 카테고리 적용
+  useEffect(() => {
+    setCategory(clickCategory);
   }, []);
+
+  const onCategory = useCallback(
+    (e) => {
+      setCategory(e.target.value);
+    },
+    [category]
+  );
+
+  // 일정추가
+  const onSubmitForm = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch({
+        type: ADD_TODO_REQUEST,
+        data: { category, title, content, deadline: date }
+      });
+    },
+    [category, title, content, date]
+  );
+
+  // 일정 추가 실패
+  useEffect(() => {
+    if (addTodoError) {
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(addTodoError);
+    }
+  }, [addTodoError]);
 
   return (
     <>
@@ -48,11 +75,11 @@ const TodoAdd = () => {
                   <i className="ni ni-tag" />
                 </InputGroupText>
               </InputGroupAddon>
-              <CustomInput type="select" id="exampleCustomSelect" name="customSelect">
-                <option>할일</option>
-                <option>진행중</option>
-                <option>완료</option>
-                <option>보류</option>
+              <CustomInput type="select" id="categorySelect" value={category} onChange={onCategory}>
+                <option value="1">할일</option>
+                <option value="2">진행중</option>
+                <option value="3">완료</option>
+                <option value="4">보류</option>
               </CustomInput>
             </InputGroup>
           </FormGroup>
@@ -66,12 +93,12 @@ const TodoAdd = () => {
               </InputGroupAddon>
               <Input
                 placeholder="제목을 입력해주세요."
-                name="user-email"
-                type="email"
-                value={email}
-                onChange={onChangeEmail}
+                name="user-title"
+                type="text"
+                value={title}
+                onChange={onChangeTitle}
                 required
-                autoComplete="new-email"
+                autoComplete="new-title"
               />
             </InputGroup>
           </FormGroup>
@@ -85,21 +112,33 @@ const TodoAdd = () => {
               </InputGroupAddon>
               <Input
                 placeholder="일정내용을 입력해주세요."
-                name="user-email"
+                name="user-content"
                 type="textarea"
-                required
+                value={content}
+                onChange={onChangeContent}
                 autoComplete="new-email"
                 style={{ minHeight: '150px' }}
               />
             </InputGroup>
           </FormGroup>
-          <Label>마감일자</Label>
-          <DatePicker id="example-datepicker" dateFormat="YYYY/MM/DD" value={date} onChange={onChangeDate} />
+          <FormGroup>
+            <Label>마감일자</Label>
+            <DatePicker id="example-datepicker" dateFormat="YYYY/MM/DD" value={date} onChange={onChangeDate} required />
+          </FormGroup>
+          <div className="text-center">
+            <Button color="primary" type="submit">
+              추가
+            </Button>
+          </div>
         </Form>
       </CardBody>
       <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>
   );
+};
+
+TodoAdd.propTypes = {
+  clickCategory: PropTypes.number.isRequired
 };
 
 export default TodoAdd;

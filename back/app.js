@@ -12,6 +12,7 @@ const helmet = require('helmet');
 const userRouter = require('./routes/user');
 const catRouter = require('./routes/category');
 const calRouter = require('./routes/calendar');
+const todoRouter = require('./routes/todo');
 
 const db = require('./models');
 const passportConfig = require('./passport');
@@ -63,6 +64,7 @@ app.use(passport.session());
 app.use('/user', userRouter);
 app.use('/cat', catRouter);
 app.use('/cal', calRouter);
+app.use('/todo', todoRouter);
 
 // 에러 처리 미들웨어 (기본적으로 내장되어 있는데 바꾸고싶으면 따로 만들어줌)
 app.use((err, req, res, next) => {});
