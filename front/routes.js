@@ -12,7 +12,7 @@ var routes = [
     layout: '/admin'
   },
   {
-    path: '/maps',
+    path: '/todo',
     name: 'TodoList',
     icon: 'ni ni-bullet-list-67 text-orange',
     layout: '/admin'

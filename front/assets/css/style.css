@@ -1,0 +1,27 @@
+.sweet-alert h2  {
+  font-size: 1.2em !important;
+}
+.sweet-alert .btn{
+  padding: 0.5rem 1rem !important;
+}
+
+.todo-container {
+  min-height: 680px;
+}
+
+.todo-container .card-style {
+  min-height: 680px;
+  border: 1px solid #dadada;
+}
+
+.todo-container .border-gray{
+  border: 1px solid #dadada;
+  cursor: pointer;
+}
+
+.todo-container .border-gray:hover {
+  background: #f9f5f5;
+}
+.cursor{
+  cursor: pointer;
+}

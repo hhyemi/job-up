@@ -1,6 +1,6 @@
 import React from 'react';
+import '../../assets/css/style.css';
 
-// reactstrap components
 import { Button, Container, Row, Col } from 'reactstrap';
 
 function UserHeader() {
