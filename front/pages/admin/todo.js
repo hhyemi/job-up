@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap';
 
 import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
+import TodoCard from '../../components/Todo/TodoCard';
+import Modal from '../../components/Modal/Modal';
+import TodoAdd from '../../components/Todo/TodoAdd';
 
-// eslint-disable-next-line arrow-body-style
 const Todo = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // 카테고리 추가
+  const addTodo = useCallback((e) => {
+    e.preventDefault();
+    setModalOpen(true);
+  });
+
+  // 모달창 닫기
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <>
       <Header />
@@ -28,47 +43,17 @@ const Todo = () => {
                   </Col>
                 </Row>
                 <hr className="my-3" />
-                <Card className="card-stats mb-3 border-gray">
-                  <CardBody className="pt-2 pb-2">
-                    <Row>
-                      <div className="col">
-                        <span className="font-weight-bold mb-0">로그인하기</span>
-                      </div>
-                    </Row>
-                  </CardBody>
-                </Card>
-                <Card className="card-stats mb-3 border-gray">
-                  <CardBody className="pt-2 pb-2">
-                    <Row>
-                      <div className="col">
-                        <span className="font-weight-bold mb-0">로그인하기</span>
-                      </div>
-                    </Row>
-                  </CardBody>
-                </Card>
-                <Card className="card-stats mb-3 border-gray">
-                  <CardBody className="pt-2 pb-2">
-                    <Row>
-                      <div className="col">
-                        <span className="font-weight-bold mb-0">로그인하기</span>
-                      </div>
-                    </Row>
-                  </CardBody>
-                </Card>
-                <Card className="card-stats mb-3 border-gray">
-                  <CardBody className="pt-2 pb-2">
-                    <Row>
-                      <div className="col">
-                        <span className="font-weight-bold mb-0">로그인하기</span>
-                      </div>
-                    </Row>
-                  </CardBody>
-                </Card>
-                <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor">
+                <div className="scroll">
+                  <TodoCard />
+                </div>
+                <div className="mt-3 mb-0 text-muted text-sm">
+                  <span className="text-muted mr-2 cursor" onClick={addTodo}>
                     <i className="fas fa-plus" /> 새로 만들기
                   </span>{' '}
-                </p>
+                  <Modal open={modalOpen} close={closeModal} todoCheck header="일정 추가">
+                    <TodoAdd />
+                  </Modal>
+                </div>
               </CardBody>
             </Card>
           </Col>
@@ -90,7 +75,7 @@ const Todo = () => {
                 </Row>
                 <hr className="my-3" />
                 <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor">
+                  <span className="text-muted mr-2 cursor" onClick={addTodo}>
                     <i className="fas fa-plus" /> 새로 만들기
                   </span>{' '}
                 </p>
@@ -115,7 +100,7 @@ const Todo = () => {
                 </Row>
                 <hr className="my-3" />
                 <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor">
+                  <span className="text-muted mr-2 cursor" onClick={addTodo}>
                     <i className="fas fa-plus" /> 새로 만들기
                   </span>{' '}
                 </p>
@@ -140,7 +125,7 @@ const Todo = () => {
                 </Row>
                 <hr className="my-3" />
                 <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor">
+                  <span className="text-muted mr-2 cursor" onClick={addTodo}>
                     <i className="fas fa-plus" /> 새로 만들기
                   </span>{' '}
                 </p>

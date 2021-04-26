@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import '../../assets/css/modal.css';
 
 const Modal = (props) => {
-  const { open, close, header, children } = props;
+  const { open, close, header, children, todoCheck } = props;
 
   return (
     <div className={open ? 'openModal modal' : 'modal'}>
@@ -18,7 +18,13 @@ const Modal = (props) => {
           </header>
           <main>{children}</main>
           <footer>
-            <button type="button" className="closebtn close" onClick={close}>
+            {todoCheck && (
+              <button type="button" className="btn btn-primary " onClick={close} style={{ float: 'left' }}>
+                {' '}
+                등록{' '}
+              </button>
+            )}
+            <button type="button" className="closebtn" onClick={close}>
               {' '}
               닫기{' '}
             </button>
@@ -33,7 +39,8 @@ Modal.propTypes = {
   open: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   header: PropTypes.string.isRequired,
-  children: PropTypes.object.isRequired
+  children: PropTypes.object.isRequired,
+  todoCheck: PropTypes.bool.isRequired
 };
 
 export default Modal;

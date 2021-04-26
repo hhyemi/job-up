@@ -22,6 +22,34 @@
 .todo-container .border-gray:hover {
   background: #f9f5f5;
 }
+
+.todo-container .scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-height: 510px;
+}
+
+.todo-container .scroll .border-gray {
+  margin-right: 1rem;
+}
+
 .cursor{
   cursor: pointer;
+}
+
+.todo-add-form .form-control{
+  padding: 0.625rem 1.75rem 0.625rem 0.75rem !important;
+  border: 0px !important;
+}
+
+.todo-add-form .input-group-text{
+  border: 0px !important;
+}
+
+.todo-add-form .custom-select {
+  border: 0px !important;
+}
+
+.todo-add-form .input-group {
+  border: 1px solid #dadada;
 }
