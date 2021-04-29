@@ -1,8 +1,9 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap';
 import axios from 'axios';
 import { END } from 'redux-saga';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
@@ -11,16 +12,40 @@ import Modal from '../../components/Modal/Modal';
 import TodoAdd from '../../components/Todo/TodoAdd';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import wrapper from '../../store/configureStore';
-import SweetAlert from 'react-bootstrap-sweetalert';
+import { LOAD_TODO_REQUEST } from '../../reducers/todo';
+import useChildRect from '../../hooks/useChildRect';
 
 const Todo = () => {
+  const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [clickCategory, setClickCategory] = useState(1);
-  const { addTodoDone } = useSelector((state) => state.todo);
+  const { todos, addTodoDone, loadTodoDone, loadTodoError } = useSelector((state) => state.todo);
 
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('');
+  const initialValue = null;
+
+  const [todoCnt, refTodoCnt] = useChildRect({ initialValue, loadTodoDone, addTodoDone });
+  const [progCnt, refProgCnt] = useChildRect({ initialValue, loadTodoDone, addTodoDone });
+  const [compleCnt, refCompleCnt] = useChildRect({ initialValue, loadTodoDone, addTodoDone });
+  const [pendCnt, refPendCnt] = useChildRect({ initialValue, loadTodoDone, addTodoDone });
+
+  // 일정 가져오기
+  useEffect(() => {
+    dispatch({
+      type: LOAD_TODO_REQUEST
+    });
+  }, []);
+
+  // 일정 가져오기 실패
+  useEffect(() => {
+    if (loadTodoError) {
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(loadTodoError);
+    }
+  }, [loadTodoError]);
 
   // 일정 추가
   const addTodo = useCallback((e) => {
@@ -58,7 +83,7 @@ const Todo = () => {
                     <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
                       to do
                     </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">할일</span> <span>12</span>
+                    <span className="h2 font-weight-bold mb-0">할일</span> <span>{todoCnt}</span>
                   </div>
                   <Col className="col-auto">
                     <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -67,14 +92,14 @@ const Todo = () => {
                   </Col>
                 </Row>
                 <hr className="my-3" />
-                <div className="scroll">
-                  <TodoCard />
+                <div className="scroll" ref={refTodoCnt}>
+                  {todos.map((todo) => todo.category === '1' && <TodoCard key={todo.id} todo={todo} />)}
                 </div>
-                <div className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor" data-msg={1} onClick={addTodo}>
+                <p className="mt-3 mb-0 text-muted text-sm">
+                  <span className="text-muted mr-2 cursor plusTodo" data-msg={1} onClick={addTodo}>
                     <i className="fas fa-plus" /> 새로 만들기
                   </span>{' '}
-                </div>
+                </p>
               </CardBody>
             </Card>
           </Col>
@@ -86,7 +111,7 @@ const Todo = () => {
                     <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
                       in progress
                     </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">진행중</span>
+                    <span className="h2 font-weight-bold mb-0">진행중</span> <span>{progCnt}</span>
                   </div>
                   <Col className="col-auto">
                     <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -95,8 +120,11 @@ const Todo = () => {
                   </Col>
                 </Row>
                 <hr className="my-3" />
+                <div className="scroll" ref={refProgCnt}>
+                  {todos.map((todo) => todo.category === '2' && <TodoCard key={todo.id} todo={todo} />)}
+                </div>
                 <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor" data-msg={2} onClick={addTodo}>
+                  <span className="text-muted mr-2 cursor plusTodo" data-msg={2} onClick={addTodo}>
                     <i className="fas fa-plus" /> 새로 만들기
                   </span>{' '}
                 </p>
@@ -111,7 +139,7 @@ const Todo = () => {
                     <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
                       completed
                     </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">완료</span>
+                    <span className="h2 font-weight-bold mb-0">완료</span> <span>{compleCnt}</span>
                   </div>
                   <Col className="col-auto">
                     <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -120,8 +148,11 @@ const Todo = () => {
                   </Col>
                 </Row>
                 <hr className="my-3" />
+                <div className="scroll" ref={refCompleCnt}>
+                  {todos.map((todo) => todo.category === '3' && <TodoCard key={todo.id} todo={todo} />)}
+                </div>
                 <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor" data-msg={3} onClick={addTodo}>
+                  <span className="text-muted mr-2 cursor plusTodo" data-msg={3} onClick={addTodo}>
                     <i className="fas fa-plus" /> 새로 만들기
                   </span>{' '}
                 </p>
@@ -136,7 +167,7 @@ const Todo = () => {
                     <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
                       Pending
                     </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">보류</span>
+                    <span className="h2 font-weight-bold mb-0">보류</span> <span>{pendCnt}</span>
                   </div>
                   <Col className="col-auto">
                     <div className="icon icon-shape bg-info text-white rounded-circle shadow">
@@ -145,8 +176,11 @@ const Todo = () => {
                   </Col>
                 </Row>
                 <hr className="my-3" />
+                <div className="scroll" ref={refPendCnt}>
+                  {todos.map((todo) => todo.category === '4' && <TodoCard key={todo.id} todo={todo} />)}
+                </div>
                 <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor" data-msg={4} onClick={addTodo}>
+                  <span className="text-muted mr-2 cursor plusTodo" data-msg={4} onClick={addTodo}>
                     <i className="fas fa-plus" /> 새로 만들기
                   </span>{' '}
                 </p>

@@ -43,7 +43,7 @@ const reducer = (state = initialState, action) =>
       case LOAD_TODO_SUCCESS:
         draft.loadTodoLoading = false;
         draft.loadTodoDone = true;
-        draft.Todos = action.data;
+        draft.todos = action.data;
         break;
       case LOAD_TODO_FAILURE:
         draft.loadTodoLoading = false;
@@ -57,7 +57,7 @@ const reducer = (state = initialState, action) =>
       case ADD_TODO_SUCCESS:
         draft.addTodoLoading = false;
         draft.addTodoDone = true;
-        draft.todos.unshift(action.data);
+        draft.todos.push(action.data);
         break;
       case ADD_TODO_FAILURE:
         draft.addTodoLoading = false;

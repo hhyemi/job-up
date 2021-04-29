@@ -75,12 +75,12 @@ const TodoAdd = ({ clickCategory }) => {
                   <i className="ni ni-tag" />
                 </InputGroupText>
               </InputGroupAddon>
-              <CustomInput type="select" id="categorySelect" value={category} onChange={onCategory}>
+              <Input type="select" id="categorySelect" value={category} onChange={onCategory}>
                 <option value="1">할일</option>
                 <option value="2">진행중</option>
                 <option value="3">완료</option>
                 <option value="4">보류</option>
-              </CustomInput>
+              </Input>
             </InputGroup>
           </FormGroup>
           <FormGroup className="mb-3">

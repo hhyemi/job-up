@@ -47,7 +47,7 @@ function Admin(props) {
         )}
         {props.children}
         <Container fluid>
-          <Footer />
+          <footer className="py-5" />
         </Container>
       </div>
     </>

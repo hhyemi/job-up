@@ -6,6 +6,20 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
+// GET /todo : 일정 가져오기
+router.get('/', isLoggedIn, async (req, res, next) => {
+  try {
+    const todo = await Todo.findAll({
+      where: { UserId: req.user.id },
+      order: [['sequence', 'ASC']]
+    });
+    res.status(201).json(todo);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // POST /todo/add : 일정 추가
 router.post('/add', isLoggedIn, async (req, res, next) => {
   try {

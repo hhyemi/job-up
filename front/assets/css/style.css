@@ -25,7 +25,7 @@
 
 .todo-container .scroll {
   overflow-x: hidden;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   max-height: 510px;
 }
 
@@ -52,4 +52,8 @@
 
 .todo-add-form .input-group {
   border: 1px solid #dadada;
+}
+
+.plusTodo:hover{
+  color: rgba(0, 0, 0, 0.7) !important;
 }
