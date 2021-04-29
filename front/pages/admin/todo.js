@@ -1,43 +1,29 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import axios from 'axios';
 import { END } from 'redux-saga';
 import { useDispatch, useSelector } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
-import TodoCard from '../../components/Todo/TodoCard';
 import Modal from '../../components/Modal/Modal';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import wrapper from '../../store/configureStore';
 import { LOAD_TODO_REQUEST } from '../../reducers/todo';
-import useChildRect from '../../hooks/useChildRect';
 import TodoModal from '../../components/Todo/TodoModal';
+import TodoCol from '../../components/Todo/TodoCol';
 
 const Todo = () => {
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [clickCategory, setClickCategory] = useState(1);
-  const {
-    todos,
-    addTodoDone,
-    addTodoError,
-    loadTodoDone,
-    loadTodoError,
-    delTodoDone,
-    uptTodoDone,
-    uptTodoError
-  } = useSelector((state) => state.todo);
+  const { addTodoDone, addTodoError, loadTodoError, uptTodoDone, uptTodoError } = useSelector((state) => state.todo);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
-
-  const refValue = { loadTodoDone, addTodoDone, delTodoDone };
-  const [todoCnt, refTodoCnt] = useChildRect(refValue);
-  const [progCnt, refProgCnt] = useChildRect(refValue);
-  const [compleCnt, refCompleCnt] = useChildRect(refValue);
-  const [pendCnt, refPendCnt] = useChildRect(refValue);
 
   // 일정 가져오기
   useEffect(() => {
@@ -109,120 +95,28 @@ const Todo = () => {
     <>
       <Header />
       <Container className="mt--9 todo-container" fluid>
-        <Row>
-          <Col lg="6" xl="3">
-            <Card className="card-stats mb-4 mb-xl-0 card-style">
-              <CardBody>
-                <Row>
-                  <div className="col">
-                    <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-                      to do
-                    </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">할일</span> <span>{todoCnt}</span>
-                  </div>
-                  <Col className="col-auto">
-                    <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                      <i className="fas fa-list-ul" />
-                    </div>
-                  </Col>
-                </Row>
-                <hr className="my-3" />
-                <div className="scroll" ref={refTodoCnt}>
-                  {todos.map((todo) => todo.category === '1' && <TodoCard key={todo.id} todo={todo} />)}
-                </div>
-                <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor plusTodo" data-msg={1} onClick={addTodo}>
-                    <i className="fas fa-plus" /> 새로 만들기
-                  </span>{' '}
-                </p>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="6" xl="3">
-            <Card className="card-stats mb-4 mb-xl-0 card-style">
-              <CardBody>
-                <Row>
-                  <div className="col">
-                    <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-                      in progress
-                    </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">진행중</span> <span>{progCnt}</span>
-                  </div>
-                  <Col className="col-auto">
-                    <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                      <i className="fas fa-spinner" />
-                    </div>
-                  </Col>
-                </Row>
-                <hr className="my-3" />
-                <div className="scroll" ref={refProgCnt}>
-                  {todos.map((todo) => todo.category === '2' && <TodoCard key={todo.id} todo={todo} />)}
-                </div>
-                <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor plusTodo" data-msg={2} onClick={addTodo}>
-                    <i className="fas fa-plus" /> 새로 만들기
-                  </span>{' '}
-                </p>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="6" xl="3">
-            <Card className="card-stats mb-4 mb-xl-0 card-style">
-              <CardBody>
-                <Row>
-                  <div className="col">
-                    <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-                      completed
-                    </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">완료</span> <span>{compleCnt}</span>
-                  </div>
-                  <Col className="col-auto">
-                    <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                      <i className="fas fa-check" />
-                    </div>
-                  </Col>
-                </Row>
-                <hr className="my-3" />
-                <div className="scroll" ref={refCompleCnt}>
-                  {todos.map((todo) => todo.category === '3' && <TodoCard key={todo.id} todo={todo} />)}
-                </div>
-                <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor plusTodo" data-msg={3} onClick={addTodo}>
-                    <i className="fas fa-plus" /> 새로 만들기
-                  </span>{' '}
-                </p>
-              </CardBody>
-            </Card>
-          </Col>
-          <Col lg="6" xl="3">
-            <Card className="card-stats mb-4 mb-xl-0 card-style">
-              <CardBody>
-                <Row>
-                  <div className="col">
-                    <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-                      Pending
-                    </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">보류</span> <span>{pendCnt}</span>
-                  </div>
-                  <Col className="col-auto">
-                    <div className="icon icon-shape bg-info text-white rounded-circle shadow">
-                      <i className="fas fa-pause" />
-                    </div>
-                  </Col>
-                </Row>
-                <hr className="my-3" />
-                <div className="scroll" ref={refPendCnt}>
-                  {todos.map((todo) => todo.category === '4' && <TodoCard key={todo.id} todo={todo} />)}
-                </div>
-                <p className="mt-3 mb-0 text-muted text-sm">
-                  <span className="text-muted mr-2 cursor plusTodo" data-msg={4} onClick={addTodo}>
-                    <i className="fas fa-plus" /> 새로 만들기
-                  </span>{' '}
-                </p>
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
+        <DndProvider backend={HTML5Backend}>
+          <Row>
+            <TodoCol addTodo={addTodo} num={1} title="할일" EngTitle="TO DO" icon="fas fa-list-ul" color="bg-danger" />
+            <TodoCol
+              addTodo={addTodo}
+              num={2}
+              title="진행중"
+              EngTitle="IN PROGRESS"
+              icon="fas fa-spinner"
+              color="bg-warning"
+            />
+            <TodoCol
+              addTodo={addTodo}
+              num={3}
+              title="완료"
+              EngTitle="COMPLETED"
+              icon="fas fa-check"
+              color="bg-yellow"
+            />
+            <TodoCol addTodo={addTodo} num={4} title="보류" EngTitle="PENDING" icon="fas fa-pause" color="bg-info" />
+          </Row>
+        </DndProvider>
         <Modal open={modalOpen} close={closeModal} header="일정 추가">
           <TodoModal clickCategory={clickCategory} />
         </Modal>

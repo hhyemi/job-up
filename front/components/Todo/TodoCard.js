@@ -1,15 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardBody, Row, Badge } from 'reactstrap';
-import SweetAlert from 'react-bootstrap-sweetalert';
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import useInput from '../../hooks/useInput';
 import Modal from '../Modal/Modal';
 import TodoModal from './TodoModal';
 
-const TodoCard = ({ todo }) => {
+const TodoCard = ({ todo, listIndex }) => {
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const { uptTodoDone } = useSelector((state) => state.todo);
@@ -36,29 +37,41 @@ const TodoCard = ({ todo }) => {
     setModalOpen(false);
   };
 
+  // 드래그
+  const [{ isDragging }, drag] = useDrag({
+    item: { name: 'Any custom name', type: 'Our type' },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging()
+    })
+  });
+
+  const opacity = isDragging ? 0.4 : 1;
+
   return (
     <>
-      <Card className="card-stats mb-3 border-gray" onClick={uptTodo}>
-        <CardBody className="pt-2 pb-2">
-          <Row>
-            <div className="col">
-              <span className="font-weight-bold mb-0">{todo.title}</span>
-              {dDay < 0 ? (
-                <Badge style={{ float: 'right' }} color="danger">
-                  마감
-                </Badge>
-              ) : (
-                <Badge style={{ float: 'right' }} color={bgColor}>
-                  {dDay === 0 ? '오늘마감' : `D - ${dDay}`}
-                </Badge>
-              )}
-            </div>
-          </Row>
-        </CardBody>
-      </Card>
-      <Modal open={modalOpen} close={closeModal} header="일정 수정">
-        <TodoModal todo={todo} />
-      </Modal>{' '}
+      <div ref={drag} style={{ opacity }}>
+        <Card className="card-stats mb-3 border-gray" onClick={uptTodo}>
+          <CardBody className="pt-2 pb-2">
+            <Row>
+              <div className="col">
+                <span className="font-weight-bold mb-0">{todo.title}</span>
+                {dDay < 0 ? (
+                  <Badge style={{ float: 'right' }} color="danger">
+                    마감
+                  </Badge>
+                ) : (
+                  <Badge style={{ float: 'right' }} color={bgColor}>
+                    {dDay === 0 ? '오늘마감' : `D - ${dDay}`}
+                  </Badge>
+                )}
+              </div>
+            </Row>
+          </CardBody>
+        </Card>
+        <Modal open={modalOpen} close={closeModal} header="일정 수정">
+          <TodoModal todo={todo} />
+        </Modal>
+      </div>
     </>
   );
 };

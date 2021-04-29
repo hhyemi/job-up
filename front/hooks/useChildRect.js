@@ -5,7 +5,7 @@ const useChildRect = ({ loadTodoDone, addTodoDone, delTodoDone }) => {
   const ref = useCallback(
     (node) => {
       if (node !== null) {
-        setRect(node.childElementCount / 2);
+        setRect(node.childElementCount);
       }
     },
     [loadTodoDone, addTodoDone, delTodoDone]
