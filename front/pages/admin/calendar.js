@@ -49,7 +49,7 @@ const Calendar = () => {
   const { calendars, loadCalendarError, addCalendarDone, uptCalendarDone } = useSelector((state) => state.calendar);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
-  const [alertType, setAlertType] = useState('');
+  const [alertType, setAlertType] = useState('default');
 
   // 카테고리, 달력 가져오기
   useEffect(() => {

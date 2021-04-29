@@ -15,7 +15,7 @@ const Category = () => {
   const [checkItems, setCheckItems] = useState([]);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
-  const [alertType, setAlertType] = useState('');
+  const [alertType, setAlertType] = useState('default');
   const [delAlertShow, setDelAlertShow] = useState(false);
 
   // 카테고리 추가

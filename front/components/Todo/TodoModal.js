@@ -8,7 +8,6 @@ import {
   InputGroupText,
   InputGroup,
   Input,
-  CustomInput,
   Label,
   Button
 } from 'reactstrap';
@@ -17,24 +16,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
 
 import useInput from '../../hooks/useInput';
-import { ADD_TODO_REQUEST } from '../../reducers/todo';
+import { ADD_TODO_REQUEST, DEL_TODO_REQUEST, UPT_TODO_REQUEST } from '../../reducers/todo';
 
-const TodoAdd = ({ clickCategory }) => {
+// eslint-disable-next-line react/prop-types
+const TodoModal = ({ clickCategory, todo }) => {
+  // eslint-disable-next-line react/prop-types
+  const { id, category, title, content, deadline } = todo;
   const dispatch = useDispatch();
-  const [category, setCategory] = useState(''); // 카테고리
-  const [title, onChangeTitle] = useInput(''); // 제목
-  const [content, onChangeContent] = useInput(''); // 내용
-  const [date, onChangeDate] = useState(''); // 마감일자
-  const { todos, addTodoDone, addTodoError } = useSelector((state) => state.todo);
+  const [Todocategory, setCategory] = useState(clickCategory || category); // 카테고리
+  const [Todotitle, onChangeTitle] = useInput(title); // 제목
+  const [Todocontent, onChangeContent] = useInput(content); // 내용
+  const [Tododate, onChangeDate] = useState(deadline); // 마감일자
 
-  const [alertShow, setAlertShow] = useState(false);
-  const [alertTitle, setAlertTitle] = useState('');
-  const [alertType, setAlertType] = useState('');
-
-  // 선택한 카테고리 적용
-  useEffect(() => {
-    setCategory(clickCategory);
-  }, []);
+  const [delAlertShow, setDelAlertShow] = useState(false);
 
   const onCategory = useCallback(
     (e) => {
@@ -43,31 +37,46 @@ const TodoAdd = ({ clickCategory }) => {
     [category]
   );
 
-  // 일정추가
-  const onSubmitForm = useCallback(
+  // 일정 추가
+  const onAddTodo = useCallback(
     (e) => {
       e.preventDefault();
       dispatch({
         type: ADD_TODO_REQUEST,
-        data: { category, title, content, deadline: date }
+        data: { category: Todocategory, title: Todotitle, content: Todocontent, deadline: Tododate }
       });
     },
-    [category, title, content, date]
+    [Todocategory, Todotitle, Todocontent, Tododate]
   );
 
-  // 일정 추가 실패
-  useEffect(() => {
-    if (addTodoError) {
-      setAlertShow(true);
-      setAlertType('danger');
-      setAlertTitle(addTodoError);
-    }
-  }, [addTodoError]);
+  // 일정 수정
+  const onUptTodo = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch({
+        type: UPT_TODO_REQUEST,
+        data: { id, category: Todocategory, title: Todotitle, content: Todocontent, deadline: Tododate }
+      });
+    },
+    [id, Todocategory, Todotitle, Todocontent, Tododate]
+  );
+
+  // 일정 삭제
+  const onDelTodoCheck = useCallback((e) => {
+    e.preventDefault();
+    setDelAlertShow(true);
+  }, []);
+  const onDelTodo = useCallback(() => {
+    dispatch({
+      type: DEL_TODO_REQUEST,
+      data: id
+    });
+  }, [id]);
 
   return (
     <>
       <CardBody className="px-lg-2 py-lg-2">
-        <Form role="form" className="todo-add-form" onSubmit={onSubmitForm}>
+        <Form role="form" className="todo-add-form">
           <FormGroup>
             <InputGroup className="input-group-alternative">
               <InputGroupAddon addonType="prepend">
@@ -75,7 +84,7 @@ const TodoAdd = ({ clickCategory }) => {
                   <i className="ni ni-tag" />
                 </InputGroupText>
               </InputGroupAddon>
-              <Input type="select" id="categorySelect" value={category} onChange={onCategory}>
+              <Input type="select" id="categorySelect" value={Todocategory} onChange={onCategory}>
                 <option value="1">할일</option>
                 <option value="2">진행중</option>
                 <option value="3">완료</option>
@@ -95,7 +104,7 @@ const TodoAdd = ({ clickCategory }) => {
                 placeholder="제목을 입력해주세요."
                 name="user-title"
                 type="text"
-                value={title}
+                value={Todotitle}
                 onChange={onChangeTitle}
                 required
                 autoComplete="new-title"
@@ -114,7 +123,7 @@ const TodoAdd = ({ clickCategory }) => {
                 placeholder="일정내용을 입력해주세요."
                 name="user-content"
                 type="textarea"
-                value={content}
+                value={Todocontent}
                 onChange={onChangeContent}
                 autoComplete="new-email"
                 style={{ minHeight: '150px' }}
@@ -123,22 +132,57 @@ const TodoAdd = ({ clickCategory }) => {
           </FormGroup>
           <FormGroup>
             <Label>마감일자</Label>
-            <DatePicker id="example-datepicker" dateFormat="YYYY/MM/DD" value={date} onChange={onChangeDate} required />
+            <DatePicker
+              id="example-datepicker"
+              dateFormat="YYYY/MM/DD"
+              value={Tododate}
+              onChange={onChangeDate}
+              required
+            />
           </FormGroup>
           <div className="text-center">
-            <Button color="primary" type="submit">
-              추가
-            </Button>
+            {clickCategory ? (
+              <Button color="primary" type="button" onClick={onAddTodo}>
+                추가
+              </Button>
+            ) : (
+              <>
+                <Button color="primary" type="button" onClick={onUptTodo}>
+                  수정
+                </Button>
+                <Button color="default" type="button" onClick={onDelTodoCheck}>
+                  삭제
+                </Button>
+              </>
+            )}
           </div>
         </Form>
       </CardBody>
-      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
+      <SweetAlert
+        warning
+        showCancel
+        show={delAlertShow}
+        cancelBtnText="취소"
+        confirmBtnText="삭제"
+        confirmBtnBsStyle="danger"
+        title="삭제하시겠습니까?"
+        onConfirm={() => onDelTodo()}
+        onCancel={() => setDelAlertShow(false)}
+        focusCancelBtn
+      />
     </>
   );
 };
 
-TodoAdd.propTypes = {
-  clickCategory: PropTypes.number.isRequired
+TodoModal.defaultProps = {
+  todo: PropTypes.shape({
+    id: '',
+    category: '',
+    sequence: '',
+    title: '',
+    content: '',
+    deadline: ''
+  })
 };
 
-export default TodoAdd;
+export default TodoModal;

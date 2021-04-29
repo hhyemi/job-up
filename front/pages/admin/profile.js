@@ -40,7 +40,7 @@ const Profile = () => {
 
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
-  const [alertType, setAlertType] = useState('');
+  const [alertType, setAlertType] = useState('default');
 
   // 로그인 풀리면
   useEffect(() => {

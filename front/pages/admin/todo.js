@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap';
 import axios from 'axios';
 import { END } from 'redux-saga';
@@ -9,27 +9,35 @@ import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
 import TodoCard from '../../components/Todo/TodoCard';
 import Modal from '../../components/Modal/Modal';
-import TodoAdd from '../../components/Todo/TodoAdd';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import wrapper from '../../store/configureStore';
 import { LOAD_TODO_REQUEST } from '../../reducers/todo';
 import useChildRect from '../../hooks/useChildRect';
+import TodoModal from '../../components/Todo/TodoModal';
 
 const Todo = () => {
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [clickCategory, setClickCategory] = useState(1);
-  const { todos, addTodoDone, loadTodoDone, loadTodoError } = useSelector((state) => state.todo);
-
+  const {
+    todos,
+    addTodoDone,
+    addTodoError,
+    loadTodoDone,
+    loadTodoError,
+    delTodoDone,
+    uptTodoDone,
+    uptTodoError
+  } = useSelector((state) => state.todo);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
-  const [alertType, setAlertType] = useState('');
-  const initialValue = null;
+  const [alertType, setAlertType] = useState('default');
 
-  const [todoCnt, refTodoCnt] = useChildRect({ initialValue, loadTodoDone, addTodoDone });
-  const [progCnt, refProgCnt] = useChildRect({ initialValue, loadTodoDone, addTodoDone });
-  const [compleCnt, refCompleCnt] = useChildRect({ initialValue, loadTodoDone, addTodoDone });
-  const [pendCnt, refPendCnt] = useChildRect({ initialValue, loadTodoDone, addTodoDone });
+  const refValue = { loadTodoDone, addTodoDone, delTodoDone };
+  const [todoCnt, refTodoCnt] = useChildRect(refValue);
+  const [progCnt, refProgCnt] = useChildRect(refValue);
+  const [compleCnt, refCompleCnt] = useChildRect(refValue);
+  const [pendCnt, refPendCnt] = useChildRect(refValue);
 
   // 일정 가져오기
   useEffect(() => {
@@ -64,6 +72,33 @@ const Todo = () => {
       setModalOpen(false);
     }
   }, [addTodoDone]);
+
+  // 일정 추가 실패
+  useEffect(() => {
+    if (addTodoError) {
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(addTodoError);
+    }
+  }, [addTodoError]);
+
+  // 일정 수정 성공
+  useEffect(() => {
+    if (uptTodoDone) {
+      setAlertShow(true);
+      setAlertType('success');
+      setAlertTitle('일정이 수정되었습니다.');
+    }
+  }, [uptTodoDone]);
+
+  // 일정 수정 실패
+  useEffect(() => {
+    if (uptTodoError) {
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(setAlertShow);
+    }
+  }, [uptTodoError]);
 
   // 모달창 닫기
   const closeModal = () => {
@@ -189,7 +224,7 @@ const Todo = () => {
           </Col>
         </Row>
         <Modal open={modalOpen} close={closeModal} header="일정 추가">
-          <TodoAdd clickCategory={clickCategory} />
+          <TodoModal clickCategory={clickCategory} />
         </Modal>
       </Container>
       <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />

@@ -27,7 +27,7 @@ const FindPassword = () => {
   const { findPasswordDone, findPasswordError } = useSelector((state) => state.user);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
-  const [alertType, setAlertType] = useState('');
+  const [alertType, setAlertType] = useState('default');
 
   // 비밀번호 찾기 버튼
   const onClickForm = useCallback(() => {

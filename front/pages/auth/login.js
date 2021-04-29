@@ -31,7 +31,7 @@ const Login = () => {
   const { findPasswordDone, findPasswordError } = useSelector((state) => state.user);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
-  const [alertType, setAlertType] = useState('');
+  const [alertType, setAlertType] = useState('default');
 
   // 로그인 버튼 클릭
   const onSubmitForm = useCallback(

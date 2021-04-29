@@ -71,7 +71,7 @@ const reducer = (state = initialState, action) =>
       case DEL_TODO_SUCCESS:
         draft.delTodoLoading = false;
         draft.delTodoDone = true;
-        draft.Todos = draft.Todos.filter((v) => v.id !== action.data.CalId);
+        draft.todos = draft.todos.filter((v) => v.id !== action.data.TodoId);
         break;
       case DEL_TODO_FAILURE:
         draft.delTodoLoading = false;
@@ -85,6 +85,7 @@ const reducer = (state = initialState, action) =>
       case UPT_TODO_SUCCESS:
         draft.uptTodoLoading = false;
         draft.uptTodoDone = true;
+        draft.todos = draft.todos.map((v) => (v.id === action.data.TodoId ? action.data.todo : v));
         break;
       case UPT_TODO_FAILURE:
         draft.uptTodoLoading = false;

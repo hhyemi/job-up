@@ -43,7 +43,7 @@ const Register = () => {
   );
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
-  const [alertType, setAlertType] = useState('');
+  const [alertType, setAlertType] = useState('default');
 
   // 약관
   const [term, setTerm] = useState('');
