@@ -20,7 +20,9 @@ const Todo = () => {
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [clickCategory, setClickCategory] = useState(1);
-  const { addTodoDone, addTodoError, loadTodoError, uptTodoDone, uptTodoError } = useSelector((state) => state.todo);
+  const { todos, addTodoDone, addTodoError, loadTodoError, uptTodoDone, uptTodoError } = useSelector(
+    (state) => state.todo
+  );
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
@@ -71,9 +73,9 @@ const Todo = () => {
   // 일정 수정 성공
   useEffect(() => {
     if (uptTodoDone) {
-      setAlertShow(true);
-      setAlertType('success');
-      setAlertTitle('일정이 수정되었습니다.');
+      //  setAlertShow(true);
+      //  setAlertType('success');
+      //  setAlertTitle('일정이 수정되었습니다.');
     }
   }, [uptTodoDone]);
 
@@ -91,14 +93,40 @@ const Todo = () => {
     setModalOpen(false);
   };
 
+  const [items, setItems] = useState(todos);
+
+  const moveCard = (dragIndex, hoverIndex) => {
+    const dragItem = items[dragIndex];
+
+    if (dragItem) {
+      setItems((prevState) => {
+        const coppiedStateArray = [...prevState];
+        const prevItem = coppiedStateArray.splice(hoverIndex, 1, dragItem);
+        coppiedStateArray.splice(dragIndex, 1, prevItem[0]);
+
+        return coppiedStateArray;
+      });
+    }
+  };
+
   return (
     <>
       <Header />
       <Container className="mt--9 todo-container" fluid>
         <DndProvider backend={HTML5Backend}>
           <Row>
-            <TodoCol addTodo={addTodo} num={1} title="할일" EngTitle="TO DO" icon="fas fa-list-ul" color="bg-danger" />
             <TodoCol
+              moveCard={moveCard}
+              addTodo={addTodo}
+              num={1}
+              title="할일"
+              EngTitle="TO DO"
+              icon="fas fa-list-ul"
+              color="bg-danger"
+            />
+            <TodoCol
+              setItems={setItems}
+              moveCard={moveCard}
               addTodo={addTodo}
               num={2}
               title="진행중"
@@ -107,6 +135,8 @@ const Todo = () => {
               color="bg-warning"
             />
             <TodoCol
+              setItems={setItems}
+              moveCard={moveCard}
               addTodo={addTodo}
               num={3}
               title="완료"
@@ -114,7 +144,16 @@ const Todo = () => {
               icon="fas fa-check"
               color="bg-yellow"
             />
-            <TodoCol addTodo={addTodo} num={4} title="보류" EngTitle="PENDING" icon="fas fa-pause" color="bg-info" />
+            <TodoCol
+              setItems={setItems}
+              moveCard={moveCard}
+              addTodo={addTodo}
+              num={4}
+              title="보류"
+              EngTitle="PENDING"
+              icon="fas fa-pause"
+              color="bg-info"
+            />
           </Row>
         </DndProvider>
         <Modal open={modalOpen} close={closeModal} header="일정 추가">

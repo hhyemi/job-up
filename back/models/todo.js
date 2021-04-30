@@ -6,7 +6,7 @@ module.exports = class Todo extends Model {
     return super.init(
       {
         category: {
-          type: DataTypes.CHAR(1),
+          type: DataTypes.INTEGER(5),
           allowNull: false
         },
         sequence: {

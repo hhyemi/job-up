@@ -1,29 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardBody, CardTitle, Row, Col } from 'reactstrap';
-import { DndProvider, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useDrop } from 'react-dnd';
 
 import { useSelector } from 'react-redux';
 
-import TodoCard from './TodoCard';
 import useChildRect from '../../hooks/useChildRect';
+import TodoCard from './TodoCard';
 
-const TodoCol = ({ num, title, EngTitle, addTodo, icon, color, children }) => {
+const TodoCol = ({ setItems, moveCard, num, title, EngTitle, addTodo, icon, color }) => {
   const { todos, loadTodoDone, addTodoDone, delTodoDone } = useSelector((state) => state.todo);
   const refValue = { loadTodoDone, addTodoDone, delTodoDone };
   const [todoCnt, refCnt] = useChildRect(refValue);
 
-  //  const [{ canDrop, isOver }, drop] = useDrop({
-  //    accept: 'Our type',
-  //    drop: () => ({ name: 'Some name' }),
-  //    collect: (monitor) => ({
-  //      isOver: monitor.isOver(),
-  //      canDrop: monitor.canDrop()
-  //    })
-  //  });
+  const [, drop] = useDrop({
+    accept: 'TodoCard',
+    drop: () => ({ num })
+  });
 
-  // console.log('options', { canDrop, isOver });
   return (
     <>
       <Col lg="6" xl="3">
@@ -43,10 +37,15 @@ const TodoCol = ({ num, title, EngTitle, addTodo, icon, color, children }) => {
               </Col>
             </Row>
             <hr className="my-3" />
-            {/* </CardBody><div className="scroll" ref={refCnt}> */}
-            <div className="scroll" ref={refCnt}>
-              {children}
-              {todos.map((todo) => todo.category === `${num}` && <TodoCard key={todo.id} todo={todo} />)}
+            <div className="scroll" ref={drop}>
+              <div ref={refCnt}>
+                {todos.map(
+                  (todo, index) =>
+                    todo.category === num && (
+                      <TodoCard key={todo.id} todo={todo} setItems={setItems} index={index} moveCard={moveCard} />
+                    )
+                )}
+              </div>
             </div>
             <p className="mt-3 mb-0 text-muted text-sm">
               <span className="text-muted mr-2 cursor plusTodo" data-msg={num} onClick={addTodo}>

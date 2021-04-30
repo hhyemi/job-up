@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardBody, Row, Badge } from 'reactstrap';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useDrag, useDrop } from 'react-dnd';
 
-import useInput from '../../hooks/useInput';
 import Modal from '../Modal/Modal';
 import TodoModal from './TodoModal';
+import { UPT_TODO_REQUEST } from '../../reducers/todo';
 
-const TodoCard = ({ todo, listIndex }) => {
+// eslint-disable-next-line react/prop-types
+const TodoCard = ({ todo, index, moveCard }) => {
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const { uptTodoDone } = useSelector((state) => state.todo);
@@ -36,10 +36,51 @@ const TodoCard = ({ todo, listIndex }) => {
   const closeModal = () => {
     setModalOpen(false);
   };
-
   // 드래그
+  const changeCard = (item, category) => {
+    dispatch({
+      type: UPT_TODO_REQUEST,
+      data: { id: item.todo.id, category }
+    });
+  };
+
+  const ref = useRef(null);
+
+  const [, drop] = useDrop({
+    accept: 'TodoCard',
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      moveCard(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    }
+  });
+
   const [{ isDragging }, drag] = useDrag({
-    item: { name: 'Any custom name', type: 'Our type' },
+    item: { index, todo, type: 'TodoCard' },
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult();
+      if (dropResult) {
+        const { num } = dropResult;
+        changeCard(item, num);
+      }
+    },
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     })
@@ -47,9 +88,11 @@ const TodoCard = ({ todo, listIndex }) => {
 
   const opacity = isDragging ? 0.4 : 1;
 
+  drag(drop(ref));
+
   return (
     <>
-      <div ref={drag} style={{ opacity }}>
+      <div ref={ref} style={{ opacity }}>
         <Card className="card-stats mb-3 border-gray" onClick={uptTodo}>
           <CardBody className="pt-2 pb-2">
             <Row>
@@ -79,7 +122,7 @@ const TodoCard = ({ todo, listIndex }) => {
 TodoCard.propTypes = {
   todo: PropTypes.shape({
     id: PropTypes.number,
-    category: PropTypes.string,
+    category: PropTypes.number,
     sequence: PropTypes.number,
     title: PropTypes.string,
     content: PropTypes.string,

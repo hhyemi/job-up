@@ -25,6 +25,7 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
   try {
     await Todo.findAll({
       attributes: [[db.sequelize.fn('MAX', db.sequelize.col('sequence')), 'maxId']],
+      where: { category: req.body.category },
       raw: true
     }).then(async function (result) {
       const todo = await Todo.create({

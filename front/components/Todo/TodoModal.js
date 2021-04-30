@@ -23,7 +23,7 @@ const TodoModal = ({ clickCategory, todo }) => {
   // eslint-disable-next-line react/prop-types
   const { id, category, title, content, deadline } = todo;
   const dispatch = useDispatch();
-  const [Todocategory, setCategory] = useState(clickCategory || category); // 카테고리
+  const [Todocategory, setCategory] = useState(clickCategory * 1 || category); // 카테고리
   const [Todotitle, onChangeTitle] = useInput(title); // 제목
   const [Todocontent, onChangeContent] = useInput(content); // 내용
   const [Tododate, onChangeDate] = useState(deadline); // 마감일자
@@ -85,10 +85,10 @@ const TodoModal = ({ clickCategory, todo }) => {
                 </InputGroupText>
               </InputGroupAddon>
               <Input type="select" id="categorySelect" value={Todocategory} onChange={onCategory}>
-                <option value="1">할일</option>
-                <option value="2">진행중</option>
-                <option value="3">완료</option>
-                <option value="4">보류</option>
+                <option value={1}>할일</option>
+                <option value={2}>진행중</option>
+                <option value={3}>완료</option>
+                <option value={4}>보류</option>
               </Input>
             </InputGroup>
           </FormGroup>
