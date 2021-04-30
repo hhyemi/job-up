@@ -37,6 +37,11 @@ const TodoCol = ({ setItems, moveCard, num, title, EngTitle, addTodo, icon, colo
               </Col>
             </Row>
             <hr className="my-3" />
+            <p className="mt-3 mb-3 text-muted text-sm">
+              <span className="text-muted mr-2 cursor plusTodo" data-msg={num} onClick={addTodo}>
+                <i className="fas fa-plus" /> 새로 만들기
+              </span>{' '}
+            </p>
             <div className="scroll" ref={drop}>
               <div ref={refCnt}>
                 {todos.map(
@@ -47,11 +52,6 @@ const TodoCol = ({ setItems, moveCard, num, title, EngTitle, addTodo, icon, colo
                 )}
               </div>
             </div>
-            <p className="mt-3 mb-0 text-muted text-sm">
-              <span className="text-muted mr-2 cursor plusTodo" data-msg={num} onClick={addTodo}>
-                <i className="fas fa-plus" /> 새로 만들기
-              </span>{' '}
-            </p>
           </CardBody>
         </Card>
       </Col>
