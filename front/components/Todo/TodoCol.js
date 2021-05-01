@@ -60,6 +60,8 @@ const TodoCol = ({ setItems, moveCard, num, title, EngTitle, addTodo, icon, colo
 };
 
 TodoCol.propTypes = {
+  setItems: PropTypes.func.isRequired,
+  moveCard: PropTypes.func.isRequired,
   num: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   EngTitle: PropTypes.string.isRequired,

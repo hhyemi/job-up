@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef, useContext } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,13 +7,13 @@ import { useDrag, useDrop } from 'react-dnd';
 
 import Modal from '../Modal/Modal';
 import TodoModal from './TodoModal';
-import { UPT_LOC_TODO_REQUEST, UPT_SEQ_LOC_REQUEST, UPT_SEQ_TODO_REQUEST, UPT_TODO_REQUEST } from '../../reducers/todo';
+import { UPT_SEQ_TODO_REQUEST } from '../../reducers/todo';
 
 // eslint-disable-next-line react/prop-types
 const TodoCard = ({ todo, index, setItems, moveCard }) => {
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
-  const { todos, uptTodoDone, uptLocTodoDone } = useSelector((state) => state.todo);
+  const { todos, uptTodoDone, uptSeqTodoDone } = useSelector((state) => state.todo);
   const ref = useRef(null);
 
   const day = new Date().getTime() - new Date(todo.deadline).getTime(); // 마감 디데이 계산
@@ -38,6 +38,7 @@ const TodoCard = ({ todo, index, setItems, moveCard }) => {
     setModalOpen(false);
   };
 
+  // 일정 순서변경
   const changeCard = (item, category) => {
     if (item.todo.category !== category) {
       dispatch({
@@ -55,15 +56,14 @@ const TodoCard = ({ todo, index, setItems, moveCard }) => {
     }
   };
 
+  // 순서변경했을때 필요 (안하면 hover할때 오류)
   useEffect(() => {
-    if (uptLocTodoDone) {
-      console.log(todos);
-      setItems((prevState) => {
-        console.log(`prevState::${prevState}`);
-      });
+    if (uptSeqTodoDone) {
+      setItems(() => todos);
     }
-  }, [uptLocTodoDone]);
+  }, [uptSeqTodoDone]);
 
+  // Drop함수
   const [, drop] = useDrop({
     accept: 'TodoCard',
     hover: (item, monitor) => {
@@ -90,6 +90,7 @@ const TodoCard = ({ todo, index, setItems, moveCard }) => {
     }
   });
 
+  // Drag함수
   const [{ isDragging }, drag] = useDrag({
     item: { index, todo, type: 'TodoCard' },
     end: (item, monitor) => {
@@ -105,7 +106,6 @@ const TodoCard = ({ todo, index, setItems, moveCard }) => {
   });
 
   const opacity = isDragging ? 0.4 : 1;
-
   drag(drop(ref));
 
   return (

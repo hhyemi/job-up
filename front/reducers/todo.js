@@ -14,12 +14,9 @@ export const initialState = {
   uptTodoLoading: false, // 일정 수정
   uptTodoDone: false,
   uptTodoError: null,
-  uptSeqTodoLoading: false, // 일정 순서 수정 (같은구역)
+  uptSeqTodoLoading: false, // 일정 순서 수정
   uptSeqTodoDone: false,
-  uptSeqTodoError: null,
-  uptLocTodoLoading: false, // 일정 순서 수정 (다른구역)
-  uptLocTodoDone: false,
-  uptLocTodoError: null
+  uptSeqTodoError: null
 };
 
 export const LOAD_TODO_REQUEST = 'LOAD_TODO_REQUEST';
@@ -41,10 +38,6 @@ export const UPT_TODO_FAILURE = 'UPT_TODO_FAILURE';
 export const UPT_SEQ_TODO_REQUEST = 'UPT_SEQ_TODO_REQUEST';
 export const UPT_SEQ_TODO_SUCCESS = 'UPT_SEQ_TODO_SUCCESS';
 export const UPT_SEQ_TODO_FAILURE = 'UPT_SEQ_TODO_FAILURE';
-
-export const UPT_LOC_TODO_REQUEST = 'UPT_LOC_TODO_REQUEST';
-export const UPT_LOC_TODO_SUCCESS = 'UPT_LOC_TODO_SUCCESS';
-export const UPT_LOC_TODO_FAILURE = 'UPT_LOC_TODO_FAILURE';
 
 export const UPT_SEQ_LOC_REQUEST = 'UPT_SEQ_LOC_REQUEST';
 
@@ -120,21 +113,6 @@ const reducer = (state = initialState, action) =>
       case UPT_SEQ_TODO_FAILURE:
         draft.uptSeqTodoLoading = false;
         draft.uptSeqTodoError = action.error;
-        break;
-      case UPT_LOC_TODO_REQUEST:
-        draft.uptLocTodoLoading = true;
-        draft.uptLocTodoError = null;
-        draft.uptLocTodoDone = false;
-        break;
-      case UPT_LOC_TODO_SUCCESS:
-        draft.uptLocTodoLoading = false;
-        draft.uptLocTodoDone = true;
-        draft.todos = draft.todos.filter((v) => v.id !== action.data.TodoId);
-        draft.todos.push(action.data.todo);
-        break;
-      case UPT_LOC_TODO_FAILURE:
-        draft.uptLocTodoLoading = false;
-        draft.uptLocTodoError = action.error;
         break;
       case UPT_SEQ_LOC_REQUEST:
         draft.todos = action.data;

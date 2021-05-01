@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useLayoutEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Container, Row } from 'reactstrap';
 import axios from 'axios';
 import { END } from 'redux-saga';
@@ -12,7 +12,7 @@ import Header from '../../components/Headers/Header';
 import Modal from '../../components/Modal/Modal';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import wrapper from '../../store/configureStore';
-import { LOAD_TODO_REQUEST, UPT_SEQ_LOC_REQUEST, UPT_SEQ_TODO_REQUEST } from '../../reducers/todo';
+import { LOAD_TODO_REQUEST, UPT_SEQ_LOC_REQUEST } from '../../reducers/todo';
 import TodoModal from '../../components/Todo/TodoModal';
 import TodoCol from '../../components/Todo/TodoCol';
 

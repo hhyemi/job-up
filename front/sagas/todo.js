@@ -10,9 +10,6 @@ import {
   LOAD_TODO_FAILURE,
   LOAD_TODO_REQUEST,
   LOAD_TODO_SUCCESS,
-  UPT_LOC_TODO_FAILURE,
-  UPT_LOC_TODO_REQUEST,
-  UPT_LOC_TODO_SUCCESS,
   UPT_SEQ_TODO_FAILURE,
   UPT_SEQ_TODO_REQUEST,
   UPT_SEQ_TODO_SUCCESS,
@@ -105,7 +102,7 @@ function* uptTodo(action) {
   }
 }
 
-// 일정 순서 수정 (같은구역)
+// 일정 순서 수정
 function uptSeqTodoAPI(data) {
   return axios.patch('/todo/seq', data);
 }
@@ -121,27 +118,6 @@ function* uptSeqTodo(action) {
     console.error(err);
     yield put({
       type: UPT_SEQ_TODO_FAILURE,
-      error: err.response.data
-    });
-  }
-}
-
-// 일정 순서 수정 (다른구역)
-function uptLocTodoAPI(data) {
-  return axios.patch('/todo/loc', data);
-}
-
-function* uptLocTodo(action) {
-  try {
-    const result = yield call(uptLocTodoAPI, action.data);
-    yield put({
-      type: UPT_LOC_TODO_SUCCESS,
-      data: result.data
-    });
-  } catch (err) {
-    console.error(err);
-    yield put({
-      type: UPT_LOC_TODO_FAILURE,
       error: err.response.data
     });
   }
@@ -167,17 +143,6 @@ function* watchUptSeqTodo() {
   yield takeLatest(UPT_SEQ_TODO_REQUEST, uptSeqTodo);
 }
 
-function* watchUptLocTodo() {
-  yield takeLatest(UPT_LOC_TODO_REQUEST, uptLocTodo);
-}
-
 export default function* userSaga() {
-  yield all([
-    fork(watchLoadTodo),
-    fork(watchAddTodo),
-    fork(watchDelTodo),
-    fork(watchUptTodo),
-    fork(watchUptSeqTodo),
-    fork(watchUptLocTodo)
-  ]);
+  yield all([fork(watchLoadTodo), fork(watchAddTodo), fork(watchDelTodo), fork(watchUptTodo), fork(watchUptSeqTodo)]);
 }
