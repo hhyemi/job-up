@@ -9,8 +9,8 @@ import useChildRect from '../../hooks/useChildRect';
 import TodoCard from './TodoCard';
 
 const TodoCol = ({ setItems, moveCard, num, title, EngTitle, addTodo, icon, color }) => {
-  const { todos, loadTodoDone, addTodoDone, delTodoDone } = useSelector((state) => state.todo);
-  const refValue = { loadTodoDone, addTodoDone, delTodoDone };
+  const { todos, loadTodoDone, addTodoDone, delTodoDone, uptSeqTodoDone } = useSelector((state) => state.todo);
+  const refValue = { loadTodoDone, addTodoDone, delTodoDone, uptSeqTodoDone };
   const [todoCnt, refCnt] = useChildRect(refValue);
 
   const [, drop] = useDrop({
@@ -47,7 +47,7 @@ const TodoCol = ({ setItems, moveCard, num, title, EngTitle, addTodo, icon, colo
                 {todos.map(
                   (todo, index) =>
                     todo.category === num && (
-                      <TodoCard key={todo.id} todo={todo} setItems={setItems} index={index} moveCard={moveCard} />
+                      <TodoCard key={todo.id} todo={todo} index={index} setItems={setItems} moveCard={moveCard} />
                     )
                 )}
               </div>

@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../models');
+const { Op } = require('sequelize');
 
 const { Todo } = require('../models');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
@@ -25,7 +26,6 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
   try {
     await Todo.findAll({
       attributes: [[db.sequelize.fn('MAX', db.sequelize.col('sequence')), 'maxId']],
-      where: { category: req.body.category },
       raw: true
     }).then(async function (result) {
       const todo = await Todo.create({
@@ -52,7 +52,47 @@ router.patch('/upt', isLoggedIn, async (req, res, next) => {
         category: req.body.category,
         title: req.body.title,
         content: req.body.content,
+        sequence: req.body.sequence,
         deadline: req.body.deadline
+      },
+      { where: { id: req.body.id } }
+    );
+    const todo = await Todo.findOne({ where: { id: req.body.id } });
+    res.status(200).json({ todo, TodoId: parseInt(req.body.id, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// PATCH /todo/seq : 일정 순서 수정 (같은구역)
+router.patch('/seq', isLoggedIn, async (req, res, next) => {
+  try {
+    await Todo.update(
+      {
+        category: req.body.category,
+        sequence: req.body.sequence
+      },
+      { where: { id: req.body.id } }
+    );
+    const todo = await Todo.findAll({
+      where: { UserId: req.user.id },
+      order: [['sequence', 'ASC']]
+    });
+    res.status(200).json(todo);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// PATCH /todo/loc : 일정 순서 수정 (다른구역)
+router.patch('/loc', isLoggedIn, async (req, res, next) => {
+  try {
+    await Todo.update(
+      {
+        category: req.body.category,
+        sequence: req.body.sequence
       },
       { where: { id: req.body.id } }
     );

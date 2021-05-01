@@ -7,13 +7,14 @@ import { useDrag, useDrop } from 'react-dnd';
 
 import Modal from '../Modal/Modal';
 import TodoModal from './TodoModal';
-import { UPT_TODO_REQUEST } from '../../reducers/todo';
+import { UPT_LOC_TODO_REQUEST, UPT_SEQ_LOC_REQUEST, UPT_SEQ_TODO_REQUEST, UPT_TODO_REQUEST } from '../../reducers/todo';
 
 // eslint-disable-next-line react/prop-types
-const TodoCard = ({ todo, index, moveCard }) => {
+const TodoCard = ({ todo, index, setItems, moveCard }) => {
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
-  const { uptTodoDone } = useSelector((state) => state.todo);
+  const { todos, uptTodoDone, uptLocTodoDone } = useSelector((state) => state.todo);
+  const ref = useRef(null);
 
   const day = new Date().getTime() - new Date(todo.deadline).getTime(); // 마감 디데이 계산
   const dDay = Math.floor(day / (1000 * 60 * 60 * 24)) * -1;
@@ -36,19 +37,36 @@ const TodoCard = ({ todo, index, moveCard }) => {
   const closeModal = () => {
     setModalOpen(false);
   };
-  // 드래그
+
   const changeCard = (item, category) => {
-    dispatch({
-      type: UPT_TODO_REQUEST,
-      data: { id: item.todo.id, category }
-    });
+    if (item.todo.category !== category) {
+      dispatch({
+        type: UPT_SEQ_TODO_REQUEST,
+        data: { id: item.todo.id, category }
+      });
+    } else {
+      todos.map((e, i) => {
+        dispatch({
+          type: UPT_SEQ_TODO_REQUEST,
+          data: { id: e.id, sequence: i }
+        });
+        return e;
+      });
+    }
   };
 
-  const ref = useRef(null);
+  useEffect(() => {
+    if (uptLocTodoDone) {
+      console.log(todos);
+      setItems((prevState) => {
+        console.log(`prevState::${prevState}`);
+      });
+    }
+  }, [uptLocTodoDone]);
 
   const [, drop] = useDrop({
     accept: 'TodoCard',
-    hover(item, monitor) {
+    hover: (item, monitor) => {
       if (!ref.current) {
         return;
       }
@@ -111,10 +129,10 @@ const TodoCard = ({ todo, index, moveCard }) => {
             </Row>
           </CardBody>
         </Card>
-        <Modal open={modalOpen} close={closeModal} header="일정 수정">
-          <TodoModal todo={todo} />
-        </Modal>
       </div>
+      <Modal open={modalOpen} close={closeModal} header="일정 수정">
+        <TodoModal todo={todo} />
+      </Modal>
     </>
   );
 };

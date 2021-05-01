@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useLayoutEffect } from 'react';
 import { Container, Row } from 'reactstrap';
 import axios from 'axios';
 import { END } from 'redux-saga';
@@ -12,7 +12,7 @@ import Header from '../../components/Headers/Header';
 import Modal from '../../components/Modal/Modal';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import wrapper from '../../store/configureStore';
-import { LOAD_TODO_REQUEST } from '../../reducers/todo';
+import { LOAD_TODO_REQUEST, UPT_SEQ_LOC_REQUEST, UPT_SEQ_TODO_REQUEST } from '../../reducers/todo';
 import TodoModal from '../../components/Todo/TodoModal';
 import TodoCol from '../../components/Todo/TodoCol';
 
@@ -73,9 +73,9 @@ const Todo = () => {
   // 일정 수정 성공
   useEffect(() => {
     if (uptTodoDone) {
-      //  setAlertShow(true);
-      //  setAlertType('success');
-      //  setAlertTitle('일정이 수정되었습니다.');
+      setAlertShow(true);
+      setAlertType('success');
+      setAlertTitle('일정이 수정되었습니다.');
     }
   }, [uptTodoDone]);
 
@@ -103,7 +103,10 @@ const Todo = () => {
         const coppiedStateArray = [...prevState];
         const prevItem = coppiedStateArray.splice(hoverIndex, 1, dragItem);
         coppiedStateArray.splice(dragIndex, 1, prevItem[0]);
-
+        dispatch({
+          type: UPT_SEQ_LOC_REQUEST,
+          data: coppiedStateArray
+        });
         return coppiedStateArray;
       });
     }
@@ -116,6 +119,7 @@ const Todo = () => {
         <DndProvider backend={HTML5Backend}>
           <Row>
             <TodoCol
+              setItems={setItems}
               moveCard={moveCard}
               addTodo={addTodo}
               num={1}
@@ -176,6 +180,9 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   }
   context.store.dispatch({
     type: LOAD_MY_INFO_REQUEST
+  });
+  context.store.dispatch({
+    type: LOAD_TODO_REQUEST
   });
   context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
   console.log('getServerSideProps end');
