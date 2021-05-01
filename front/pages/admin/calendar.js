@@ -51,16 +51,6 @@ const Calendar = () => {
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
 
-  // 카테고리, 달력 가져오기
-  useEffect(() => {
-    dispatch({
-      type: LOAD_CALENDAR_REQUEST
-    });
-    dispatch({
-      type: LOAD_CATEGORY_REQUEST
-    });
-  }, []);
-
   useEffect(() => {
     if (addCalendarDone || uptCalendarDone) {
       dispatch({
@@ -287,6 +277,12 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   }
   context.store.dispatch({
     type: LOAD_MY_INFO_REQUEST
+  });
+  context.store.dispatch({
+    type: LOAD_CALENDAR_REQUEST
+  });
+  context.store.dispatch({
+    type: LOAD_CATEGORY_REQUEST
   });
   context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
   console.log('getServerSideProps end');
