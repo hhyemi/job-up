@@ -13,6 +13,7 @@ const userRouter = require('./routes/user');
 const catRouter = require('./routes/category');
 const calRouter = require('./routes/calendar');
 const todoRouter = require('./routes/todo');
+const memoRouter = require('./routes/memo');
 
 const db = require('./models');
 const passportConfig = require('./passport');
@@ -65,6 +66,7 @@ app.use('/user', userRouter);
 app.use('/cat', catRouter);
 app.use('/cal', calRouter);
 app.use('/todo', todoRouter);
+app.use('/memo', memoRouter);
 
 // 에러 처리 미들웨어 (기본적으로 내장되어 있는데 바꾸고싶으면 따로 만들어줌)
 app.use((err, req, res, next) => {});

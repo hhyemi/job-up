@@ -114,3 +114,11 @@
   max-width: 1000px !important;
   min-height: 700px !important;
 }
+
+.memo-container .modal > section > main {
+  padding: 10px  !important;
+}
+
+.memo-add-form .quill {
+  height: 450px;
+}
