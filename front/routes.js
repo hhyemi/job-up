@@ -18,7 +18,7 @@ var routes = [
     layout: '/admin'
   },
   {
-    path: '/profile',
+    path: '/memo',
     name: 'Memo',
     icon: 'ni ni-book-bookmark text-yellow',
     layout: '/admin'
