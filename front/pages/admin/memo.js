@@ -2,16 +2,21 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Container, CardDeck } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import axios from 'axios';
+import { END } from 'redux-saga';
 
 import MemoCard from '../../components/Memo/MemoCard';
 import Modal from '../../components/Modal/Modal';
 import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
 import MemoModal from '../../components/Memo/MemoModal';
+import wrapper from '../../store/configureStore';
+import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
+import { LOAD_MEMO_REQUEST } from '../../reducers/memo';
 
 const Memo = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { addMemoDone, addMemoError } = useSelector((state) => state.memo);
+  const { memos, addMemoDone, addMemoError } = useSelector((state) => state.memo);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
@@ -50,32 +55,28 @@ const Memo = () => {
     <>
       <Header />
       <Container className="mt--9 memo-container " fluid>
-        <div className="mb-3">
+        <div>
           <span>
             <input className="custom-control-input" id="checkFavorites" type="checkbox" />
             <label className="custom-control-label cursor" htmlFor="checkFavorites">
               <span className="text-secondary star">즐겨찾기만 보기</span>
             </label>
           </span>
-          <button type="button" className="btn btn-primary btn-sm" style={{ float: 'right' }} onClick={addMemo}>
+          <button
+            type="button"
+            className="btn btn-primary btn-sm"
+            style={{ float: 'right', marginRight: '17px' }}
+            onClick={addMemo}
+          >
             메모 추가
           </button>
           <Modal open={modalOpen} close={closeModal} header="메모 추가">
             <MemoModal />
           </Modal>
         </div>
-        <CardDeck>
-          <MemoCard />
-          <MemoCard />
-          <MemoCard />
-          <MemoCard />
-        </CardDeck>
-        <CardDeck>
-          <MemoCard />
-          <MemoCard />
-          <MemoCard />
-          <MemoCard />
-        </CardDeck>
+        {memos.map((memo) => (
+          <MemoCard key={memo.id} memo={memo} />
+        ))}
         <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
       </Container>
     </>
@@ -83,5 +84,23 @@ const Memo = () => {
 };
 
 Memo.layout = Admin;
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  console.log('getServerSideProps start');
+  const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST
+  });
+  context.store.dispatch({
+    type: LOAD_MEMO_REQUEST
+  });
+  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
+  console.log('getServerSideProps end');
+  await context.store.sagaTask.toPromise();
+});
 
 export default Memo;

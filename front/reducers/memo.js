@@ -43,7 +43,7 @@ const reducer = (state = initialState, action) =>
       case LOAD_MEMO_SUCCESS:
         draft.loadMemoLoading = false;
         draft.loadMemoDone = true;
-        draft.Memos = action.data;
+        draft.memos = action.data;
         break;
       case LOAD_MEMO_FAILURE:
         draft.loadMemoLoading = false;

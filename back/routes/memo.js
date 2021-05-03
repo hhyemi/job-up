@@ -7,6 +7,20 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
+// GET /memo : 메모 가져오기
+router.get('/', isLoggedIn, async (req, res, next) => {
+  try {
+    const memo = await Memo.findAll({
+      where: { UserId: req.user.id },
+      order: [['createdAt', 'DESC']]
+    });
+    res.status(201).json(memo);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // POST /memo/add : 메모 추가
 router.post('/add', isLoggedIn, async (req, res, next) => {
   try {

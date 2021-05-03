@@ -43,10 +43,17 @@ const formats = [
   'image'
 ];
 
-const MemoModal = () => {
+const MemoModal = ({ memo }) => {
   const dispatch = useDispatch();
-  const [memoTitle, onChangeMemoTitle] = useInput(''); // 제목
-  const [memoContent, setMemoContent] = useState(''); // 내용
+  const [memoTitle, onChangeMemoTitle] = useInput(memo.title); // 제목
+  const [memoContent, setMemoContent] = useState(memo.content); // 내용
+
+  const onChangeContent = useCallback(
+    (text) => {
+      setMemoContent(text);
+    },
+    [memoContent]
+  );
 
   // 메모 추가
   const onAddMemo = useCallback(
@@ -56,7 +63,6 @@ const MemoModal = () => {
         type: ADD_MEMO_REQUEST,
         data: { title: memoTitle, content: memoContent, bookmark: false }
       });
-      console.log(memoTitle, memoContent);
     },
     [memoTitle, memoContent]
   );
@@ -89,7 +95,7 @@ const MemoModal = () => {
               formats={formats}
               theme="snow"
               value={memoContent}
-              onChange={setMemoContent}
+              onChange={(content, delta, source, editor) => onChangeContent(editor.getContents())}
             />
           </FormGroup>
           <div className="text-center" style={{ paddingTop: '2rem' }}>
@@ -103,6 +109,24 @@ const MemoModal = () => {
   );
 };
 
-MemoModal.defaultProps = {};
+MemoModal.propTypes = {
+  memo: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    content: PropTypes.any,
+    bookmard: PropTypes.bool,
+    createdAt: PropTypes.string
+  })
+};
+
+MemoModal.defaultProps = {
+  memo: PropTypes.shape({
+    id: '',
+    title: '',
+    content: '',
+    bookmard: '',
+    createdAt: ''
+  })
+};
 
 export default MemoModal;

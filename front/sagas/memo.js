@@ -17,7 +17,7 @@ import {
 
 // 메모 가져오기
 function loadMemoAPI() {
-  return axios.get('/Memo');
+  return axios.get('/memo');
 }
 
 function* loadMemo() {
