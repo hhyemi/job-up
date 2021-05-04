@@ -7,7 +7,7 @@ import SweetAlert from 'react-bootstrap-sweetalert';
 
 import Modal from '../Modal/Modal';
 import MemoModal from './MemoModal';
-import { UPT_MEMO_REQUEST } from '../../reducers/memo';
+import { BK_MARK_MEMO_REQUEST, UPT_MEMO_REQUEST } from '../../reducers/memo';
 import useInput from '../../hooks/useInput';
 
 const MemoCard = ({ memo }) => {
@@ -50,14 +50,14 @@ const MemoCard = ({ memo }) => {
       e.preventDefault();
       const mark = e.target.getAttribute('data-mark');
       dispatch({
-        type: UPT_MEMO_REQUEST,
+        type: BK_MARK_MEMO_REQUEST,
         data: {
           id: id,
           bookmark: mark
         }
       });
     },
-    [id]
+    [id, bookmark]
   );
 
   // 메모 수정 성공 (모달창닫기)

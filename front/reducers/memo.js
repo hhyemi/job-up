@@ -13,7 +13,10 @@ export const initialState = {
   delMemoError: null,
   uptMemoLoading: false, // 메모 수정
   uptMemoDone: false,
-  uptMemoError: null
+  uptMemoError: null,
+  bkMarkMemoLoading: false, // 즐겨찾기
+  bkMarkMemoDone: false,
+  bkMarkMemoError: null
 };
 
 export const LOAD_MEMO_REQUEST = 'LOAD_MEMO_REQUEST';
@@ -31,6 +34,10 @@ export const DEL_MEMO_FAILURE = 'DEL_MEMO_FAILURE';
 export const UPT_MEMO_REQUEST = 'UPT_MEMO_REQUEST';
 export const UPT_MEMO_SUCCESS = 'UPT_MEMO_SUCCESS';
 export const UPT_MEMO_FAILURE = 'UPT_MEMO_FAILURE';
+
+export const BK_MARK_MEMO_REQUEST = 'BK_MARK_MEMO_REQUEST';
+export const BK_MARK_MEMO_SUCCESS = 'BK_MARK_MEMO_SUCCESS';
+export const BK_MARK_MEMO_FAILURE = 'BK_MARK_MEMO_FAILURE';
 
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
@@ -90,6 +97,20 @@ const reducer = (state = initialState, action) =>
       case UPT_MEMO_FAILURE:
         draft.uptMemoLoading = false;
         draft.uptMemoError = action.error;
+        break;
+      case BK_MARK_MEMO_REQUEST:
+        draft.bkMarkMemoLoading = true;
+        draft.bkMarkMemoError = null;
+        draft.bkMarkMemoDone = false;
+        break;
+      case BK_MARK_MEMO_SUCCESS:
+        draft.bkMarkMemoLoading = false;
+        draft.bkMarkMemoDone = true;
+        draft.memos.find((v) => v.id === action.data.MemoId).bookmark = action.data.memo.bookmark;
+        break;
+      case BK_MARK_MEMO_FAILURE:
+        draft.bkMarkMemoLoading = false;
+        draft.bkMarkMemoError = action.error;
         break;
       default:
         break;

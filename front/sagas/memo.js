@@ -4,6 +4,9 @@ import {
   ADD_MEMO_FAILURE,
   ADD_MEMO_REQUEST,
   ADD_MEMO_SUCCESS,
+  BK_MARK_MEMO_FAILURE,
+  BK_MARK_MEMO_REQUEST,
+  BK_MARK_MEMO_SUCCESS,
   DEL_MEMO_FAILURE,
   DEL_MEMO_REQUEST,
   DEL_MEMO_SUCCESS,
@@ -101,6 +104,27 @@ function* uptMemo(action) {
   }
 }
 
+// 메모 즐겨찾기
+function bkMarkMemoAPI(data) {
+  return axios.patch('/memo/bkmark/', data);
+}
+
+function* bkMarkMemo(action) {
+  try {
+    const result = yield call(bkMarkMemoAPI, action.data);
+    yield put({
+      type: BK_MARK_MEMO_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: BK_MARK_MEMO_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
 function* watchLoadMemo() {
   yield takeLatest(LOAD_MEMO_REQUEST, loadMemo);
 }
@@ -117,6 +141,10 @@ function* watchUptMemo() {
   yield takeLatest(UPT_MEMO_REQUEST, uptMemo);
 }
 
+function* watchBkMarkMemo() {
+  yield takeLatest(BK_MARK_MEMO_REQUEST, bkMarkMemo);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLoadMemo), fork(watchAddMemo), fork(watchDelMemo), fork(watchUptMemo)]);
+  yield all([fork(watchLoadMemo), fork(watchAddMemo), fork(watchDelMemo), fork(watchUptMemo), fork(watchBkMarkMemo)]);
 }
