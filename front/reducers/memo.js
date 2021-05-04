@@ -2,6 +2,7 @@ import produce from '../util/produce';
 
 export const initialState = {
   memos: [],
+  hasMoreMemos: true,
   loadMemoLoading: false, // 메모 가져오기
   loadMemoDone: false,
   loadMemoError: null,
@@ -50,7 +51,8 @@ const reducer = (state = initialState, action) =>
       case LOAD_MEMO_SUCCESS:
         draft.loadMemoLoading = false;
         draft.loadMemoDone = true;
-        draft.memos = action.data;
+        draft.memos = draft.memos.concat(action.data);
+        draft.hasMoreMemos = action.data.length === 12;
         break;
       case LOAD_MEMO_FAILURE:
         draft.loadMemoLoading = false;
@@ -64,7 +66,7 @@ const reducer = (state = initialState, action) =>
       case ADD_MEMO_SUCCESS:
         draft.addMemoLoading = false;
         draft.addMemoDone = true;
-        draft.memos.push(action.data);
+        draft.memos.unshift(action.data);
         break;
       case ADD_MEMO_FAILURE:
         draft.addMemoLoading = false;

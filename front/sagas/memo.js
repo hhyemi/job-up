@@ -19,13 +19,13 @@ import {
 } from '../reducers/memo';
 
 // 메모 가져오기
-function loadMemoAPI() {
-  return axios.get('/memo');
+function loadMemoAPI(lastId) {
+  return axios.get(`/memo?lastId=${lastId || 0}`);
 }
 
-function* loadMemo() {
+function* loadMemo(action) {
   try {
-    const result = yield call(loadMemoAPI);
+    const result = yield call(loadMemoAPI, action.lastId);
     yield put({
       type: LOAD_MEMO_SUCCESS,
       data: result.data

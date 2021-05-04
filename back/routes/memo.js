@@ -10,8 +10,14 @@ const router = express.Router();
 // GET /memo : 메모 가져오기
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
+    const where = { UserId: req.user.id };
+    // 초기 로딩이 아닐 때
+    if (parseInt(req.query.lastId, 10)) {
+      where.id = { [Op.lt]: parseInt(req.query.lastId, 10) }; // lastId보다 작은
+    }
     const memo = await Memo.findAll({
-      where: { UserId: req.user.id },
+      where,
+      limit: 12,
       order: [['createdAt', 'DESC']]
     });
     res.status(201).json(memo);

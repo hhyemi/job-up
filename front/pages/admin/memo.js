@@ -17,7 +17,9 @@ import { LOAD_MEMO_REQUEST } from '../../reducers/memo';
 const Memo = () => {
   const dispatch = useDispatch();
   const [onlyBookmark, setOnlyBookmark] = useState(false); // 즐겨찾기만 보기
-  const { memos, addMemoDone, addMemoError, uptMemoDone } = useSelector((state) => state.memo);
+  const { memos, hasMoreMemos, loadMemoLoading, addMemoDone, addMemoError, uptMemoDone } = useSelector(
+    (state) => state.memo
+  );
 
   const [modalOpen, setModalOpen] = useState(false);
   const [alertShow, setAlertShow] = useState(false);
@@ -25,10 +27,23 @@ const Memo = () => {
   const [alertType, setAlertType] = useState('default');
 
   useEffect(() => {
-    dispatch({
-      type: LOAD_MEMO_REQUEST
-    });
-  }, []);
+    function onScroll() {
+      if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
+        if (hasMoreMemos && !loadMemoLoading) {
+          const lastId = memos[memos.length - 1]?.id;
+          dispatch({
+            type: LOAD_MEMO_REQUEST,
+            lastId
+          });
+        }
+      }
+    }
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      // 스크롤 해지를 해줘야함 메모리가 쌓임 , onScroll같은 함수를 넣어야함
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [hasMoreMemos, loadMemoLoading, memos]);
 
   // 즐겨찾기만 보기
   const onOnlyBookmark = useCallback((e) => {
