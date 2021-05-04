@@ -85,7 +85,7 @@ const reducer = (state = initialState, action) =>
       case UPT_MEMO_SUCCESS:
         draft.uptMemoLoading = false;
         draft.uptMemoDone = true;
-        draft.Memos = draft.memos.map((v) => (v.id === action.data.MemoId ? action.data.Memo : v));
+        draft.memos = draft.memos.map((v) => (v.id === action.data.MemoId ? action.data.memo : v));
         break;
       case UPT_MEMO_FAILURE:
         draft.uptMemoLoading = false;

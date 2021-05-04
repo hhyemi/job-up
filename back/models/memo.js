@@ -10,12 +10,19 @@ module.exports = class Memo extends Model {
           allowNull: false
         },
         content: {
-          type: DataTypes.BLOB,
+          type: DataTypes.TEXT,
           allowNull: false
         },
         bookmark: {
           type: DataTypes.BOOLEAN,
           allowNull: false
+        },
+        color: {
+          type: DataTypes.STRING(30),
+          allowNull: false
+        },
+        secret: {
+          type: DataTypes.STRING(100)
         }
       },
       {

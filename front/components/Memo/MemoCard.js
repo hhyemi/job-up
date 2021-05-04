@@ -24,19 +24,19 @@ const MemoCard = ({ memo }) => {
 
   return (
     <>
-      <Card onClick={uptMemo}>
+      <Card onClick={uptMemo} style={{ backgroundColor: `${memo.color}` }}>
         <CardImg alt="..." src={require('assets/img/theme/img-1-1000x600.jpg')} top />
         <i className="far fa-star fa-lg" />
         <CardBody>
           <CardTitle>{memo.title}</CardTitle>
-          <CardText>ㅇㅇ</CardText>
+          <CardText>d</CardText>
           <CardText>
             <small className="text-muted">{memo.createdAt.substring(0, 10)}</small>
           </CardText>
         </CardBody>
       </Card>
       <Modal open={modalOpen} close={closeModal} header="메모 수정">
-        <MemoModal memo={memo} />
+        <MemoModal memo={memo} content={memo.content} />
       </Modal>
     </>
   );

@@ -75,9 +75,8 @@
   max-height: 290px !important;
   cursor: pointer;
   max-height: 290px !important;
-  background-color: #fcff9c85;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  width: 317px !important;
+  width: 23% !important;
   float: left !important;
   margin: 15px 13px 15px 14px !important;
 }
@@ -93,6 +92,7 @@
 
 .memo-container .custom-control-label::before {
   left: 1rem !important;
+  margin-top: 0.25rem !important;
 }
 
 .memo-container .star {
@@ -122,5 +122,31 @@
 }
 
 .memo-add-form .quill {
-  height: 450px;
+  height: 400px;
+}
+
+.btn-md{
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.memo-color{
+  float: left 
+}
+
+.memo-color .memo-back{
+  padding: 5px;
+  background: #fff;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.1);
+  display: inline-block;
+  cursor: pointer
+}
+
+.memo-color .memo-handle{
+   position: fixed; 
+   top: 0px; 
+   right: 0px;
+   bottom: 0px;
+   left: 0px; 
 }

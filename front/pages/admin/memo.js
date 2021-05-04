@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Container, CardDeck } from 'reactstrap';
-import { useSelector } from 'react-redux';
+import { Container } from 'reactstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import axios from 'axios';
 import { END } from 'redux-saga';
@@ -15,11 +15,18 @@ import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import { LOAD_MEMO_REQUEST } from '../../reducers/memo';
 
 const Memo = () => {
+  const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const { memos, addMemoDone, addMemoError } = useSelector((state) => state.memo);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
+
+  useEffect(() => {
+    dispatch({
+      type: LOAD_MEMO_REQUEST
+    });
+  }, []);
 
   // 카테고리 추가
   const addMemo = useCallback((e) => {
@@ -57,8 +64,8 @@ const Memo = () => {
       <Container className="mt--9 memo-container " fluid>
         <div>
           <span>
-            <input className="custom-control-input" id="checkFavorites" type="checkbox" />
-            <label className="custom-control-label cursor" htmlFor="checkFavorites">
+            <input className="custom-control-input" id="checkBookMark" type="checkbox" />
+            <label className="custom-control-label cursor" htmlFor="checkBookMark">
               <span className="text-secondary star">즐겨찾기만 보기</span>
             </label>
           </span>

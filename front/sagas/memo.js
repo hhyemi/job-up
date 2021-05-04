@@ -61,7 +61,7 @@ function* addMemo(action) {
 
 // 메모 삭제
 function delMemoAPI(data) {
-  return axios.delete(`/Memo/del/${data}`);
+  return axios.delete(`/memo/del/${data}`);
 }
 
 function* delMemo(action) {
@@ -82,7 +82,7 @@ function* delMemo(action) {
 
 // 메모 수정
 function uptMemoAPI(data) {
-  return axios.patch('/Memo/upt/', data);
+  return axios.patch('/memo/upt/', data);
 }
 
 function* uptMemo(action) {
