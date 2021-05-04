@@ -60,7 +60,8 @@
 }
 
 .memo-container .card-img-top{
-  height: 130px;
+  height: 140px;
+  width: 140px;
 }
 
 .memo-container .card-body{
@@ -69,6 +70,7 @@
 
 .memo-container .card-title{
   margin-bottom: 1rem !important;
+  color: black;
 }
 
 .memo-container .card{
@@ -85,14 +87,15 @@
   position: relative;
 }
 
-.memo-container .card-text{
-  min-height: 50px;
-  max-height: 50px;
-}
-
 .memo-container .custom-control-label::before {
   left: 1rem !important;
   margin-top: 0.25rem !important;
+}
+
+.memo-body{
+  padding: 1rem !important;
+  max-height: 260px;
+  min-height: 260px;
 }
 
 .memo-container .star {
@@ -150,3 +153,49 @@
    bottom: 0px;
    left: 0px; 
 }
+
+.memo-container pre{
+  margin: 0 !important;
+  font-family: Open Sans, sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: #525f7f !important;
+  text-align: left !important;
+  height: 165px;
+  min-height: 165px;
+  overflow: hidden;
+}
+
+.memo-container .memo-date{
+  bottom: 15px;
+  position: absolute;
+}
+
+.memo-container .memo-div-lock{
+  position: absolute;
+  top: 29%;
+  left: 21%;
+}
+.memo-container .memo-lock{
+  padding-left: 58px;
+  padding-bottom: 10px;
+  position: p;
+}
+
+.memo-container .memo-lock-input{
+  float: left;
+  width: 45% !important;
+  margin-right: 10px;
+  height: 2rem;
+}
+
+.memo-container .memo-lock-show{
+  text-align: center; 
+  color: gray;
+}
+
+.memo-container .memo-lock-show:hover{
+  color: black;
+}
+

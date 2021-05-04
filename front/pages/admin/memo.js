@@ -16,8 +16,10 @@ import { LOAD_MEMO_REQUEST } from '../../reducers/memo';
 
 const Memo = () => {
   const dispatch = useDispatch();
+  const [onlyBookmark, setOnlyBookmark] = useState(false); // 즐겨찾기만 보기
+  const { memos, addMemoDone, addMemoError, uptMemoDone } = useSelector((state) => state.memo);
+
   const [modalOpen, setModalOpen] = useState(false);
-  const { memos, addMemoDone, addMemoError } = useSelector((state) => state.memo);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
@@ -27,6 +29,11 @@ const Memo = () => {
       type: LOAD_MEMO_REQUEST
     });
   }, []);
+
+  // 즐겨찾기만 보기
+  const onOnlyBookmark = useCallback((e) => {
+    setOnlyBookmark(e.target.checked);
+  });
 
   // 카테고리 추가
   const addMemo = useCallback((e) => {
@@ -58,13 +65,28 @@ const Memo = () => {
     }
   }, [addMemoError]);
 
+  // 메모 수정 성공
+  useEffect(() => {
+    if (uptMemoDone) {
+      setAlertShow(true);
+      setAlertType('success');
+      setAlertTitle('메모가 수정되었습니다.');
+    }
+  }, [uptMemoDone]);
+
   return (
     <>
       <Header />
       <Container className="mt--9 memo-container " fluid>
         <div>
           <span>
-            <input className="custom-control-input" id="checkBookMark" type="checkbox" />
+            <input
+              className="custom-control-input"
+              id="checkBookMark"
+              type="checkbox"
+              checked={onlyBookmark}
+              onChange={onOnlyBookmark}
+            />
             <label className="custom-control-label cursor" htmlFor="checkBookMark">
               <span className="text-secondary star">즐겨찾기만 보기</span>
             </label>
@@ -81,9 +103,13 @@ const Memo = () => {
             <MemoModal />
           </Modal>
         </div>
-        {memos.map((memo) => (
-          <MemoCard key={memo.id} memo={memo} />
-        ))}
+        {memos.map((memo) =>
+          onlyBookmark ? (
+            memo.bookmark && <MemoCard key={memo.id} memo={memo} />
+          ) : (
+            <MemoCard key={memo.id} memo={memo} />
+          )
+        )}
         <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
       </Container>
     </>
