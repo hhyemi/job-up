@@ -199,3 +199,11 @@
   color: black;
 }
 
+.community-container th, td:not(.comm-title) {
+  text-align: center;
+}
+
+.pagination {
+  position: absolute;
+  left: 40%;
+}

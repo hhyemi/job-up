@@ -22,12 +22,6 @@ var routes = [
     name: 'Memo',
     icon: 'ni ni-book-bookmark text-yellow',
     layout: '/admin'
-  },
-  {
-    path: '/tables',
-    name: 'Resume',
-    icon: 'ni ni-badge text-red',
-    layout: '/admin'
   }
 ];
 export default routes;
