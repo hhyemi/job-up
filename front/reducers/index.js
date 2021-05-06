@@ -6,6 +6,7 @@ import category from './category';
 import calendar from './calendar';
 import todo from './todo';
 import memo from './memo';
+import commty from './commty';
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -18,7 +19,8 @@ const rootReducer = (state, action) => {
         category,
         calendar,
         todo,
-        memo
+        memo,
+        commty
       });
       return combineReducer(state, action);
     }

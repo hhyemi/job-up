@@ -4,6 +4,9 @@ const category = require('./category');
 const calendar = require('./calendar');
 const todo = require('./todo');
 const memo = require('./memo');
+const comment = require('./comment');
+const commty = require('./commty');
+const hashtag = require('./hashtag');
 
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
@@ -18,6 +21,9 @@ db.Category = category;
 db.Calendar = calendar;
 db.Todo = todo;
 db.Memo = memo;
+db.Comment = comment;
+db.Commty = commty;
+db.Hashtag = hashtag;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);

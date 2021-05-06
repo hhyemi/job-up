@@ -68,7 +68,7 @@ function Sidebar(props) {
 
   const onCommunity = useCallback((e) => {
     e.preventDefault();
-    router.push('/admin/community');
+    router.push('/admin/commty');
   });
 
   return (
@@ -198,7 +198,7 @@ function Sidebar(props) {
           <Nav className="mb-md-3" navbar>
             <NavItem>
               <NavLink onClick={onCommunity} className="cursor">
-                <i class="ni ni-archive-2" style={{ color: '#00a75fb8' }} />
+                <i className="ni ni-archive-2" style={{ color: '#00a75fb8' }} />
                 Community
               </NavLink>
             </NavItem>

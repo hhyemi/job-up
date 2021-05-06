@@ -5,6 +5,7 @@
   padding: 0.5rem 1rem !important;
 }
 
+/* TODO-LIST */
 .todo-container {
   min-height: 680px;
 }
@@ -59,6 +60,7 @@
   color: rgba(0, 0, 0, 0.7) !important;
 }
 
+/* MEMO-LIST */
 .memo-container .card-img-top{
   height: 140px;
   width: 140px;
@@ -199,6 +201,7 @@
   color: black;
 }
 
+/* COMMUNITY */
 .community-container th, td:not(.comm-title) {
   text-align: center;
 }
@@ -206,4 +209,11 @@
 .pagination {
   position: absolute;
   left: 40%;
+}
+
+.add-commty-row .quill{
+  height: 440px;
+}
+.add-commty-row .card-header{
+  padding-bottom: 0rem !important;
 }

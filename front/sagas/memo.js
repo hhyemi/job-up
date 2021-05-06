@@ -41,13 +41,11 @@ function* loadMemo(action) {
 
 // 메모 추가
 function addMemoAPI(data) {
-  console.log(data);
   return axios.post('/memo/add', data);
 }
 
 function* addMemo(action) {
   try {
-    console.log(action);
     const result = yield call(addMemoAPI, action.data);
     yield put({
       type: ADD_MEMO_SUCCESS,
