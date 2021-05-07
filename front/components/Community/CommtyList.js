@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -14,13 +14,66 @@ import {
   InputGroupAddon
 } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
-const CommtyList = ({ setAddPostOpen }) => {
+import { LOAD_COMMTY_REQUEST } from '../../reducers/commty';
+import CommtyOne from './CommtyOne';
+
+const CommtyList = ({ setAddPostOpen, setAlertShow, setAlertType, setAlertTitle }) => {
+  const dispatch = useDispatch();
+  const { commties, commtyCnt, loadCommtyDone, loadCommtyError } = useSelector((state) => state.commty);
+  const [pages, setPages] = useState([]); // 페이지 개수
+  const [currentPage, setCurrentPage] = useState(1); // 현재페이지
+
+  // 커뮤니티 가져오기
+  useEffect(() => {
+    dispatch({
+      type: LOAD_COMMTY_REQUEST,
+      data: {
+        offset: 0
+      }
+    });
+  }, []);
+
+  // 커뮤니티 가져오기 실패
+  useEffect(() => {
+    if (loadCommtyError) {
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(loadCommtyError);
+    }
+  }, [loadCommtyError]);
+
+  // 커뮤니티 가져오기 성공
+  useEffect(() => {
+    if (loadCommtyDone) {
+      const tmpCnt = Math.ceil(commtyCnt / 20);
+      const commtyPages = Array.from({ length: tmpCnt }, (v, i) => i + 1);
+      setPages(commtyPages);
+    }
+  }, [loadCommtyDone]);
+
   // 글쓰기 클릭
   const onAddPostOpen = useCallback((e) => {
     e.preventDefault();
     setAddPostOpen(true);
   });
+
+  // 페이지 이동
+  const movePage = useCallback(
+    (e) => {
+      e.preventDefault();
+      const pageno = e.target.getAttribute('data-pageno');
+      setCurrentPage(pageno);
+      dispatch({
+        type: LOAD_COMMTY_REQUEST,
+        data: {
+          offset: (pageno - 1) * 20
+        }
+      });
+    },
+    [currentPage]
+  );
 
   return (
     <>
@@ -64,307 +117,9 @@ const CommtyList = ({ setAddPostOpen }) => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    <font className="text-blue pl-1">#리액트 #코딩 #신입</font>
-                    프리하다가 정직원을 할때에 대해 토론해보고자 합니다.
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    싸피(SSAFY) 6기에 지원하려는 비전공자인데 궁금한 점이 있습니다..
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
-                <tr>
-                  <td>123</td>
-                  <td className="comm-title">
-                    고민이많아요,,,,,,,,,이거잘모르겠어요{' '}
-                    <font className="text-red pl-1">
-                      <b>[2]</b>
-                    </font>
-                  </td>
-                  <td>이혜미</td>
-                  <td>2021-05-05</td>
-                  <td>123</td>
-                  <td>
-                    <i className="ni ni-favourite-28 text-red mr-1" />3
-                  </td>
-                </tr>
+                {commties.map((commty, index) => (
+                  <CommtyOne key={commty.id} commty={commty} num={commtyCnt - 20 * (currentPage - 1) - index} />
+                ))}
               </tbody>
             </Table>
           </Card>
@@ -375,26 +130,26 @@ const CommtyList = ({ setAddPostOpen }) => {
           <nav aria-label="...">
             <Pagination>
               <PaginationItem className=" disabled">
-                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()} tabindex="-1">
+                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>
                   <i className=" fa fa-angle-left" />
                   <span className=" sr-only">Previous</span>
                 </PaginationLink>
               </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>
-                  1
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem className=" active">
-                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>
-                  2 <span className=" sr-only">(current)</span>
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>
-                  3
-                </PaginationLink>
-              </PaginationItem>
+              {pages.map((page) =>
+                page == currentPage ? (
+                  <PaginationItem className="active" key={page}>
+                    <PaginationLink data-pageno={page} href="#pablo" onClick={movePage}>
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ) : (
+                  <PaginationItem key={page}>
+                    <PaginationLink data-pageno={page} href="#pablo" onClick={movePage}>
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+              )}
               <PaginationItem>
                 <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>
                   <i className=" fa fa-angle-right" />
@@ -413,7 +168,10 @@ const CommtyList = ({ setAddPostOpen }) => {
 };
 
 CommtyList.propTypes = {
-  setAddPostOpen: PropTypes.func.isRequired
+  setAddPostOpen: PropTypes.func.isRequired,
+  setAlertShow: PropTypes.func.isRequired,
+  setAlertType: PropTypes.func.isRequired,
+  setAlertTitle: PropTypes.func.isRequired
 };
 
 export default CommtyList;

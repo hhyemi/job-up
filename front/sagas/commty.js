@@ -16,13 +16,13 @@ import {
 } from '../reducers/commty';
 
 // 커뮤니티 가져오기
-function loadCommtyAPI(lastId) {
-  return axios.get(`/Commty?lastId=${lastId || 0}`);
+function loadCommtyAPI(data) {
+  return axios.post('/commty', data);
 }
 
 function* loadCommty(action) {
   try {
-    const result = yield call(loadCommtyAPI, action.lastId);
+    const result = yield call(loadCommtyAPI, action.data);
     yield put({
       type: LOAD_COMMTY_SUCCESS,
       data: result.data

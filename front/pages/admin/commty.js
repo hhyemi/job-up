@@ -41,7 +41,16 @@ const Commty = () => {
     <>
       <Header />
       <Container className="mt--9 community-container" fluid>
-        {!addPostOpen ? <CommtyList setAddPostOpen={setAddPostOpen} /> : <AddCommty setAddPostOpen={setAddPostOpen} />}
+        {!addPostOpen ? (
+          <CommtyList
+            setAddPostOpen={setAddPostOpen}
+            setAlertType={setAlertType}
+            setAlertShow={setAlertShow}
+            setAlertTitle={setAlertTitle}
+          />
+        ) : (
+          <AddCommty setAddPostOpen={setAddPostOpen} />
+        )}
       </Container>
       <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>

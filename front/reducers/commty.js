@@ -2,6 +2,7 @@ import produce from '../util/produce';
 
 export const initialState = {
   commties: [],
+  commtyCnt: 0,
   loadCommtyLoading: false, // 커뮤니티 가져오기
   loadCommtyDone: false,
   loadCommtyError: null,
@@ -43,7 +44,8 @@ const reducer = (state = initialState, action) =>
       case LOAD_COMMTY_SUCCESS:
         draft.loadCommtyLoading = false;
         draft.loadCommtyDone = true;
-        draft.commties = draft.commties.concat(action.data);
+        draft.commties = action.data.commty;
+        draft.commtyCnt = action.data.commtyCnt.count;
         break;
       case LOAD_COMMTY_FAILURE:
         draft.loadCommtyLoading = false;
