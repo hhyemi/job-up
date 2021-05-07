@@ -5,7 +5,7 @@ const router = express.Router();
 const { User, Commty, Comment, Hashtag } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
-// GET /commty : 커뮤니티 가져오기
+// GET /commty : 커뮤니티 목록 가져오기
 router.post('/', isLoggedIn, async (req, res, next) => {
   try {
     const where = {};
@@ -42,6 +42,45 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     });
     const commtyCnt = await Commty.findAndCountAll();
     res.status(201).json({ commty, commtyCnt });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// GET /commty/1
+router.get('/:commtyId', async (req, res, next) => {
+  try {
+    const commty = await Commty.findOne({
+      where: { id: req.params.commtyId }
+    });
+    if (!commty) {
+      return res.status(404).send('존재하지 않는 게시글입니다.');
+    }
+    const fullCommty = await Commty.findOne({
+      where: { id: commty.id },
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'name', 'src']
+        },
+        {
+          model: User,
+          as: 'Likers',
+          attributes: ['id', 'name']
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ['id', 'name', 'src']
+            }
+          ]
+        }
+      ]
+    });
+    res.status(203).json(fullCommty);
   } catch (error) {
     console.error(error);
     next(error);

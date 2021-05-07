@@ -1,19 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
+import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOAD_COMMTY_REQUEST } from '../../reducers/commty';
 
 const CommtyOne = ({ commty, num }) => {
   const { id, title, createdAt, views, User, Comments, Likers } = commty;
   const dispatch = useDispatch();
-  const { commties, commtyCnt, loadCommtyDone, loadCommtyError } = useSelector((state) => state.commty);
+
+  // 글 상세보기
+  const onCommtyClick = useCallback(() => {
+    Router.push(`/admin/commty/${id}`);
+  }, [id]);
 
   return (
     <>
       <tr>
         <td>{num}</td>
-        <td className="comm-title">
+        <td className="comm-title cursor" onClick={onCommtyClick}>
           {title.split(/(#[^\s#]+)/g).map((v, i) => {
             if (v.match(/(#[^\s#]+)/)) {
               return (

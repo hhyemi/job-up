@@ -7,6 +7,9 @@ import {
   DEL_COMMTY_FAILURE,
   DEL_COMMTY_REQUEST,
   DEL_COMMTY_SUCCESS,
+  LOAD_COMMTIES_FAILURE,
+  LOAD_COMMTIES_REQUEST,
+  LOAD_COMMTIES_SUCCESS,
   LOAD_COMMTY_FAILURE,
   LOAD_COMMTY_REQUEST,
   LOAD_COMMTY_SUCCESS,
@@ -16,8 +19,29 @@ import {
 } from '../reducers/commty';
 
 // 커뮤니티 가져오기
-function loadCommtyAPI(data) {
+function loadCommtiesAPI(data) {
   return axios.post('/commty', data);
+}
+
+function* loadCommties(action) {
+  try {
+    const result = yield call(loadCommtiesAPI, action.data);
+    yield put({
+      type: LOAD_COMMTIES_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_COMMTIES_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
+// 커뮤니티 상세보기
+function loadCommtyAPI(data) {
+  return axios.get(`/commty/${data}`);
 }
 
 function* loadCommty(action) {
@@ -99,6 +123,10 @@ function* uptCommty(action) {
   }
 }
 
+function* watchLoadCommties() {
+  yield takeLatest(LOAD_COMMTIES_REQUEST, loadCommties);
+}
+
 function* watchLoadCommty() {
   yield takeLatest(LOAD_COMMTY_REQUEST, loadCommty);
 }
@@ -116,5 +144,11 @@ function* watchUptCommty() {
 }
 
 export default function* userSaga() {
-  yield all([fork(watchLoadCommty), fork(watchAddCommty), fork(watchDelCommty), fork(watchUptCommty)]);
+  yield all([
+    fork(watchLoadCommties),
+    fork(watchLoadCommty),
+    fork(watchAddCommty),
+    fork(watchDelCommty),
+    fork(watchUptCommty)
+  ]);
 }

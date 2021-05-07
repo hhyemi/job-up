@@ -1,5 +1,6 @@
 const DataTypes = require('sequelize');
 const { Model } = DataTypes;
+const moment = require('moment');
 
 module.exports = class Commty extends Model {
   static init(sequelize) {
@@ -15,6 +16,18 @@ module.exports = class Commty extends Model {
         views: {
           type: DataTypes.INTEGER(5),
           allowNull: false
+        },
+        createdAt: {
+          type: DataTypes.DATE,
+          get() {
+            return moment(this.getDataValue('createdAt')).format('YYYY/DD/MM hh:mm:ss');
+          }
+        },
+        updatedAt: {
+          type: DataTypes.DATE,
+          get() {
+            return moment(this.getDataValue('updatedAt')).format('YYYY/DD/MM hh:mm:ss');
+          }
         }
       },
       {

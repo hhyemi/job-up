@@ -16,19 +16,19 @@ import {
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { LOAD_COMMTY_REQUEST } from '../../reducers/commty';
+import { LOAD_COMMTIES_REQUEST } from '../../reducers/commty';
 import CommtyOne from './CommtyOne';
 
 const CommtyList = ({ setAddPostOpen, setAlertShow, setAlertType, setAlertTitle }) => {
   const dispatch = useDispatch();
-  const { commties, commtyCnt, loadCommtyDone, loadCommtyError } = useSelector((state) => state.commty);
+  const { commties, commtyCnt, loadCommtiesDone, loadCommtiesError } = useSelector((state) => state.commty);
   const [pages, setPages] = useState([]); // 페이지 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재페이지
 
   // 커뮤니티 가져오기
   useEffect(() => {
     dispatch({
-      type: LOAD_COMMTY_REQUEST,
+      type: LOAD_COMMTIES_REQUEST,
       data: {
         offset: 0
       }
@@ -37,21 +37,21 @@ const CommtyList = ({ setAddPostOpen, setAlertShow, setAlertType, setAlertTitle 
 
   // 커뮤니티 가져오기 실패
   useEffect(() => {
-    if (loadCommtyError) {
+    if (loadCommtiesError) {
       setAlertShow(true);
       setAlertType('danger');
-      setAlertTitle(loadCommtyError);
+      setAlertTitle(loadCommtiesError);
     }
-  }, [loadCommtyError]);
+  }, [loadCommtiesError]);
 
   // 커뮤니티 가져오기 성공
   useEffect(() => {
-    if (loadCommtyDone) {
+    if (loadCommtiesDone) {
       const tmpCnt = Math.ceil(commtyCnt / 20);
       const commtyPages = Array.from({ length: tmpCnt }, (v, i) => i + 1);
       setPages(commtyPages);
     }
-  }, [loadCommtyDone]);
+  }, [loadCommtiesDone]);
 
   // 글쓰기 클릭
   const onAddPostOpen = useCallback((e) => {
@@ -66,7 +66,7 @@ const CommtyList = ({ setAddPostOpen, setAlertShow, setAlertType, setAlertTitle 
       const pageno = e.target.getAttribute('data-pageno');
       setCurrentPage(pageno);
       dispatch({
-        type: LOAD_COMMTY_REQUEST,
+        type: LOAD_COMMTIES_REQUEST,
         data: {
           offset: (pageno - 1) * 20
         }

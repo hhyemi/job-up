@@ -2,10 +2,11 @@ import produce from '../util/produce';
 
 export const initialState = {
   commties: [],
+  singleCommty: null,
   commtyCnt: 0,
-  loadCommtyLoading: false, // 커뮤니티 가져오기
-  loadCommtyDone: false,
-  loadCommtyError: null,
+  loadCommtiesLoading: false, // 커뮤니티 가져오기
+  loadCommtiesDone: false,
+  loadCommtiesError: null,
   addCommtyLoading: false, // 커뮤니티 추가
   addCommtyDone: false,
   addCommtyError: null,
@@ -16,6 +17,9 @@ export const initialState = {
   uptCommtyDone: false,
   uptCommtyError: null
 };
+export const LOAD_COMMTIES_REQUEST = 'LOAD_COMMTIES_REQUEST';
+export const LOAD_COMMTIES_SUCCESS = 'LOAD_COMMTIES_SUCCESS';
+export const LOAD_COMMTIES_FAILURE = 'LOAD_COMMTIES_FAILURE';
 
 export const LOAD_COMMTY_REQUEST = 'LOAD_COMMTY_REQUEST';
 export const LOAD_COMMTY_SUCCESS = 'LOAD_COMMTY_SUCCESS';
@@ -36,6 +40,21 @@ export const UPT_COMMTY_FAILURE = 'UPT_COMMTY_FAILURE';
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_COMMTIES_REQUEST:
+        draft.loadCommtiesLoading = true;
+        draft.loadCommtiesError = null;
+        draft.loadCommtiesDone = false;
+        break;
+      case LOAD_COMMTIES_SUCCESS:
+        draft.loadCommtiesLoading = false;
+        draft.loadCommtiesDone = true;
+        draft.commties = action.data.commty;
+        draft.commtyCnt = action.data.commtyCnt.count;
+        break;
+      case LOAD_COMMTIES_FAILURE:
+        draft.loadCommtiesLoading = false;
+        draft.loadCommtiesError = action.error;
+        break;
       case LOAD_COMMTY_REQUEST:
         draft.loadCommtyLoading = true;
         draft.loadCommtyError = null;
@@ -44,8 +63,7 @@ const reducer = (state = initialState, action) =>
       case LOAD_COMMTY_SUCCESS:
         draft.loadCommtyLoading = false;
         draft.loadCommtyDone = true;
-        draft.commties = action.data.commty;
-        draft.commtyCnt = action.data.commtyCnt.count;
+        draft.singleCommty = action.data;
         break;
       case LOAD_COMMTY_FAILURE:
         draft.loadCommtyLoading = false;
