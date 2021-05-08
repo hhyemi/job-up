@@ -4,9 +4,12 @@ export const initialState = {
   commties: [],
   singleCommty: null,
   commtyCnt: 0,
-  loadCommtiesLoading: false, // 커뮤니티 가져오기
+  loadCommtiesLoading: false, // 커뮤니티들 가져오기
   loadCommtiesDone: false,
   loadCommtiesError: null,
+  loadCommtyLoading: false, // 커뮤니티 가져오기
+  loadCommtyDone: false,
+  loadCommtyError: null,
   addCommtyLoading: false, // 커뮤니티 추가
   addCommtyDone: false,
   addCommtyError: null,

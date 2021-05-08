@@ -217,3 +217,6 @@
 .add-commty-row .card-header{
   padding-bottom: 0rem !important;
 }
+.info-commty-container .card{
+  padding: 0.5rem 1rem 0.5rem 1rem !important;
+}

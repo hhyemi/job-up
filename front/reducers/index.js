@@ -7,6 +7,7 @@ import calendar from './calendar';
 import todo from './todo';
 import memo from './memo';
 import commty from './commty';
+import comment from './comment';
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -20,7 +21,8 @@ const rootReducer = (state, action) => {
         calendar,
         todo,
         memo,
-        commty
+        commty,
+        comment
       });
       return combineReducer(state, action);
     }

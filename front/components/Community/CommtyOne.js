@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { LOAD_COMMTY_REQUEST } from '../../reducers/commty';
+import { backUrl } from '../../config/config';
 
 const CommtyOne = ({ commty, num }) => {
   const { id, title, createdAt, views, User, Comments, Likers } = commty;

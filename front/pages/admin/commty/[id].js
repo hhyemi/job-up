@@ -1,10 +1,23 @@
 // commty/[id].js
-import React, { useState } from 'react';
-import { Container, Button, Card, CardHeader, Row, Col, Input, FormGroup, CardBody, Media, CardImg } from 'reactstrap';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  Container,
+  Button,
+  Card,
+  CardHeader,
+  Row,
+  Col,
+  Input,
+  FormGroup,
+  CardBody,
+  Media,
+  InputGroup
+} from 'reactstrap';
 import { useRouter } from 'next/router';
 import { END } from 'redux-saga';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import SweetAlert from 'react-bootstrap-sweetalert';
+import { useDispatch, useSelector } from 'react-redux';
 
 import wrapper from '../../../store/configureStore';
 import Header from '../../../components/Headers/Header';
@@ -12,18 +25,45 @@ import { LOAD_MY_INFO_REQUEST } from '../../../reducers/user';
 import { LOAD_COMMTY_REQUEST } from '../../../reducers/commty';
 import Admin from '../../../layouts/Admin';
 import { backUrl } from '../../../config/config';
-import QuillWrapper from '../../../components/Memo/QuillWrapper';
+import useInput from '../../../hooks/useInput';
+import { ADD_COMMENT_REQUEST } from '../../../reducers/comment';
 
 const SingleCommty = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { id } = router.query;
   const { singleCommty } = useSelector((state) => state.commty);
+  const { addCommentDone } = useSelector((state) => state.comment);
   const [commtyContent, setCommtyContent] = useState(singleCommty.content); // 내용
+  const [commentContent, onCommentContent, setCommentText] = useInput(''); // 댓글 내용
+
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('default');
+
+  // 댓글 추가
+  const addComment = useCallback((e) => {
+    e.preventDefault();
+    dispatch({
+      type: ADD_COMMENT_REQUEST,
+      data: { content: commentContent, commtyId: singleCommty.id }
+    });
+  });
+
+  // 댓글 추가 성공
+  useEffect(() => {
+    if (addCommentDone) {
+      setCommentText('');
+      setAlertShow(true);
+      setAlertType('success');
+      setAlertTitle('댓글이 등록되었습니다.');
+    }
+  }, [addCommentDone]);
 
   return (
     <>
       <Header />
-      <Container className="mt--9 community-container" fluid>
+      <Container className="mt--9 info-commty-container" fluid>
         <Row className="add-commty-row">
           <Col className="mb-5 mb-xl-0">
             <Card className="shadow">
@@ -51,21 +91,35 @@ const SingleCommty = () => {
               </CardHeader>
               <CardBody>
                 <FormGroup>
-                  <QuillWrapper value={commtyContent} />
+                  <div dangerouslySetInnerHTML={{ __html: commtyContent }} />
                 </FormGroup>
-                <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-                  <Button color="default" className="btn-md" type="submit">
-                    취소
+                <hr />
+                <FormGroup>
+                  <InputGroup>
+                    <Input
+                      style={{ height: '8rem' }}
+                      type="textarea"
+                      value={commentContent}
+                      onChange={onCommentContent}
+                      placeholder="댓글 내용을 입력해주세요."
+                    />
+                  </InputGroup>
+                  <Button
+                    color="primary"
+                    type="button"
+                    className="mt-3"
+                    style={{ float: 'right' }}
+                    onClick={addComment}
+                  >
+                    등록
                   </Button>
-                  <Button color="primary" className="btn-md" type="submit">
-                    글쓰기
-                  </Button>
-                </div>
+                </FormGroup>
               </CardBody>
             </Card>
           </Col>
         </Row>
       </Container>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>
   );
 };
