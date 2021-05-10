@@ -18,7 +18,13 @@ export const initialState = {
   delCommtyError: null,
   uptCommtyLoading: false, // 커뮤니티 수정
   uptCommtyDone: false,
-  uptCommtyError: null
+  uptCommtyError: null,
+  likceCommtyLoading: false, // 좋아요
+  likceCommtyDone: false,
+  likceCommtyError: null,
+  unlikeCommtyLoading: false, // 좋아요 취소
+  unlikeCommtyDone: false,
+  unlikeCommtyError: null
 };
 export const LOAD_COMMTIES_REQUEST = 'LOAD_COMMTIES_REQUEST';
 export const LOAD_COMMTIES_SUCCESS = 'LOAD_COMMTIES_SUCCESS';
@@ -39,6 +45,14 @@ export const DEL_COMMTY_FAILURE = 'DEL_COMMTY_FAILURE';
 export const UPT_COMMTY_REQUEST = 'UPT_COMMTY_REQUEST';
 export const UPT_COMMTY_SUCCESS = 'UPT_COMMTY_SUCCESS';
 export const UPT_COMMTY_FAILURE = 'UPT_COMMTY_FAILURE';
+
+export const LIKE_COMMTY_REQUEST = 'LIKE_COMMTY_REQUEST';
+export const LIKE_COMMTY_SUCCESS = 'LIKE_COMMTY_SUCCESS';
+export const LIKE_COMMTY_FAILURE = 'LIKE_COMMTY_FAILURE';
+
+export const UNLIKE_COMMTY_REQUEST = 'UNLIKE_COMMTY_REQUEST';
+export const UNLIKE_COMMTY_SUCCESS = 'UNLIKE_COMMTY_SUCCESS';
+export const UNLIKE_COMMTY_FAILURE = 'UNLIKE_COMMTY_FAILURE';
 
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
@@ -109,10 +123,41 @@ const reducer = (state = initialState, action) =>
         draft.uptCommtyLoading = false;
         draft.uptCommtyDone = true;
         draft.commties = draft.commties.map((v) => (v.id === action.data.CommtyId ? action.data.Commty : v));
+        draft.singleCommty = action.data.Commty;
         break;
       case UPT_COMMTY_FAILURE:
         draft.uptCommtyLoading = false;
         draft.uptCommtyError = action.error;
+        break;
+      case LIKE_COMMTY_REQUEST:
+        draft.likeCommtyLoading = true;
+        draft.likeCommtyDone = false;
+        draft.likeCommtyError = null;
+        break;
+      case LIKE_COMMTY_SUCCESS: {
+        draft.singleCommty.Likers.push({ id: action.data.UserId });
+        draft.likeCommtyLoading = false;
+        draft.likeCommtyDone = true;
+        break;
+      }
+      case LIKE_COMMTY_FAILURE:
+        draft.likeCommtyLoading = false;
+        draft.likeCommtyError = action.error;
+        break;
+      case UNLIKE_COMMTY_REQUEST:
+        draft.unlikeCommtyLoading = true;
+        draft.unlikeCommtyDone = false;
+        draft.unlikeCommtyError = null;
+        break;
+      case UNLIKE_COMMTY_SUCCESS: {
+        draft.singleCommty.Likers = draft.singleCommty.Likers.filter((v) => v.id !== action.data.UserId);
+        draft.unlikeCommtyLoading = false;
+        draft.unlikeCommtyDone = true;
+        break;
+      }
+      case UNLIKE_COMMTY_FAILURE:
+        draft.unlikeCommtyLoading = false;
+        draft.unlikeCommtyError = action.error;
         break;
       default:
         break;

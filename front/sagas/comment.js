@@ -59,7 +59,7 @@ function* addComment(action) {
 
 // 댓글 삭제
 function delCommentAPI(data) {
-  return axios.delete(`/Comment/del/${data}`);
+  return axios.delete(`/comment/del/${data}`);
 }
 
 function* delComment(action) {
@@ -80,7 +80,7 @@ function* delComment(action) {
 
 // 댓글 수정
 function uptCommentAPI(data) {
-  return axios.patch('/Comment/upt/', data);
+  return axios.patch('/comment/upt/', data);
 }
 
 function* uptComment(action) {

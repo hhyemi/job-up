@@ -20,13 +20,13 @@ module.exports = class Commty extends Model {
         createdAt: {
           type: DataTypes.DATE,
           get() {
-            return moment(this.getDataValue('createdAt')).format('YYYY/DD/MM hh:mm:ss');
+            return moment(this.getDataValue('createdAt')).format('YYYY.DD.MM hh:mm');
           }
         },
         updatedAt: {
           type: DataTypes.DATE,
           get() {
-            return moment(this.getDataValue('updatedAt')).format('YYYY/DD/MM hh:mm:ss');
+            return moment(this.getDataValue('updatedAt')).format('YYYY.DD.MM hh:mm');
           }
         }
       },

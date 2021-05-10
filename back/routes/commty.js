@@ -33,6 +33,15 @@ router.post('/', isLoggedIn, async (req, res, next) => {
           model: User, // 좋아요 누른사람
           as: 'Likers', // 구분
           attributes: ['id']
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ['id', 'name']
+            }
+          ]
         }
       ],
       order: [
@@ -48,7 +57,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
   }
 });
 
-// GET /commty/1
+// GET /commty/1 : 커뮤니티 상세보기
 router.get('/:commtyId', async (req, res, next) => {
   try {
     const commty = await Commty.findOne({
@@ -131,6 +140,65 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
       ]
     });
     res.status(201).json(fullCommty);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// PATCH /commty/upt : 커뮤니티 수정
+router.patch('/upt', isLoggedIn, async (req, res, next) => {
+  try {
+    await Commty.update(
+      {
+        title: req.body.title,
+        content: req.body.content
+      },
+      { where: { id: req.body.id } }
+    );
+    const commty = await Commty.findOne({ where: { id: req.body.id } });
+    res.status(200).json({ Commty, CommtyId: parseInt(req.body.id, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// DELETE /commty/del : 커뮤니티 삭제
+router.delete('/del/:commtyId', isLoggedIn, async (req, res, next) => {
+  try {
+    await Commty.destroy({ where: { id: req.params.commtyId, UserId: req.user.id } });
+    res.json({ CommtyId: parseInt(req.params.commtyId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// PATCH /commty/1/like : 좋아요
+router.patch('/:commtyId/like', isLoggedIn, async (req, res, next) => {
+  try {
+    const commty = await Commty.findOne({ where: { id: req.params.commtyId } });
+    if (!commty) {
+      return res.status(403).send('게시글이 존재하지 않습니다.');
+    }
+    await commty.addLikers(req.user.id);
+    res.json({ CommtyId: commty.id, UserId: req.user.id });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// DELETE /post/1/unlike : 좋아요취소
+router.delete('/:commtyId/unlike', isLoggedIn, async (req, res, next) => {
+  try {
+    const commty = await Commty.findOne({ where: { id: req.params.commtyId } });
+    if (!commty) {
+      return res.status(403).send('게시글이 존재하지 않습니다.');
+    }
+    await commty.removeLikers(req.user.id);
+    res.json({ CommtyId: commty.id, UserId: req.user.id });
   } catch (error) {
     console.error(error);
     next(error);

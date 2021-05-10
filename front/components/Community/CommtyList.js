@@ -100,11 +100,11 @@ const CommtyList = ({ setAddPostOpen, setAlertShow, setAlertType, setAlertTitle 
             <Table className="align-items-center table-flush" responsive>
               <colgroup>
                 <col width="10%" />
-                <col width="50%" />
-                <col width="10%" />
-                <col width="10%" />
-                <col width="10%" />
                 <col />
+                <col width="10%" />
+                <col width="15%" />
+                <col width="8%" />
+                <col width="8%" />
               </colgroup>
               <thead className="thead-light">
                 <tr>
