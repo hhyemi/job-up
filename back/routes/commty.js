@@ -205,4 +205,66 @@ router.delete('/:commtyId/unlike', isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.post('/hashtag', async (req, res, next) => {
+  try {
+    const where = {};
+    if (parseInt(req.body.lastId, 10)) {
+      where.id = { [Op.lt]: parseInt(req.body.lastId, 10) };
+    }
+    const commty = await Commty.findAll({
+      offset: req.body.offset,
+      limit: 20,
+      include: [
+        {
+          model: Hashtag,
+          where: { name: decodeURIComponent(req.body.tag) } // include안에서 조건 가능 , 해시태그는 여기에있기 때문에
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User, // 댓글 작성자
+              attributes: ['id', 'name']
+            }
+          ]
+        },
+        {
+          model: User, // 게시글 작성자
+          attributes: ['id', 'name']
+        },
+        {
+          model: User, // 좋아요 누른사람
+          as: 'Likers', // 구분
+          attributes: ['id']
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ['id', 'name']
+            }
+          ]
+        }
+      ],
+      order: [
+        ['createdAt', 'DESC'],
+        ['id', 'DESC']
+      ]
+    });
+    const commtyCnt = await Commty.findAndCountAll({
+      include: [
+        {
+          model: Hashtag,
+          where: { name: decodeURIComponent(req.body.tag) }
+        }
+      ]
+    });
+    res.status(201).json({ commty, commtyCnt });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;

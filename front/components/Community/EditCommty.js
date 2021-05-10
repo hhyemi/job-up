@@ -56,7 +56,7 @@ const EditCommty = ({ setEditOpen, commty }) => {
       });
       setEditOpen(false);
     },
-    [commtyTitle, commtyContent, commty.id]
+    [commtyTitle, commtyContent]
   );
 
   return (

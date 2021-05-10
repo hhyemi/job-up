@@ -16,6 +16,9 @@ import {
   LOAD_COMMTY_FAILURE,
   LOAD_COMMTY_REQUEST,
   LOAD_COMMTY_SUCCESS,
+  LOAD_HASHTAG_COMMTY_FAILURE,
+  LOAD_HASHTAG_COMMTY_REQUEST,
+  LOAD_HASHTAG_COMMTY_SUCCESS,
   UNLIKE_COMMTY_FAILURE,
   UNLIKE_COMMTY_REQUEST,
   UNLIKE_COMMTY_SUCCESS,
@@ -40,6 +43,27 @@ function* loadCommties(action) {
     console.error(err);
     yield put({
       type: LOAD_COMMTIES_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
+// 커뮤니티 가져오기 (Tag)
+function loadTagCommtiesAPI(data) {
+  return axios.post('/commty/hashtag', data);
+}
+
+function* loadTagCommties(action) {
+  try {
+    const result = yield call(loadTagCommtiesAPI, action.data, action.offset);
+    yield put({
+      type: LOAD_HASHTAG_COMMTY_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_HASHTAG_COMMTY_FAILURE,
       error: err.response.data
     });
   }
@@ -173,6 +197,10 @@ function* watchLoadCommties() {
   yield takeLatest(LOAD_COMMTIES_REQUEST, loadCommties);
 }
 
+function* watchLoadTagCommties() {
+  yield takeLatest(LOAD_HASHTAG_COMMTY_REQUEST, loadTagCommties);
+}
+
 function* watchLoadCommty() {
   yield takeLatest(LOAD_COMMTY_REQUEST, loadCommty);
 }
@@ -200,6 +228,7 @@ function* watchUnLikeCommty() {
 export default function* userSaga() {
   yield all([
     fork(watchLoadCommties),
+    fork(watchLoadTagCommties),
     fork(watchLoadCommty),
     fork(watchAddCommty),
     fork(watchDelCommty),

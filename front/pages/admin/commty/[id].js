@@ -148,7 +148,7 @@ const SingleCommty = () => {
                   <hr className="mt-4" />
                 </CardHeader>
                 <CardBody>
-                  <FormGroup>
+                  <FormGroup className="mb-5">
                     <div dangerouslySetInnerHTML={{ __html: singleCommty.content }} />
                   </FormGroup>
                   <span className="text-md comment-click">

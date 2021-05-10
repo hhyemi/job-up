@@ -54,21 +54,28 @@ export const UNLIKE_COMMTY_REQUEST = 'UNLIKE_COMMTY_REQUEST';
 export const UNLIKE_COMMTY_SUCCESS = 'UNLIKE_COMMTY_SUCCESS';
 export const UNLIKE_COMMTY_FAILURE = 'UNLIKE_COMMTY_FAILURE';
 
+export const LOAD_HASHTAG_COMMTY_REQUEST = 'LOAD_HASHTAG_COMMTY_REQUEST';
+export const LOAD_HASHTAG_COMMTY_SUCCESS = 'LOAD_HASHTAG_COMMTY_SUCCESS';
+export const LOAD_HASHTAG_COMMTY_FAILURE = 'LOAD_HASHTAG_COMMTY_FAILURE';
+
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
       case LOAD_COMMTIES_REQUEST:
+      case LOAD_HASHTAG_COMMTY_REQUEST:
         draft.loadCommtiesLoading = true;
         draft.loadCommtiesError = null;
         draft.loadCommtiesDone = false;
         break;
       case LOAD_COMMTIES_SUCCESS:
+      case LOAD_HASHTAG_COMMTY_SUCCESS:
         draft.loadCommtiesLoading = false;
         draft.loadCommtiesDone = true;
         draft.commties = action.data.commty;
         draft.commtyCnt = action.data.commtyCnt.count;
         break;
       case LOAD_COMMTIES_FAILURE:
+      case LOAD_HASHTAG_COMMTY_FAILURE:
         draft.loadCommtiesLoading = false;
         draft.loadCommtiesError = action.error;
         break;

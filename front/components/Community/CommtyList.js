@@ -16,10 +16,10 @@ import {
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { LOAD_COMMTIES_REQUEST } from '../../reducers/commty';
+import { LOAD_COMMTIES_REQUEST, LOAD_HASHTAG_COMMTY_REQUEST } from '../../reducers/commty';
 import CommtyOne from './CommtyOne';
 
-const CommtyList = ({ setAddPostOpen, setAlertShow, setAlertType, setAlertTitle }) => {
+const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertTitle }) => {
   const dispatch = useDispatch();
   const { commties, commtyCnt, loadCommtiesDone, loadCommtiesError } = useSelector((state) => state.commty);
   const [pages, setPages] = useState([]); // 페이지 개수
@@ -27,12 +27,22 @@ const CommtyList = ({ setAddPostOpen, setAlertShow, setAlertType, setAlertTitle 
 
   // 커뮤니티 가져오기
   useEffect(() => {
-    dispatch({
-      type: LOAD_COMMTIES_REQUEST,
-      data: {
-        offset: 0
-      }
-    });
+    if (tag) {
+      dispatch({
+        type: LOAD_HASHTAG_COMMTY_REQUEST,
+        data: {
+          offset: 0,
+          tag: encodeURIComponent(tag)
+        }
+      });
+    } else {
+      dispatch({
+        type: LOAD_COMMTIES_REQUEST,
+        data: {
+          offset: 0
+        }
+      });
+    }
   }, []);
 
   // 커뮤니티 가져오기 실패
@@ -65,12 +75,22 @@ const CommtyList = ({ setAddPostOpen, setAlertShow, setAlertType, setAlertTitle 
       e.preventDefault();
       const pageno = e.target.getAttribute('data-pageno');
       setCurrentPage(pageno);
-      dispatch({
-        type: LOAD_COMMTIES_REQUEST,
-        data: {
-          offset: (pageno - 1) * 20
-        }
-      });
+      if (tag) {
+        dispatch({
+          type: LOAD_HASHTAG_COMMTY_REQUEST,
+          data: {
+            offset: (pageno - 1) * 20,
+            tag: encodeURIComponent(tag)
+          }
+        });
+      } else {
+        dispatch({
+          type: LOAD_COMMTIES_REQUEST,
+          data: {
+            offset: (pageno - 1) * 20
+          }
+        });
+      }
     },
     [currentPage]
   );
