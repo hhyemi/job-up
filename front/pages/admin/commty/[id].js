@@ -1,4 +1,3 @@
-// commty/[id].js
 import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Card, CardHeader, Row, Col, Input, FormGroup, CardBody, Media, InputGroup } from 'reactstrap';
 import { useRouter } from 'next/router';

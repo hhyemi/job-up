@@ -12,7 +12,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
     let query = `SELECT 
                   calendar.* , category.color, category.bgColor, category.borderColor , category.dragBgColor 
                 FROM category, calendar 
-                WHERE calendar.calendarId = category.id;`;
+                WHERE calendar.calendarId = category.id and calendar.UserId = ${req.user.id}`;
     const calendar = await db.sequelize.query(query, {
       type: db.Sequelize.QueryTypes.SELECT,
       raw: true

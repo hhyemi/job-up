@@ -1,4 +1,4 @@
-var routes = [
+const routes = [
   {
     path: '/dashboard',
     name: 'Main',

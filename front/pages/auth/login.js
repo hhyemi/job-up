@@ -17,10 +17,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import GitHubLogin from 'react-github-login';
 import GoogleLogin from 'react-google-login';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import axios from 'axios';
+import { END } from 'redux-saga';
+import wrapper from '../../store/configureStore';
 
 import Auth from '../../layouts/Auth';
 import useInput from '../../hooks/useInput';
-import { GIT_LOG_IN_REQUEST, loginRequestAction, LOG_IN_REQUEST } from '../../reducers/user';
+import { GIT_LOG_IN_REQUEST, LOAD_MY_INFO_REQUEST, loginRequestAction, LOG_IN_REQUEST } from '../../reducers/user';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -32,6 +35,13 @@ const Login = () => {
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
+
+  // 로그인 되어있으면 메인페이지로 이동
+  useEffect(() => {
+    if (me) {
+      Router.replace('/admin/dashboard');
+    }
+  }, []);
 
   // 로그인 버튼 클릭
   const onSubmitForm = useCallback(
@@ -46,7 +56,7 @@ const Login = () => {
   // 로그인 성공
   useEffect(() => {
     if (me) {
-      Router.replace('/');
+      Router.replace('/admin/dashboard');
     }
   }, [me]);
 
@@ -98,7 +108,7 @@ const Login = () => {
   const onClickFindPassword = useCallback((e) => {
     e.preventDefault();
     Router.replace('/auth/findpassword');
-  }, []);
+  });
 
   return (
     <>
@@ -187,5 +197,18 @@ const Login = () => {
 };
 
 Login.layout = Auth;
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST
+  });
+  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
+  await context.store.sagaTask.toPromise();
+});
 
 export default Login;

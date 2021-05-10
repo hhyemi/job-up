@@ -1,7 +1,6 @@
 import React from 'react';
-import '../../assets/css/style.css';
 
-import { Button, Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 function UserHeader() {
   return (
