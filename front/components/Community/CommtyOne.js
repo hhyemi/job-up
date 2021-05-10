@@ -38,10 +38,7 @@ const CommtyOne = ({ commty, num }) => {
         <td>{User.name}</td>
         <td>{createdAt.substring(0, 10)}</td>
         <td>{views}</td>
-        <td>
-          <i className="ni ni-favourite-28 text-red mr-1" />
-          {Likers.length}
-        </td>
+        <td>{Likers.length}</td>
       </tr>
     </>
   );

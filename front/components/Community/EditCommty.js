@@ -5,12 +5,12 @@ import { useDispatch } from 'react-redux';
 
 import QuillWrapper from '../Memo/QuillWrapper';
 import useInput from '../../hooks/useInput';
-import { ADD_COMMTY_REQUEST } from '../../reducers/commty';
+import { ADD_COMMTY_REQUEST, UPT_COMMTY_REQUEST } from '../../reducers/commty';
 
-const AddCommty = ({ setAddPostOpen }) => {
+const EditCommty = ({ setEditOpen, commty }) => {
   const dispatch = useDispatch();
-  const [commtyTitle, onCommtyTitle] = useInput(''); // 제목
-  const [commtyContent, setCommtyContent] = useState(''); // 내용
+  const [commtyTitle, onCommtyTitle] = useInput(commty ? commty.title : ''); // 제목
+  const [commtyContent, setCommtyContent] = useState(commty ? commty.content : ''); // 내용
 
   // 내용 바뀔때마다 SET해주기
   const onChangeContent = useCallback(
@@ -23,7 +23,7 @@ const AddCommty = ({ setAddPostOpen }) => {
   // 취소 클릭
   const onCancle = useCallback((e) => {
     e.preventDefault();
-    setAddPostOpen(false);
+    setEditOpen(false);
   });
 
   // 글쓰기 클릭
@@ -37,9 +37,26 @@ const AddCommty = ({ setAddPostOpen }) => {
           content: commtyContent
         }
       });
-      setAddPostOpen(false);
+      setEditOpen(false);
     },
     [commtyTitle, commtyContent]
+  );
+
+  // 글수정 클릭
+  const onUptPost = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch({
+        type: UPT_COMMTY_REQUEST,
+        data: {
+          title: commtyTitle,
+          content: commtyContent,
+          id: commty.id
+        }
+      });
+      setEditOpen(false);
+    },
+    [commtyTitle, commtyContent, commty.id]
   );
 
   return (
@@ -50,7 +67,7 @@ const AddCommty = ({ setAddPostOpen }) => {
             <CardHeader className="border-0">
               <Row className="align-items-center">
                 <div className="col" style={{ maxWidth: '65%' }}>
-                  <h3 className="mb-0">글쓰기</h3>
+                  <h3 className="mb-0">{commty ? '글수정' : '글쓰기'}</h3>
                 </div>
               </Row>
             </CardHeader>
@@ -71,8 +88,8 @@ const AddCommty = ({ setAddPostOpen }) => {
                 <Button color="default" className="btn-md" type="submit" onClick={onCancle}>
                   취소
                 </Button>
-                <Button color="primary" className="btn-md" type="submit" onClick={onAddPost}>
-                  글쓰기
+                <Button color="primary" className="btn-md" type="submit" onClick={commty ? onUptPost : onAddPost}>
+                  {commty ? '수정' : '등록'}
                 </Button>
               </div>
             </CardBody>
@@ -83,8 +100,13 @@ const AddCommty = ({ setAddPostOpen }) => {
   );
 };
 
-AddCommty.propTypes = {
-  setAddPostOpen: PropTypes.func.isRequired
+EditCommty.propTypes = {
+  setEditOpen: PropTypes.func.isRequired,
+  commty: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    content: PropTypes.any
+  })
 };
 
-export default AddCommty;
+export default EditCommty;

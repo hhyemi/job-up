@@ -9,7 +9,7 @@ import wrapper from '../../store/configureStore';
 import Header from '../../components/Headers/Header';
 import Admin from '../../layouts/Admin';
 import CommtyList from '../../components/Community/CommtyList';
-import AddCommty from '../../components/Community/AddCommty';
+import EditCommty from '../../components/Community/EditCommty';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 
 const Commty = () => {
@@ -49,7 +49,7 @@ const Commty = () => {
             setAlertTitle={setAlertTitle}
           />
         ) : (
-          <AddCommty setAddPostOpen={setAddPostOpen} />
+          <EditCommty setEditOpen={setAddPostOpen} />
         )}
       </Container>
       <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
