@@ -26,14 +26,15 @@ import { LOAD_COMMTY_REQUEST } from '../../../reducers/commty';
 import Admin from '../../../layouts/Admin';
 import { backUrl } from '../../../config/config';
 import useInput from '../../../hooks/useInput';
-import { ADD_COMMENT_REQUEST } from '../../../reducers/comment';
+import { ADD_COMMENT_REQUEST, LOAD_COMMENT_REQUEST } from '../../../reducers/comment';
+import CommentList from '../../../components/Community/CommentList';
 
 const SingleCommty = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = router.query;
   const { singleCommty } = useSelector((state) => state.commty);
-  const { addCommentDone } = useSelector((state) => state.comment);
+  const { comments, addCommentDone, addCommentError } = useSelector((state) => state.comment);
   const [commtyContent, setCommtyContent] = useState(singleCommty.content); // 내용
   const [commentContent, onCommentContent, setCommentText] = useInput(''); // 댓글 내용
 
@@ -60,6 +61,16 @@ const SingleCommty = () => {
     }
   }, [addCommentDone]);
 
+  // 댓글 추가 실패
+  useEffect(() => {
+    if (addCommentError) {
+      setCommentText('');
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle('댓글이 등록이 실패되었습니다.');
+    }
+  }, [addCommentError]);
+
   return (
     <>
       <Header />
@@ -68,9 +79,9 @@ const SingleCommty = () => {
           <Col className="mb-5 mb-xl-0">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <Row className="align-items-center">
+                <Row className="align-items-center pb-2">
                   <div className="col" style={{ maxWidth: '65%' }}>
-                    <h2 className="mb-0">{singleCommty.title}</h2>
+                    <span className="mb-0 text-xl font-weight-normal text-darker">{singleCommty.title}</span>
                   </div>
                 </Row>
                 <Row>
@@ -87,14 +98,29 @@ const SingleCommty = () => {
                     </Media>
                   </Media>
                 </Row>
-                <hr />
+                <hr className="mt-4" />
               </CardHeader>
               <CardBody>
                 <FormGroup>
                   <div dangerouslySetInnerHTML={{ __html: commtyContent }} />
                 </FormGroup>
-                <hr />
-                <FormGroup>
+                <span className="text-md comment-click">
+                  댓글 <span className="text-danger font-weight-bold">{comments.length}</span>
+                </span>
+                <span className="text-md ml-2 comment-click">
+                  좋아요 <span className="text-danger font-weight-bold">{singleCommty.Likers.length}</span>
+                </span>
+                <FormGroup className="comment-list mt-4">
+                  <hr />
+                  {comments.map((comment) => (
+                    <CommentList
+                      key={comment.id}
+                      comment={comment}
+                      setAlertType={setAlertType}
+                      setAlertShow={setAlertShow}
+                      setAlertTitle={setAlertTitle}
+                    />
+                  ))}
                   <InputGroup>
                     <Input
                       style={{ height: '8rem' }}
@@ -138,6 +164,10 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   context.store.dispatch({
     type: LOAD_COMMTY_REQUEST,
     data: context.params.id // router.query에 접근
+  });
+  context.store.dispatch({
+    type: LOAD_COMMENT_REQUEST,
+    data: { commtyId: context.params.id }
   });
 
   context.store.dispatch(END); // 데이터를 success될때까지 기다려줌

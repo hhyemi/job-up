@@ -220,3 +220,55 @@
 .info-commty-container .card{
   padding: 0.5rem 1rem 0.5rem 1rem !important;
 }
+
+.text-md{
+  font-size: 1rem !important;
+}
+
+.comment-list hr{
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.comment-list-row .dropdown{
+  float: right;
+  position: absolute;
+  right: 12px;
+}
+
+.comment-list-row .dropdown-toggle::after{
+  border-top: 0em !important;
+}
+
+.comment-list-row .dropdown-toggle{
+  color: #a3a3a4;
+  background-color: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 0 0 0 !important;
+}
+
+.comment-list-row .btn-secondary:not(:disabled):not(.disabled):active{
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+.comment-list-row .dropdown-menu {
+  min-width: 6rem;
+  transform: translate3d(-60px, 41px, 0px) !important;
+}
+
+.info-commty-container .comment-click{
+  cursor: pointer;
+  border: 1px solid #dad8d8;
+  padding: 9px 13px 9px 13px;
+}
+
+.comment-list-row .upt-comment-input{
+  height: 8rem;
+  width: 77rem;
+  margin-top: 1rem;
+}
+
+.f-r{
+  float: right;
+}

@@ -33,6 +33,15 @@ router.post('/', isLoggedIn, async (req, res, next) => {
           model: User, // 좋아요 누른사람
           as: 'Likers', // 구분
           attributes: ['id']
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ['id', 'name']
+            }
+          ]
         }
       ],
       order: [

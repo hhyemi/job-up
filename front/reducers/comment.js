@@ -56,7 +56,7 @@ const reducer = (state = initialState, action) =>
       case ADD_COMMENT_SUCCESS:
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
-        draft.comments.unshift(action.data);
+        draft.comments.push(action.data);
         break;
       case ADD_COMMENT_FAILURE:
         draft.addCommentLoading = false;
@@ -84,7 +84,7 @@ const reducer = (state = initialState, action) =>
       case UPT_COMMENT_SUCCESS:
         draft.uptCommentLoading = false;
         draft.uptCommentDone = true;
-        draft.comments = draft.comments.map((v) => (v.id === action.data.CommentId ? action.data.Comment : v));
+        draft.comments = draft.comments.map((v) => (v.id === action.data.CommentId ? action.data.comment : v));
         break;
       case UPT_COMMENT_FAILURE:
         draft.uptCommentLoading = false;
