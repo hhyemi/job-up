@@ -13,7 +13,8 @@ import {
   DEL_COMMTY_REQUEST,
   LIKE_COMMTY_REQUEST,
   LOAD_COMMTY_REQUEST,
-  UNLIKE_COMMTY_REQUEST
+  UNLIKE_COMMTY_REQUEST,
+  UPT_COMMTY_REQUEST
 } from '../../../reducers/commty';
 import Admin from '../../../layouts/Admin';
 import { backUrl } from '../../../config/config';
@@ -30,13 +31,24 @@ const SingleCommty = () => {
   const userId = useSelector((state) => state.user.me?.id);
   const { comments, addCommentDone, addCommentError } = useSelector((state) => state.comment);
   const [commentContent, onCommentContent, setCommentText] = useInput(''); // 댓글 내용
-  const liked = singleCommty.Likers.find((v) => v.id === userId); // 좋아요
+  const liked = singleCommty && singleCommty.Likers.find((v) => v.id === userId); // 좋아요
   const [uptCommtyOpen, setUptCommtyOpen] = useState(false); // 수정페이지
 
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
   const [delAlertShow, setDelAlertShow] = useState(false);
+
+  useEffect(() => {
+    dispatch({
+      type: LOAD_COMMTY_REQUEST,
+      data: id
+    });
+    dispatch({
+      type: UPT_COMMTY_REQUEST,
+      data: { views: 1, id }
+    });
+  }, []);
 
   // 커뮤니티 삭제
   const onDelCommtyCheck = useCallback((e) => {
@@ -74,7 +86,7 @@ const SingleCommty = () => {
     e.preventDefault();
     dispatch({
       type: ADD_COMMENT_REQUEST,
-      data: { content: commentContent, commtyId: singleCommty.id }
+      data: { content: commentContent, commtyId: singleCommty && singleCommty.id }
     });
   });
 
@@ -103,7 +115,7 @@ const SingleCommty = () => {
     e.preventDefault();
     dispatch({
       type: LIKE_COMMTY_REQUEST,
-      data: singleCommty.id
+      data: singleCommty && singleCommty.id
     });
   });
 
@@ -112,7 +124,7 @@ const SingleCommty = () => {
     e.preventDefault();
     dispatch({
       type: UNLIKE_COMMTY_REQUEST,
-      data: singleCommty.id
+      data: singleCommty && singleCommty.id
     });
   });
 
@@ -127,19 +139,21 @@ const SingleCommty = () => {
                 <CardHeader className="border-0">
                   <Row className="align-items-center pb-2">
                     <div className="col" style={{ maxWidth: '65%' }}>
-                      <span className="mb-0 text-xl font-weight-normal text-darker">{singleCommty.title}</span>
+                      <span className="mb-0 text-xl font-weight-normal text-darker">
+                        {singleCommty && singleCommty.title}
+                      </span>
                     </div>
                   </Row>
                   <Row>
                     <Media className="align-items-center pl-3 mt-2">
                       <span className="avatar avatar-sm rounded-circle">
-                        <img alt="..." src={`${backUrl}/${singleCommty.User.src}`} />
+                        <img alt="..." src={`${backUrl}/${singleCommty && singleCommty.User.src}`} />
                       </span>
                       <Media className="ml-2 d-none d-lg-block">
-                        <span className="mb-0 text-sm font-weight-bold">{singleCommty.User.name}</span>
+                        <span className="mb-0 text-sm font-weight-bold">{singleCommty && singleCommty.User.name}</span>
                         <div className="mb-0 text-sm text-muted">
-                          {singleCommty.createdAt}
-                          &ensp;조회 {singleCommty.views}
+                          {singleCommty && singleCommty.createdAt}
+                          &ensp;조회 {singleCommty && singleCommty.views}
                         </div>
                       </Media>
                     </Media>
@@ -148,7 +162,7 @@ const SingleCommty = () => {
                 </CardHeader>
                 <CardBody>
                   <FormGroup className="mb-5">
-                    <div dangerouslySetInnerHTML={{ __html: singleCommty.content }} />
+                    <div dangerouslySetInnerHTML={{ __html: singleCommty && singleCommty.content }} />
                   </FormGroup>
                   <span className="text-md comment-click">
                     댓글 <span className="text-dark font-weight-bold">{comments.length}</span>
@@ -159,7 +173,8 @@ const SingleCommty = () => {
                     ) : (
                       <i className="far fa-heart text-red mr-1 cursor" onClick={onLike} />
                     )}
-                    좋아요 <span className="text-dark font-weight-bold">{singleCommty.Likers.length}</span>
+                    좋아요{' '}
+                    <span className="text-dark font-weight-bold">{singleCommty && singleCommty.Likers.length}</span>
                   </span>
                   <button type="button" className="btn btn-md btn-default f-r" onClick={onDelCommtyCheck}>
                     삭제
@@ -199,7 +214,7 @@ const SingleCommty = () => {
             </Col>
           </Row>
         ) : (
-          <EditCommty setEditOpen={setUptCommtyOpen} commty={singleCommty} />
+          <EditCommty setEditOpen={setUptCommtyOpen} commty={singleCommty && singleCommty} />
         )}
       </Container>
       <SweetAlert

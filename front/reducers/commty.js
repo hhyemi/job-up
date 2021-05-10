@@ -129,8 +129,10 @@ const reducer = (state = initialState, action) =>
       case UPT_COMMTY_SUCCESS:
         draft.uptCommtyLoading = false;
         draft.uptCommtyDone = true;
-        draft.commties = draft.commties.map((v) => (v.id === action.data.CommtyId ? action.data.Commty : v));
-        draft.singleCommty = action.data.Commty;
+        draft.commties = draft.commties.map((v) => (v.id === action.data.CommtyId ? action.data.commty : v));
+        draft.singleCommty.content = action.data.commty.content;
+        draft.singleCommty.title = action.data.commty.title;
+        draft.singleCommty.views = action.data.commty.views;
         break;
       case UPT_COMMTY_FAILURE:
         draft.uptCommtyLoading = false;

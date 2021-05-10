@@ -52,6 +52,15 @@ const Calendar = () => {
   const [alertType, setAlertType] = useState('default');
 
   useEffect(() => {
+    dispatch({
+      type: LOAD_CALENDAR_REQUEST
+    });
+    dispatch({
+      type: LOAD_CATEGORY_REQUEST
+    });
+  }, []);
+
+  useEffect(() => {
     if (addCalendarDone || uptCalendarDone) {
       dispatch({
         type: LOAD_CALENDAR_REQUEST

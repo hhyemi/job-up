@@ -27,6 +27,12 @@ const Memo = () => {
   const [alertType, setAlertType] = useState('default');
 
   useEffect(() => {
+    dispatch({
+      type: LOAD_MEMO_REQUEST
+    });
+  }, []);
+
+  useEffect(() => {
     function onScroll() {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (hasMoreMemos && !loadMemoLoading) {

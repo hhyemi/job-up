@@ -27,6 +27,12 @@ const Todo = () => {
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
 
+  useEffect(() => {
+    dispatch({
+      type: LOAD_TODO_REQUEST
+    });
+  }, []);
+
   // 일정 가져오기 실패
   useEffect(() => {
     if (loadTodoError) {

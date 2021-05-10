@@ -149,15 +149,20 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
 // PATCH /commty/upt : 커뮤니티 수정
 router.patch('/upt', isLoggedIn, async (req, res, next) => {
   try {
-    await Commty.update(
-      {
-        title: req.body.title,
-        content: req.body.content
-      },
-      { where: { id: req.body.id } }
-    );
+    if (req.body.views) {
+      await Commty.increment({ views: 1 }, { where: { id: req.body.id } });
+    } else {
+      await Commty.update(
+        {
+          title: req.body.title,
+          content: req.body.content
+        },
+        { where: { id: req.body.id } }
+      );
+    }
+
     const commty = await Commty.findOne({ where: { id: req.body.id } });
-    res.status(200).json({ Commty, CommtyId: parseInt(req.body.id, 10) });
+    res.status(200).json({ commty, CommtyId: parseInt(req.body.id, 10) });
   } catch (error) {
     console.error(error);
     next(error);
@@ -190,7 +195,7 @@ router.patch('/:commtyId/like', isLoggedIn, async (req, res, next) => {
   }
 });
 
-// DELETE /post/1/unlike : 좋아요취소
+// DELETE /commty/1/unlike : 좋아요취소
 router.delete('/:commtyId/unlike', isLoggedIn, async (req, res, next) => {
   try {
     const commty = await Commty.findOne({ where: { id: req.params.commtyId } });
@@ -205,6 +210,7 @@ router.delete('/:commtyId/unlike', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// POST /commty/hashtag : 해시태그 글만 보기
 router.post('/hashtag', async (req, res, next) => {
   try {
     const where = {};
