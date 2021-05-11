@@ -18,12 +18,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { LOAD_COMMTIES_REQUEST, LOAD_HASHTAG_COMMTY_REQUEST } from '../../reducers/commty';
 import CommtyOne from './CommtyOne';
+import useInput from '../../hooks/useInput';
 
 const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertTitle }) => {
   const dispatch = useDispatch();
   const { commties, commtyCnt, loadCommtiesDone, loadCommtiesError } = useSelector((state) => state.commty);
   const [pages, setPages] = useState([]); // 페이지 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재페이지
+  const [searchWord, onSearchWord] = useInput(''); // 검색어
 
   // 커뮤니티 가져오기
   useEffect(() => {
@@ -87,12 +89,44 @@ const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertT
         dispatch({
           type: LOAD_COMMTIES_REQUEST,
           data: {
-            offset: (pageno - 1) * 20
+            offset: (pageno - 1) * 20,
+            searchWord
           }
         });
       }
     },
-    [currentPage]
+    [currentPage, searchWord]
+  );
+
+  // 검색하기
+  const onSearch = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch({
+        type: LOAD_COMMTIES_REQUEST,
+        data: {
+          offset: 0,
+          searchWord
+        }
+      });
+    },
+    [searchWord]
+  );
+
+  // 검색하기 (엔터)
+  const onSearchKey = useCallback(
+    (e) => {
+      if (e.key === 'Enter') {
+        dispatch({
+          type: LOAD_COMMTIES_REQUEST,
+          data: {
+            offset: 0,
+            searchWord
+          }
+        });
+      }
+    },
+    [searchWord]
   );
 
   return (
@@ -107,9 +141,15 @@ const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertT
                 </div>
                 <div style={{ width: '33%' }}>
                   <InputGroup>
-                    <Input placeholder="검색어를 입력해주세요" type="text" />
+                    <Input
+                      placeholder="검색어를 입력해주세요"
+                      type="text"
+                      value={searchWord}
+                      onChange={onSearchWord}
+                      onKeyPress={onSearchKey}
+                    />
                     <InputGroupAddon addonType="append">
-                      <Button color="primary" id="button-addon2" type="button">
+                      <Button color="primary" id="button-addon2" type="button" onClick={onSearch}>
                         <i className="fas fa-search" />
                       </Button>
                     </InputGroupAddon>

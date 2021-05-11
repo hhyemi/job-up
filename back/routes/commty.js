@@ -9,10 +9,11 @@ const { isLoggedIn } = require('./middlewares');
 router.post('/', isLoggedIn, async (req, res, next) => {
   try {
     const where = {};
-    if (parseInt(req.body.lastId, 10)) {
-      where.id = { [Op.lt]: parseInt(req.body.lastId, 10) };
+    if (req.body.searchWord) {
+      where.title = { [Op.like]: '%' + req.body.searchWord + '%' };
     }
     const commty = await Commty.findAll({
+      where,
       offset: req.body.offset,
       limit: 20,
       include: [
@@ -49,7 +50,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
         ['id', 'DESC']
       ]
     });
-    const commtyCnt = await Commty.findAndCountAll();
+    const commtyCnt = await Commty.findAndCountAll({ where });
     res.status(201).json({ commty, commtyCnt });
   } catch (error) {
     console.error(error);
@@ -213,10 +214,6 @@ router.delete('/:commtyId/unlike', isLoggedIn, async (req, res, next) => {
 // POST /commty/hashtag : 해시태그 글만 보기
 router.post('/hashtag', async (req, res, next) => {
   try {
-    const where = {};
-    if (parseInt(req.body.lastId, 10)) {
-      where.id = { [Op.lt]: parseInt(req.body.lastId, 10) };
-    }
     const commty = await Commty.findAll({
       offset: req.body.offset,
       limit: 20,
