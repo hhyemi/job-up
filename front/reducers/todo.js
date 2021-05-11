@@ -41,20 +41,27 @@ export const UPT_SEQ_TODO_FAILURE = 'UPT_SEQ_TODO_FAILURE';
 
 export const UPT_SEQ_LOC_REQUEST = 'UPT_SEQ_LOC_REQUEST';
 
+export const LOAD_TODAY_TODO_REQUEST = 'LOAD_TODAY_TODO_REQUEST';
+export const LOAD_TODAY_TODO_SUCCESS = 'LOAD_TODAY_TODO_SUCCESS';
+export const LOAD_TODAY_TODO_FAILURE = 'LOAD_TODAY_TODO_FAILURE';
+
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
       case LOAD_TODO_REQUEST:
+      case LOAD_TODAY_TODO_REQUEST:
         draft.loadTodoLoading = true;
         draft.loadTodoError = null;
         draft.loadTodoDone = false;
         break;
       case LOAD_TODO_SUCCESS:
+      case LOAD_TODAY_TODO_SUCCESS:
         draft.loadTodoLoading = false;
         draft.loadTodoDone = true;
         draft.todos = action.data;
         break;
       case LOAD_TODO_FAILURE:
+      case LOAD_TODAY_TODO_FAILURE:
         draft.loadTodoLoading = false;
         draft.loadTodoError = action.error;
         break;

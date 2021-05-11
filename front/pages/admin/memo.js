@@ -98,7 +98,7 @@ const Memo = () => {
   return (
     <>
       <Header />
-      <Container className="mt--9 memo-container " fluid>
+      <Container className="mt-3 memo-container " fluid>
         <div>
           <span>
             <input
@@ -109,7 +109,7 @@ const Memo = () => {
               onChange={onOnlyBookmark}
             />
             <label className="custom-control-label cursor" htmlFor="checkBookMark">
-              <span className="text-secondary star">즐겨찾기만 보기</span>
+              <span className="text-dark star">즐겨찾기만 보기</span>
             </label>
           </span>
           <button

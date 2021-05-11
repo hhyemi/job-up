@@ -39,7 +39,7 @@ const Login = () => {
   // 로그인 되어있으면 메인페이지로 이동
   useEffect(() => {
     if (me) {
-      Router.replace('/admin/dashboard');
+      Router.replace('/admin/main');
     }
   }, []);
 
@@ -56,7 +56,7 @@ const Login = () => {
   // 로그인 성공
   useEffect(() => {
     if (me) {
-      Router.replace('/admin/dashboard');
+      Router.replace('/admin/main');
     }
   }, [me]);
 

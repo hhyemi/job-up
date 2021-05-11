@@ -24,6 +24,24 @@ router.get('/', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// // GET /cal/today : 오늘 달력 가져오기
+router.get('/today', isLoggedIn, async (req, res, next) => {
+  try {
+    let query = `SELECT 
+                  calendar.* , category.bgColor, category.name
+                FROM category, calendar 
+                WHERE calendar.calendarId = category.id AND DATE_FORMAT(DATE_ADD(calendar.start, INTERVAL 9 HOUR) , "%Y-%m-%d") = CURDATE() AND calendar.UserId = ${req.user.id}`;
+    const calendar = await db.sequelize.query(query, {
+      type: db.Sequelize.QueryTypes.SELECT,
+      raw: true
+    });
+    res.status(201).json(calendar);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // POST /cal/add : 달력 추가
 router.post('/add', isLoggedIn, async (req, res, next) => {
   try {

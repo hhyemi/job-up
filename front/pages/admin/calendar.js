@@ -27,7 +27,7 @@ import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 
 // styled
 const RenderDateSpan = styled.span`
-  color: white;
+  color: black;
   position: relative;
   font-size: 1.5rem;
   margin-left: 0.5rem;
@@ -197,6 +197,7 @@ const Calendar = () => {
     time(schedule) {
       // console.log(schedule);
       renderChange();
+      console.log(schedule);
       return _getTimeTemplate(schedule, false);
     }
   };
@@ -235,7 +236,7 @@ const Calendar = () => {
   return (
     <>
       <Header />
-      <Container className="mt--9" fluid>
+      <Container className="mt-3" fluid>
         <div className="mb-2">
           <span>
             <button type="button" className="btn btn-danger btn-sm" onClick={moveToday}>

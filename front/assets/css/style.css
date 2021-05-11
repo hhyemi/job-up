@@ -260,6 +260,7 @@
 .info-commty-container .comment-click{
   border: 1px solid #dad8d8;
   padding: 9px 13px 9px 13px;
+  border-radius: 0.375rem;
 }
 
 .comment-list-row .upt-comment-input{
@@ -271,3 +272,81 @@
 .f-r{
   float: right;
 }
+
+/* main */
+@font-face {
+  font-family: 'LAB디지털';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/LAB디지털.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.stopwatch-div p {
+  font-family: 'LAB디지털';
+  font-size: 8rem;
+  color: #3e3e3e !important;
+  text-align: center;
+}
+
+@font-face {
+  font-family: 'S-CoreDream-4Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body{
+  font-family: 'S-CoreDream-4Regular';
+}
+
+.main-container .stopwatch-div span.text-md {
+  padding: 10px 25px 10px 25px;
+  margin-left: 10px;
+  cursor: pointer;
+  color: #fff;
+  border-radius: 0.375rem;
+}
+
+.main-container .buttons{
+  text-align: center;
+}
+
+.main-container .buttons{
+  text-align: center;
+}
+
+.main-container .sw-start{
+  background-color: #4aae71;
+  border-color: #4aae71;
+}
+
+.main-container .sw-resume{
+  background-color: #4aae71;
+  border-color: #4aae71;
+}
+
+.main-container .sw-pause{
+  background-color: #f17979;
+  border-color: #f17979;
+}
+
+.main-container .sw-reset{
+  background-color: #fbad10;
+  border-color: #fbad10;
+}
+
+.main-container .sw-lab{
+  background-color: #00a1f7;
+  border-color: #00a1f7;
+}
+
+.main-container Table{
+  text-align: center;
+}
+
+.main-container .scroll {
+  overflow-x: hidden;
+  max-height: 215px;
+  min-height: 215px;
+}
+

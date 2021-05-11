@@ -10,6 +10,9 @@ import {
   LOAD_CALENDAR_FAILURE,
   LOAD_CALENDAR_REQUEST,
   LOAD_CALENDAR_SUCCESS,
+  LOAD_TODAY_CAL_FAILURE,
+  LOAD_TODAY_CAL_REQUEST,
+  LOAD_TODAY_CAL_SUCCESS,
   UPT_CALENDAR_FAILURE,
   UPT_CALENDAR_REQUEST,
   UPT_CALENDAR_SUCCESS
@@ -31,6 +34,27 @@ function* loadCalendar() {
     console.error(err);
     yield put({
       type: LOAD_CALENDAR_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
+// 오늘 달력 가져오기
+function loadTodayCalAPI() {
+  return axios.get('/cal/today');
+}
+
+function* loadTodayCal() {
+  try {
+    const result = yield call(loadTodayCalAPI);
+    yield put({
+      type: LOAD_TODAY_CAL_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_TODAY_CAL_FAILURE,
       error: err.response.data
     });
   }
@@ -103,6 +127,10 @@ function* watchLoadCalendar() {
   yield takeLatest(LOAD_CALENDAR_REQUEST, loadCalendar);
 }
 
+function* watchLoadTodayCal() {
+  yield takeLatest(LOAD_TODAY_CAL_REQUEST, loadTodayCal);
+}
+
 function* watchAddCalendar() {
   yield takeLatest(ADD_CALENDAR_REQUEST, addCalendar);
 }
@@ -116,5 +144,11 @@ function* watchUptCalendar() {
 }
 
 export default function* userSaga() {
-  yield all([fork(watchLoadCalendar), fork(watchAddCalendar), fork(watchDelCalendar), fork(watchUptCalendar)]);
+  yield all([
+    fork(watchLoadCalendar),
+    fork(watchLoadTodayCal),
+    fork(watchAddCalendar),
+    fork(watchDelCalendar),
+    fork(watchUptCalendar)
+  ]);
 }

@@ -7,6 +7,9 @@ import {
   DEL_TODO_FAILURE,
   DEL_TODO_REQUEST,
   DEL_TODO_SUCCESS,
+  LOAD_TODAY_TODO_FAILURE,
+  LOAD_TODAY_TODO_REQUEST,
+  LOAD_TODAY_TODO_SUCCESS,
   LOAD_TODO_FAILURE,
   LOAD_TODO_REQUEST,
   LOAD_TODO_SUCCESS,
@@ -34,6 +37,27 @@ function* loadTodo() {
     console.error(err);
     yield put({
       type: LOAD_TODO_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
+// 오늘 일정 가져오기
+function loadTodayTodoAPI() {
+  return axios.get('/todo/today');
+}
+
+function* loadTodayTodo() {
+  try {
+    const result = yield call(loadTodayTodoAPI);
+    yield put({
+      type: LOAD_TODAY_TODO_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_TODAY_TODO_FAILURE,
       error: err.response.data
     });
   }
@@ -127,6 +151,10 @@ function* watchLoadTodo() {
   yield takeLatest(LOAD_TODO_REQUEST, loadTodo);
 }
 
+function* watchLoadTodayTodo() {
+  yield takeLatest(LOAD_TODAY_TODO_REQUEST, loadTodayTodo);
+}
+
 function* watchAddTodo() {
   yield takeLatest(ADD_TODO_REQUEST, addTodo);
 }
@@ -144,5 +172,12 @@ function* watchUptSeqTodo() {
 }
 
 export default function* userSaga() {
-  yield all([fork(watchLoadTodo), fork(watchAddTodo), fork(watchDelTodo), fork(watchUptTodo), fork(watchUptSeqTodo)]);
+  yield all([
+    fork(watchLoadTodo),
+    fork(watchLoadTodayTodo),
+    fork(watchAddTodo),
+    fork(watchDelTodo),
+    fork(watchUptTodo),
+    fork(watchUptSeqTodo)
+  ]);
 }

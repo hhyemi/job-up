@@ -46,9 +46,7 @@ function Admin(props) {
           <AuthNavbar {...props} brandText={getBrandText()} />
         )}
         {props.children}
-        <Container fluid>
-          <footer className="py-5" />
-        </Container>
+        <Container fluid>{/*     <footer className="py-5" />*/}</Container>
       </div>
     </>
   );

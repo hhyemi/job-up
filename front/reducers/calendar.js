@@ -20,6 +20,10 @@ export const LOAD_CALENDAR_REQUEST = 'LOAD_CALENDAR_REQUEST';
 export const LOAD_CALENDAR_SUCCESS = 'LOAD_CALENDAR_SUCCESS';
 export const LOAD_CALENDAR_FAILURE = 'LOAD_CALENDAR_FAILURE';
 
+export const LOAD_TODAY_CAL_REQUEST = 'LOAD_TODAY_CAL_REQUEST';
+export const LOAD_TODAY_CAL_SUCCESS = 'LOAD_TODAY_CAL_SUCCESS';
+export const LOAD_TODAY_CAL_FAILURE = 'LOAD_TODAY_CAL_FAILURE';
+
 export const ADD_CALENDAR_REQUEST = 'ADD_CALENDAR_REQUEST';
 export const ADD_CALENDAR_SUCCESS = 'ADD_CALENDAR_SUCCESS';
 export const ADD_CALENDAR_FAILURE = 'ADD_CALENDAR_FAILURE';
@@ -36,16 +40,19 @@ const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
       case LOAD_CALENDAR_REQUEST:
+      case LOAD_TODAY_CAL_REQUEST:
         draft.loadCalendarLoading = true;
         draft.loadCalendarError = null;
         draft.loadCalendarDone = false;
         break;
       case LOAD_CALENDAR_SUCCESS:
+      case LOAD_TODAY_CAL_SUCCESS:
         draft.loadCalendarLoading = false;
         draft.loadCalendarDone = true;
         draft.calendars = action.data;
         break;
       case LOAD_CALENDAR_FAILURE:
+      case LOAD_TODAY_CAL_FAILURE:
         draft.loadCalendarLoading = false;
         draft.loadCalendarError = action.error;
         break;

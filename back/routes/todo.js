@@ -21,6 +21,22 @@ router.get('/', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// GET /todo/today : 오늘 일정 가져오기
+router.get('/today', isLoggedIn, async (req, res, next) => {
+  try {
+    let query = `SELECT * FROM todo
+                WHERE UserId = ${req.user.id} AND DATE_FORMAT(deadline , "%Y-%m-%d") = CURDATE() `;
+    const todo = await db.sequelize.query(query, {
+      type: db.Sequelize.QueryTypes.SELECT,
+      raw: true
+    });
+    res.status(201).json(todo);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // POST /todo/add : 일정 추가
 router.post('/add', isLoggedIn, async (req, res, next) => {
   try {

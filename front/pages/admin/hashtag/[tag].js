@@ -44,7 +44,7 @@ const HashTag = () => {
   return (
     <>
       <Header />
-      <Container className="mt--9 community-container" fluid>
+      <Container className="mt-3 community-container" fluid>
         {!addPostOpen ? (
           <CommtyList
             tag={tag}

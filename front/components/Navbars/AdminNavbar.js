@@ -35,9 +35,9 @@ const AdminNavbar = ({ brandText }) => {
 
   return (
     <>
-      <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
+      <Navbar className="navbar-top navbar-dark" style={{ top: '-11px' }} expand="md" id="navbar-main">
         <Container fluid>
-          <Link href="/admin/dashboard">
+          <Link href="/admin/main">
             <a className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">{brandText}</a>
           </Link>
           <Nav className="align-items-center d-none d-md-flex" navbar>

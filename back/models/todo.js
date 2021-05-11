@@ -1,5 +1,6 @@
 const DataTypes = require('sequelize');
 const { Model } = DataTypes;
+const moment = require('moment');
 
 module.exports = class Todo extends Model {
   static init(sequelize) {

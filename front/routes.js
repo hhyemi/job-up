@@ -1,6 +1,6 @@
 const routes = [
   {
-    path: '/dashboard',
+    path: '/main',
     name: 'Main',
     icon: 'ni ni-tv-2 text-primary',
     layout: '/admin'

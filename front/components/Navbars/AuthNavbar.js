@@ -8,9 +8,9 @@ function AuthNavbar({ brandText }) {
   brandText = brandText || 'Main';
   return (
     <>
-      <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
+      <Navbar className="navbar-top navbar-dark" style={{ top: '-5px !important' }} expand="md" id="navbar-main">
         <Container fluid>
-          <Link href="/admin/dashboard">
+          <Link href="/admin/main">
             <a className="h4 mb-0 text-white d-none d-lg-inline-block">{brandText}</a>
           </Link>
           <Nav className="align-items-center d-none d-md-flex" navbar>
@@ -18,7 +18,7 @@ function AuthNavbar({ brandText }) {
               <div className="navbar-collapse-header d-md-none">
                 <Row>
                   <Col className="collapse-brand" xs="6">
-                    <Link href="/admin/dashboard">
+                    <Link href="/admin/main">
                       <img alt="..." src={require('assets/img/brand/logoUp.png')} />
                     </Link>
                   </Col>

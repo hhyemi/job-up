@@ -114,7 +114,7 @@ const Todo = () => {
   return (
     <>
       <Header />
-      <Container className="mt--9 todo-container" fluid>
+      <Container className="mt-3 todo-container" fluid>
         <DndProvider backend={HTML5Backend}>
           <Row>
             <TodoCol

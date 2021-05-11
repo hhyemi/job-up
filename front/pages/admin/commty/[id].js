@@ -131,7 +131,7 @@ const SingleCommty = () => {
   return (
     <>
       <Header />
-      <Container className="mt--9 info-commty-container" fluid>
+      <Container className="mt-3 info-commty-container" fluid>
         {!uptCommtyOpen ? (
           <Row className="add-commty-row">
             <Col className="mb-5 mb-xl-0">
