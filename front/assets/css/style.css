@@ -283,9 +283,10 @@
 
 .stopwatch-div p {
   font-family: 'LAB디지털';
-  font-size: 8rem;
+  font-size: 7rem;
   color: #3e3e3e !important;
   text-align: center;
+  margin-top: -45px;
 }
 
 @font-face {
@@ -335,7 +336,7 @@ body{
   border-color: #fbad10;
 }
 
-.main-container .sw-lab{
+.main-container .sw-save{
   background-color: #00a1f7;
   border-color: #00a1f7;
 }
@@ -350,3 +351,16 @@ body{
   min-height: 215px;
 }
 
+.scroll-stop {
+  overflow-x: hidden;
+  max-height: 265px;
+  min-height: 265px;
+}
+
+.main-chart-body{
+  padding: 0rem 0rem 0rem 0rem;
+}
+
+.chart{
+  height: 305px;
+}

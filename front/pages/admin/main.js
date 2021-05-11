@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Card, CardHeader, CardBody, Table, Container, Row, Col } from 'reactstrap';
+import classnames from 'classnames';
+import Chart from 'chart.js';
+import { Line, Bar } from 'react-chartjs-2';
+import { Card, CardHeader, CardBody, Table, Container, Row, Col, Nav, NavItem, NavLink } from 'reactstrap';
 import axios from 'axios';
 import { END } from 'redux-saga';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import 'moment/locale/ko';
 
+import { chartOptions, parseOptions, chartExample2 } from '../../variables/charts';
 import wrapper from '../../store/configureStore';
 import Header from '../../components/Headers/Header';
 import Admin from '../../layouts/Admin';
@@ -22,6 +26,19 @@ const Main = () => {
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const countRef = useRef(null);
+
+  const [activeNav, setActiveNav] = React.useState(1);
+  const [chartExample1Data, setChartExample1Data] = React.useState('data1');
+
+  if (window.Chart) {
+    parseOptions(Chart, chartOptions());
+  }
+
+  const toggleNavs = (e, index) => {
+    e.preventDefault();
+    setActiveNav(index);
+    setChartExample1Data('data' + index);
+  };
 
   const formatTime = () => {
     const getSeconds = `0${timer % 60}`.slice(-2);
@@ -113,9 +130,6 @@ const Main = () => {
                         <span className="text-md sw-pause" onClick={handlePause}>
                           <span className="text-white font-weight-bold">중지</span>
                         </span>
-                        <span className="text-md sw-lab" onClick={handleReset}>
-                          <span className="text-white font-weight-bold">랩</span>
-                        </span>
                       </>
                     ) : (
                       <>
@@ -125,39 +139,114 @@ const Main = () => {
                         <span className="text-md sw-reset" onClick={handleReset}>
                           <span className="text-white font-weight-bold">재설정</span>
                         </span>
+                        <span className="text-md sw-save" onClick={handleReset}>
+                          <span className="text-white font-weight-bold">저장</span>
+                        </span>
                       </>
                     )}
                   </div>
                 </div>
-                <Table className="align-items-center table-flush mt-5 stop-table" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">랩</th>
-                      <th scope="col">총시간</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* {calendars.map((cal) => ( */}
-                    <tr>
-                      <th>1 </th>
-                      <th>2321:#23;#</th>
-                    </tr>
-                    <tr>
-                      <th>1 </th>
-                      <th>2321:#23;#</th>
-                    </tr>
-                    <tr>
-                      <th>1 </th>
-                      <th>2321:#23;#</th>
-                    </tr>
-                    <tr>
-                      <th>1 </th>
-                      <th>2321:#23;#</th>
-                    </tr>
-
-                    {/* ))} */}
-                  </tbody>
-                </Table>
+                <CardHeader className="bg-transparent">
+                  <Row className="align-items-center">
+                    <div className="col">
+                      <Nav className="justify-content-end" pills>
+                        <NavItem>
+                          <NavLink
+                            className={classnames('py-2 px-3', {
+                              active: activeNav === 1
+                            })}
+                            href="#pablo"
+                            onClick={(e) => toggleNavs(e, 1)}
+                          >
+                            <span className="d-none d-md-block">주간</span>
+                            <span className="d-md-none">M</span>
+                          </NavLink>
+                        </NavItem>
+                        <NavItem>
+                          <NavLink
+                            className={classnames('py-2 px-3', {
+                              active: activeNav === 2
+                            })}
+                            data-toggle="tab"
+                            href="#pablo"
+                            onClick={(e) => toggleNavs(e, 2)}
+                          >
+                            <span className="d-none d-md-block">일간</span>
+                            <span className="d-md-none">W</span>
+                          </NavLink>
+                        </NavItem>
+                      </Nav>
+                    </div>
+                  </Row>
+                </CardHeader>
+                <CardBody className="main-chart-body">
+                  {activeNav === 1 ? (
+                    <div className="chart pt-3">
+                      <Bar data={chartExample2.data} options={chartExample2.options} />
+                    </div>
+                  ) : (
+                    <>
+                      <Table className="align-items-center table-flush stop-table" responsive>
+                        <colgroup>
+                          <col width="40%" />
+                          <col />
+                        </colgroup>
+                        <thead className="thead-light">
+                          <tr>
+                            <th scope="col">랩</th>
+                            <th scope="col">총시간</th>
+                          </tr>
+                        </thead>
+                      </Table>
+                      <div className="scroll-stop">
+                        <Table>
+                          <colgroup>
+                            <col width="40%" />
+                            <col />
+                          </colgroup>
+                          <tbody>
+                            <tr>
+                              <th>1 </th>
+                              <th>2321:#23;#</th>
+                            </tr>
+                            <tr>
+                              <th>1 </th>
+                              <th>2321:#23;#</th>
+                            </tr>
+                            <tr>
+                              <th>1 </th>
+                              <th>2321:#23;#</th>
+                            </tr>
+                            <tr>
+                              <th>1 </th>
+                              <th>2321:#23;#</th>
+                            </tr>
+                            <tr>
+                              <th>1 </th>
+                              <th>2321:#23;#</th>
+                            </tr>{' '}
+                            <tr>
+                              <th>1 </th>
+                              <th>2321:#23;#</th>
+                            </tr>{' '}
+                            <tr>
+                              <th>1 </th>
+                              <th>2321:#23;#</th>
+                            </tr>{' '}
+                            <tr>
+                              <th>1 </th>
+                              <th>2321:#23;#</th>
+                            </tr>{' '}
+                            <tr>
+                              <th>1 </th>
+                              <th>2321:#23;#</th>
+                            </tr>
+                          </tbody>
+                        </Table>
+                      </div>
+                    </>
+                  )}
+                </CardBody>
               </CardBody>
             </Card>
           </Col>

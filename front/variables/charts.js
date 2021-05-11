@@ -6,37 +6,20 @@ if (typeof document === 'undefined') {
     querySelector: () => {}
   };
 }
-/*!
-
-=========================================================
-* NextJS Argon Dashboard - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/nextjs-argon-dashboard
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/nextjs-argon-dashboard/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-const Chart = require('chart.js');
-//
-// Chart extension for making the bars rounded
-// Code from: https://codepen.io/jedtrow/full/ygRYgo
-//
+let Chart = require('chart.js');
 
 Chart.elements.Rectangle.prototype.draw = function () {
-  var ctx = this._chart.ctx;
-  var vm = this._view;
-  var left, right, top, bottom, signX, signY, borderSkipped, radius;
-  var borderWidth = vm.borderWidth;
-  // Set Radius Here
-  // If radius is large enough to cause drawing errors a max radius is imposed
-  var cornerRadius = 6;
+  let { ctx } = this._chart;
+  let vm = this._view;
+  let left;
+  let right;
+  let top;
+  let bottom;
+  let signX;
+  let signY;
+  let borderSkipped;
+  let { borderWidth } = vm;
+  let cornerRadius = 6;
 
   if (!vm.horizontal) {
     // bar
@@ -62,14 +45,14 @@ Chart.elements.Rectangle.prototype.draw = function () {
   // adjust the sizes to fit if we're setting a stroke on the line
   if (borderWidth) {
     // borderWidth shold be less than bar width and bar height.
-    var barSize = Math.min(Math.abs(left - right), Math.abs(top - bottom));
+    let barSize = Math.min(Math.abs(left - right), Math.abs(top - bottom));
     borderWidth = borderWidth > barSize ? barSize : borderWidth;
-    var halfStroke = borderWidth / 2;
+    let halfStroke = borderWidth / 2;
     // Adjust borderWidth when bar top position is near vm.base(zero).
-    var borderLeft = left + (borderSkipped !== 'left' ? halfStroke * signX : 0);
-    var borderRight = right + (borderSkipped !== 'right' ? -halfStroke * signX : 0);
-    var borderTop = top + (borderSkipped !== 'top' ? halfStroke * signY : 0);
-    var borderBottom = bottom + (borderSkipped !== 'bottom' ? -halfStroke * signY : 0);
+    let borderLeft = left + (borderSkipped !== 'left' ? halfStroke * signX : 0);
+    let borderRight = right + (borderSkipped !== 'right' ? -halfStroke * signX : 0);
+    let borderTop = top + (borderSkipped !== 'top' ? halfStroke * signY : 0);
+    let borderBottom = bottom + (borderSkipped !== 'bottom' ? -halfStroke * signY : 0);
     // not become a vertical line?
     if (borderLeft !== borderRight) {
       top = borderTop;
@@ -90,7 +73,7 @@ Chart.elements.Rectangle.prototype.draw = function () {
   // Corner points, from bottom-left to bottom-right clockwise
   // | 1 2 |
   // | 0 3 |
-  var corners = [
+  let corners = [
     [left, bottom],
     [left, top],
     [right, top],
@@ -98,8 +81,8 @@ Chart.elements.Rectangle.prototype.draw = function () {
   ];
 
   // Find first (starting) corner with fallback to 'bottom'
-  var borders = ['bottom', 'left', 'top', 'right'];
-  var startCorner = borders.indexOf(borderSkipped, 0);
+  let borders = ['bottom', 'left', 'top', 'right'];
+  let startCorner = borders.indexOf(borderSkipped, 0);
   if (startCorner === -1) {
     startCorner = 0;
   }
@@ -109,10 +92,10 @@ Chart.elements.Rectangle.prototype.draw = function () {
   }
 
   // Draw rectangle from 'startCorner'
-  var corner = cornerAt(0);
+  let corner = cornerAt(0);
   ctx.moveTo(corner[0], corner[1]);
 
-  for (var i = 1; i < 4; i++) {
+  for (let i = 1; i < 4; i++) {
     corner = cornerAt(i);
     let nextCornerId = i + 1;
     if (nextCornerId === 4) {
@@ -126,7 +109,7 @@ Chart.elements.Rectangle.prototype.draw = function () {
     let x = corners[1][0];
     let y = corners[1][1];
     // eslint-disable-next-line
-    var radius = cornerRadius;
+    let radius = cornerRadius;
 
     // Fix radius being too large
     if (radius > height / 2) {
@@ -153,13 +136,13 @@ Chart.elements.Rectangle.prototype.draw = function () {
   }
 };
 
-var mode = 'light'; //(themeMode) ? themeMode : 'light';
-var fonts = {
+let mode = 'light'; //(themeMode) ? themeMode : 'light';
+let fonts = {
   base: 'Open Sans'
 };
 
 // Colors
-var colors = {
+let colors = {
   gray: {
     100: '#f6f9fc',
     200: '#e9ecef',
@@ -190,7 +173,7 @@ var colors = {
 // Chart.js global options
 function chartOptions() {
   // Options
-  var options = {
+  let options = {
     defaults: {
       global: {
         responsive: true,
@@ -223,7 +206,7 @@ function chartOptions() {
             borderCapStyle: 'rounded'
           },
           rectangle: {
-            backgroundColor: colors.theme['warning']
+            backgroundColor: '#fc5050'
           },
           arc: {
             backgroundColor: colors.theme['primary'],
@@ -239,15 +222,15 @@ function chartOptions() {
       },
       doughnut: {
         cutoutPercentage: 83,
-        legendCallback: function (chart) {
-          var data = chart.data;
-          var content = '';
+        legendCallback(chart) {
+          let { data } = chart;
+          let content = '';
 
-          data.labels.forEach(function (label, index) {
-            var bgColor = data.datasets[0].backgroundColor[index];
+          data.labels.forEach((label, index) => {
+            let bgColor = data.datasets[0].backgroundColor[index];
 
             content += '<span className="chart-legend-item">';
-            content += '<i className="chart-legend-indicator" style="background-color: ' + bgColor + '"></i>';
+            content += `<i className="chart-legend-indicator" style="background-color: ${bgColor}"></i>`;
             content += label;
             content += '</span>';
           });
@@ -300,7 +283,7 @@ function chartOptions() {
 
 // Parse global options
 function parseOptions(parent, options) {
-  for (var item in options) {
+  for (let item in options) {
     if (typeof options[item] !== 'object') {
       parent[item] = options[item];
     } else {
@@ -308,67 +291,6 @@ function parseOptions(parent, options) {
     }
   }
 }
-
-// Example 1 of Chart inside src/views/Index.js (Sales value - Card)
-let chartExample1 = {
-  options: {
-    scales: {
-      yAxes: [
-        {
-          gridLines: {
-            color: colors.gray[900],
-            zeroLineColor: colors.gray[900]
-          },
-          ticks: {
-            callback: function (value) {
-              if (!(value % 10)) {
-                return '$' + value + 'k';
-              }
-            }
-          }
-        }
-      ]
-    },
-    tooltips: {
-      callbacks: {
-        label: function (item, data) {
-          var label = data.datasets[item.datasetIndex].label || '';
-          var yLabel = item.yLabel;
-          var content = '';
-
-          if (data.datasets.length > 1) {
-            content += label;
-          }
-
-          content += '$' + yLabel + 'k';
-          return content;
-        }
-      }
-    }
-  },
-  data1: (canvas) => {
-    return {
-      labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      datasets: [
-        {
-          label: 'Performance',
-          data: [0, 20, 10, 30, 15, 40, 20, 60, 60]
-        }
-      ]
-    };
-  },
-  data2: (canvas) => {
-    return {
-      labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      datasets: [
-        {
-          label: 'Performance',
-          data: [0, 20, 5, 25, 10, 30, 15, 40, 40]
-        }
-      ]
-    };
-  }
-};
 
 // Example 2 of Chart inside src/views/Index.js (Total orders - Card)
 let chartExample2 = {
@@ -390,9 +312,9 @@ let chartExample2 = {
     tooltips: {
       callbacks: {
         label: function (item, data) {
-          var label = data.datasets[item.datasetIndex].label || '';
-          var yLabel = item.yLabel;
-          var content = '';
+          let label = data.datasets[item.datasetIndex].label || '';
+          let yLabel = item.yLabel;
+          let content = '';
           if (data.datasets.length > 1) {
             content += label;
           }
@@ -403,12 +325,12 @@ let chartExample2 = {
     }
   },
   data: {
-    labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    labels: ['월', '화', '수', '목', '금', '토', '일'],
     datasets: [
       {
         label: 'Sales',
-        data: [25, 20, 30, 22, 17, 29],
-        maxBarThickness: 10
+        data: [25, 20, 30, 22, 17, 29, 30],
+        maxBarThickness: 14
       }
     ]
   }
@@ -417,6 +339,5 @@ let chartExample2 = {
 module.exports = {
   chartOptions, // used inside src/views/Index.js
   parseOptions, // used inside src/views/Index.js
-  chartExample1, // used inside src/views/Index.js
   chartExample2 // used inside src/views/Index.js
 };
