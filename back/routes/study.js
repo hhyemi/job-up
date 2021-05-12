@@ -27,6 +27,39 @@ const router = express.Router();
 //   }
 // });
 
+// GET /study : 최근 일주일 공부시간 가져오기
+router.get('/', isLoggedIn, async (req, res, next) => {
+  try {
+    let query = `SELECT SUM(time), DATE_FORMAT(createdAt , "%Y-%m-%d") 
+                  FROM study WHERE DATE_FORMAT(createdAt , "%Y-%m-%d") > DATE_ADD(NOW(),INTERVAL -7 DAY) 
+                    GROUP BY DATE_FORMAT(createdAt , "%Y-%m-%d")`;
+    const study = await db.sequelize.query(query, {
+      type: db.Sequelize.QueryTypes.SELECT,
+      raw: true
+    });
+    res.status(201).json(study);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// GET /study/today : 오늘 공부시간 가져오기
+router.get('/today', isLoggedIn, async (req, res, next) => {
+  try {
+    let query = `SELECT * FROM study
+                WHERE UserId = ${req.user.id} AND DATE_FORMAT(createdAt , "%Y-%m-%d") = CURDATE()`;
+    const study = await db.sequelize.query(query, {
+      type: db.Sequelize.QueryTypes.SELECT,
+      raw: true
+    });
+    res.status(201).json(study);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // POST /study/add : 공부시간 추가
 router.post('/add', isLoggedIn, async (req, res, next) => {
   try {

@@ -17,13 +17,13 @@ import Admin from '../../layouts/Admin';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import { LOAD_TODAY_CAL_REQUEST } from '../../reducers/calendar';
 import { LOAD_TODAY_TODO_REQUEST } from '../../reducers/todo';
-import { ADD_STUDY_REQUEST } from '../../reducers/study';
+import { ADD_STUDY_REQUEST, LOAD_TODAY_STUDY_REQUEST } from '../../reducers/study';
 
 const Main = () => {
   const dispatch = useDispatch();
   const { calendars } = useSelector((state) => state.calendar);
   const { todos } = useSelector((state) => state.todo);
-  const { addStudyError, addStudyDone } = useSelector((state) => state.study);
+  const { todayStudies, addStudyError, addStudyDone } = useSelector((state) => state.study);
 
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -131,6 +131,9 @@ const Main = () => {
     });
     dispatch({
       type: LOAD_TODAY_TODO_REQUEST
+    });
+    dispatch({
+      type: LOAD_TODAY_STUDY_REQUEST
     });
   }, []);
 
@@ -252,22 +255,17 @@ const Main = () => {
                             <col />
                           </colgroup>
                           <tbody>
-                            <tr>
-                              <th>1 </th>
-                              <th>00:10:23</th> <th>00:10:23</th>
-                            </tr>
-                            <tr>
-                              <th>1 </th>
-                              <th>00:10:23</th> <th>00:10:23</th>
-                            </tr>
-                            <tr>
-                              <th>1 </th>
-                              <th>00:10:23</th> <th>00:10:23</th>
-                            </tr>
-                            <tr>
-                              <th>1 </th>
-                              <th>00:10:23</th> <th>00:10:23</th>
-                            </tr>
+                            {todayStudies.map((dayStudy, index) => (
+                              <tr>
+                                <th>{index + 1}</th>
+                                <th>
+                                  {`0${Math.floor(dayStudy.time / 3600)}`.slice(-2)}:
+                                  {`0${Math.floor(dayStudy.time / 60) % 60}`.slice(-2)}:
+                                  {`0${dayStudy.time % 60}`.slice(-2)}
+                                </th>
+                                <th>{dayStudy.createdAt}</th>
+                              </tr>
+                            ))}
                           </tbody>
                         </Table>
                       </div>

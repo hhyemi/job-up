@@ -329,7 +329,7 @@ let chartExample2 = {
     datasets: [
       {
         label: 'Sales',
-        data: [25, 20, 30, 22, 17, 29, 30],
+        data: [205, 200, 300, 220, 107, 290, 300],
         maxBarThickness: 14
       }
     ]

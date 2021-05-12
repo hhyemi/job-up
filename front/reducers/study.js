@@ -2,9 +2,13 @@ import produce from '../util/produce';
 
 export const initialState = {
   studies: [],
+  todayStudies: [],
   loadStudyLoading: false, // 공부시간 가져오기
   loadStudyDone: false,
   loadStudyError: null,
+  loadTodayStudyLoading: false, // 오늘 공부시간 가져오기
+  loadTodayStudyDone: false,
+  loadTodayStudyError: null,
   addStudyLoading: false, // 공부시간 추가
   addStudyDone: false,
   addStudyError: null,
@@ -32,6 +36,10 @@ export const UPT_STUDY_REQUEST = 'UPT_STUDY_REQUEST';
 export const UPT_STUDY_SUCCESS = 'UPT_STUDY_SUCCESS';
 export const UPT_STUDY_FAILURE = 'UPT_STUDY_FAILURE';
 
+export const LOAD_TODAY_STUDY_REQUEST = 'LOAD_TODAY_STUDY_REQUEST';
+export const LOAD_TODAY_STUDY_SUCCESS = 'LOAD_TODAY_STUDY_SUCCESS';
+export const LOAD_TODAY_STUDY_FAILURE = 'LOAD_TODAY_STUDY_FAILURE';
+
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
@@ -49,6 +57,20 @@ const reducer = (state = initialState, action) =>
         draft.loadStudyLoading = false;
         draft.loadStudyError = action.error;
         break;
+      case LOAD_TODAY_STUDY_REQUEST:
+        draft.loadTodayStudyLoading = true;
+        draft.loadTodayStudyError = null;
+        draft.loadTodayStudyDone = false;
+        break;
+      case LOAD_TODAY_STUDY_SUCCESS:
+        draft.loadTodayStudyLoading = false;
+        draft.loadTodayStudyDone = true;
+        draft.todayStudies = action.data;
+        break;
+      case LOAD_TODAY_STUDY_FAILURE:
+        draft.loadTodayStudyLoading = false;
+        draft.loadTodayStudyError = action.error;
+        break;
       case ADD_STUDY_REQUEST:
         draft.addStudyLoading = true;
         draft.addStudyError = null;
@@ -57,7 +79,8 @@ const reducer = (state = initialState, action) =>
       case ADD_STUDY_SUCCESS:
         draft.addStudyLoading = false;
         draft.addStudyDone = true;
-        draft.studies.unshift(action.data);
+        draft.studies.push(action.data);
+        draft.todayStudies.push(action.data);
         break;
       case ADD_STUDY_FAILURE:
         draft.addStudyLoading = false;

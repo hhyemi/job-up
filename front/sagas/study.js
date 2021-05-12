@@ -10,19 +10,22 @@ import {
   LOAD_STUDY_FAILURE,
   LOAD_STUDY_REQUEST,
   LOAD_STUDY_SUCCESS,
+  LOAD_TODAY_STUDY_FAILURE,
+  LOAD_TODAY_STUDY_REQUEST,
+  LOAD_TODAY_STUDY_SUCCESS,
   UPT_STUDY_FAILURE,
   UPT_STUDY_REQUEST,
   UPT_STUDY_SUCCESS
 } from '../reducers/study';
 
 // 공부시간 가져오기
-function loadStudyAPI(lastId) {
-  return axios.get(`/study?lastId=${lastId || 0}`);
+function loadStudyAPI() {
+  return axios.get('/study');
 }
 
-function* loadStudy(action) {
+function* loadStudy() {
   try {
-    const result = yield call(loadStudyAPI, action.lastId);
+    const result = yield call(loadStudyAPI);
     yield put({
       type: LOAD_STUDY_SUCCESS,
       data: result.data
@@ -31,6 +34,27 @@ function* loadStudy(action) {
     console.error(err);
     yield put({
       type: LOAD_STUDY_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
+// 오늘 공부시간 가져오기
+function loadTodayStudyAPI() {
+  return axios.get('/study/today');
+}
+
+function* loadTodayStudy() {
+  try {
+    const result = yield call(loadTodayStudyAPI);
+    yield put({
+      type: LOAD_TODAY_STUDY_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_TODAY_STUDY_FAILURE,
       error: err.response.data
     });
   }
@@ -103,6 +127,10 @@ function* watchLoadStudy() {
   yield takeLatest(LOAD_STUDY_REQUEST, loadStudy);
 }
 
+function* watchLoadTodayStudy() {
+  yield takeLatest(LOAD_TODAY_STUDY_REQUEST, loadTodayStudy);
+}
+
 function* watchAddStudy() {
   yield takeLatest(ADD_STUDY_REQUEST, addStudy);
 }
@@ -116,5 +144,11 @@ function* watchUptStudy() {
 }
 
 export default function* userSaga() {
-  yield all([fork(watchLoadStudy), fork(watchAddStudy), fork(watchDelStudy), fork(watchUptStudy)]);
+  yield all([
+    fork(watchLoadStudy),
+    fork(watchLoadTodayStudy),
+    fork(watchAddStudy),
+    fork(watchDelStudy),
+    fork(watchUptStudy)
+  ]);
 }
