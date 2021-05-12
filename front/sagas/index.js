@@ -8,6 +8,7 @@ import todoSaga from './todo';
 import memoSaga from './memo';
 import commtySaga from './commty';
 import commentSaga from './comment';
+import studySaga from './study';
 
 import { backUrl } from '../config/config';
 
@@ -22,6 +23,7 @@ export default function* rootSage() {
     fork(todoSaga),
     fork(memoSaga),
     fork(commtySaga),
-    fork(commentSaga)
+    fork(commentSaga),
+    fork(studySaga)
   ]);
 }

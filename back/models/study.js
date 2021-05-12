@@ -2,19 +2,12 @@ const DataTypes = require('sequelize');
 const { Model } = DataTypes;
 const moment = require('moment');
 
-module.exports = class Commty extends Model {
+module.exports = class Study extends Model {
   static init(sequelize) {
     return super.init(
       {
-        title: {
-          type: DataTypes.STRING(30),
-          allowNull: false
-        },
-        content: {
-          type: DataTypes.TEXT
-        },
-        views: {
-          type: DataTypes.INTEGER(5),
+        time: {
+          type: DataTypes.INTEGER(10),
           allowNull: false
         },
         createdAt: {
@@ -31,8 +24,8 @@ module.exports = class Commty extends Model {
         }
       },
       {
-        modelName: 'Commty',
-        tableName: 'commty',
+        modelName: 'Study',
+        tableName: 'study',
         charset: 'utf8',
         collate: 'utf8_general_ci',
         sequelize
@@ -40,9 +33,6 @@ module.exports = class Commty extends Model {
     );
   }
   static associate(db) {
-    db.Commty.belongsTo(db.User);
-    db.Commty.hasMany(db.Comment);
-    db.Commty.belongsToMany(db.Hashtag, { through: 'CommtyHashtag' });
-    db.Commty.belongsToMany(db.User, { through: 'Like', as: 'Likers' });
+    db.Study.belongsTo(db.User);
   }
 };

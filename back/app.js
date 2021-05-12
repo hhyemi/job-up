@@ -16,6 +16,7 @@ const todoRouter = require('./routes/todo');
 const memoRouter = require('./routes/memo');
 const commtyRouter = require('./routes/commty');
 const commentRouter = require('./routes/comment');
+const studyRouter = require('./routes/study');
 
 const db = require('./models');
 const passportConfig = require('./passport');
@@ -71,6 +72,7 @@ app.use('/todo', todoRouter);
 app.use('/memo', memoRouter);
 app.use('/commty', commtyRouter);
 app.use('/comment', commentRouter);
+app.use('/study', studyRouter);
 
 // 에러 처리 미들웨어 (기본적으로 내장되어 있는데 바꾸고싶으면 따로 만들어줌)
 app.use((err, req, res, next) => {});

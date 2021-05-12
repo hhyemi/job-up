@@ -8,6 +8,7 @@ import todo from './todo';
 import memo from './memo';
 import commty from './commty';
 import comment from './comment';
+import study from './study';
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -22,7 +23,8 @@ const rootReducer = (state, action) => {
         todo,
         memo,
         commty,
-        comment
+        comment,
+        study
       });
       return combineReducer(state, action);
     }

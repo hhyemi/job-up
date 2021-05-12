@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import Chart from 'chart.js';
-import { Line, Bar } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { Card, CardHeader, CardBody, Table, Container, Row, Col, Nav, NavItem, NavLink } from 'reactstrap';
 import axios from 'axios';
 import { END } from 'redux-saga';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import 'moment/locale/ko';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 import { chartOptions, parseOptions, chartExample2 } from '../../variables/charts';
 import wrapper from '../../store/configureStore';
@@ -16,16 +17,23 @@ import Admin from '../../layouts/Admin';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import { LOAD_TODAY_CAL_REQUEST } from '../../reducers/calendar';
 import { LOAD_TODAY_TODO_REQUEST } from '../../reducers/todo';
+import { ADD_STUDY_REQUEST } from '../../reducers/study';
 
 const Main = () => {
   const dispatch = useDispatch();
   const { calendars } = useSelector((state) => state.calendar);
   const { todos } = useSelector((state) => state.todo);
+  const { addStudyError, addStudyDone } = useSelector((state) => state.study);
 
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const countRef = useRef(null);
+
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('default');
+  const [delAlertShow, setDelAlertShow] = useState(false);
 
   const [activeNav, setActiveNav] = React.useState(1);
   const [chartExample1Data, setChartExample1Data] = React.useState('data1');
@@ -50,35 +58,71 @@ const Main = () => {
   };
 
   // 스탑워치 - 시작
-  const handleStart = () => {
+  const onStart = useCallback((e) => {
+    e.preventDefault();
     setIsActive(true);
     setIsPaused(true);
     countRef.current = setInterval(() => {
       setTimer((timer) => timer + 1);
     }, 1000);
-  };
+  });
 
   // 스탑워치 - 중지
-  const handlePause = () => {
+  const onPause = useCallback((e) => {
+    e.preventDefault();
     clearInterval(countRef.current);
     setIsPaused(false);
-  };
+    console.log(timer);
+  });
 
   // 스탑워치 - 재시작
-  const handleResume = () => {
+  const onResume = useCallback((e) => {
+    e.preventDefault();
     setIsPaused(true);
     countRef.current = setInterval(() => {
       setTimer((timer) => timer + 1);
     }, 1000);
-  };
+  });
 
   // 스탑워치 - 재설정
-  const handleReset = () => {
+  const onReset = useCallback((e) => {
+    e.preventDefault();
     clearInterval(countRef.current);
     setIsActive(false);
     setIsPaused(false);
     setTimer(0);
-  };
+  });
+
+  // 스탑워치 - 저장
+  const onTimeSave = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch({
+        type: ADD_STUDY_REQUEST,
+        data: { time: timer }
+      });
+    },
+    [timer]
+  );
+
+  // 스탑워치 저장 실패
+  useEffect(() => {
+    if (addStudyError) {
+      setAlertShow(true);
+      setAlertType('danger');
+      setAlertTitle(addStudyError);
+    }
+  }, [addStudyError]);
+
+  // 스탑워치 저장 성공
+  useEffect(() => {
+    if (addStudyDone) {
+      setAlertShow(true);
+      setAlertType('success');
+      setAlertTitle('공부시간이 저장되었습니다. 일간에서 확인가능합니다.');
+      setTimer(0);
+    }
+  }, [addStudyDone]);
 
   // 오늘 달력 가져오기
   useEffect(() => {
@@ -91,10 +135,10 @@ const Main = () => {
   }, []);
 
   const todoCategory = {
-    1: '할일',
-    2: '진행중',
-    3: '완료',
-    4: '보류'
+    1: { title: '할일', color: '#f5365c' },
+    2: { title: '진행중', color: '#fb6340 ' },
+    3: { title: '완료', color: '#ffd600 ' },
+    4: { title: '보류', color: '#11cdef ' }
   };
 
   return (
@@ -118,28 +162,28 @@ const Main = () => {
                   <div className="buttons">
                     {!isActive && !isPaused ? (
                       <>
-                        <span className="text-md sw-start" onClick={handleStart}>
+                        <span className="text-md sw-start" onClick={onStart}>
                           <span className="text-white font-weight-bold">시작</span>
                         </span>
-                        <span className="text-md sw-reset" onClick={handleReset}>
+                        <span className="text-md sw-reset" onClick={onReset}>
                           <span className="text-white font-weight-bold">재설정</span>
                         </span>
                       </>
                     ) : isPaused ? (
                       <>
-                        <span className="text-md sw-pause" onClick={handlePause}>
+                        <span className="text-md sw-pause" onClick={onPause}>
                           <span className="text-white font-weight-bold">중지</span>
                         </span>
                       </>
                     ) : (
                       <>
-                        <span className="text-md sw-resume" onClick={handleResume}>
+                        <span className="text-md sw-resume" onClick={onResume}>
                           <span className="text-white font-weight-bold">시작</span>
                         </span>
-                        <span className="text-md sw-reset" onClick={handleReset}>
+                        <span className="text-md sw-reset" onClick={onReset}>
                           <span className="text-white font-weight-bold">재설정</span>
                         </span>
-                        <span className="text-md sw-save" onClick={handleReset}>
+                        <span className="text-md sw-save" onClick={onTimeSave}>
                           <span className="text-white font-weight-bold">저장</span>
                         </span>
                       </>
@@ -188,58 +232,41 @@ const Main = () => {
                     <>
                       <Table className="align-items-center table-flush stop-table" responsive>
                         <colgroup>
+                          <col width="20%" />
                           <col width="40%" />
                           <col />
                         </colgroup>
                         <thead className="thead-light">
                           <tr>
-                            <th scope="col">랩</th>
-                            <th scope="col">총시간</th>
+                            <th scope="col">No</th>
+                            <th scope="col">공부시간</th>
+                            <th scope="col">종료시간</th>
                           </tr>
                         </thead>
                       </Table>
                       <div className="scroll-stop">
                         <Table>
                           <colgroup>
+                            <col width="20%" />
                             <col width="40%" />
                             <col />
                           </colgroup>
                           <tbody>
                             <tr>
                               <th>1 </th>
-                              <th>2321:#23;#</th>
+                              <th>00:10:23</th> <th>00:10:23</th>
                             </tr>
                             <tr>
                               <th>1 </th>
-                              <th>2321:#23;#</th>
+                              <th>00:10:23</th> <th>00:10:23</th>
                             </tr>
                             <tr>
                               <th>1 </th>
-                              <th>2321:#23;#</th>
+                              <th>00:10:23</th> <th>00:10:23</th>
                             </tr>
                             <tr>
                               <th>1 </th>
-                              <th>2321:#23;#</th>
-                            </tr>
-                            <tr>
-                              <th>1 </th>
-                              <th>2321:#23;#</th>
-                            </tr>{' '}
-                            <tr>
-                              <th>1 </th>
-                              <th>2321:#23;#</th>
-                            </tr>{' '}
-                            <tr>
-                              <th>1 </th>
-                              <th>2321:#23;#</th>
-                            </tr>{' '}
-                            <tr>
-                              <th>1 </th>
-                              <th>2321:#23;#</th>
-                            </tr>{' '}
-                            <tr>
-                              <th>1 </th>
-                              <th>2321:#23;#</th>
+                              <th>00:10:23</th> <th>00:10:23</th>
                             </tr>
                           </tbody>
                         </Table>
@@ -284,12 +311,12 @@ const Main = () => {
                   <tbody>
                     {calendars.map((cal) => (
                       <tr key={cal.id}>
-                        <th>
+                        <th className="dot">
                           <i className="fas fa-circle mr-2" style={{ color: `${cal.bgColor}`, fontSize: '0.1rem' }} />
                           {cal.name}
                         </th>
                         <th>{cal.title}</th>
-                        <th>{moment(cal.start).format('YYYY-MM-DD hh:mm')}</th>
+                        <th>{moment(cal.start).format('YYYY.MM.DD HH:mm')}</th>
                       </tr>
                     ))}
                   </tbody>
@@ -329,7 +356,13 @@ const Main = () => {
                   <tbody>
                     {todos.map((todo) => (
                       <tr key={todo.id}>
-                        <th>{todoCategory[todo.category]}</th>
+                        <th className="dot">
+                          <i
+                            className="fas fa-circle mr-2"
+                            style={{ color: `${todoCategory[todo.category].color}`, fontSize: '0.1rem' }}
+                          />
+                          {todoCategory[todo.category].title}
+                        </th>
                         <th>{todo.title}</th>
                         <th>{todo.content}</th>
                       </tr>
@@ -341,6 +374,7 @@ const Main = () => {
           </Col>
         </Row>
       </Container>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>
   );
 };

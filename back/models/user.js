@@ -36,6 +36,10 @@ module.exports = class User extends Model {
   static associate(db) {
     db.User.hasMany(db.Calendar);
     db.User.hasMany(db.Category);
+    db.User.hasMany(db.Comment);
+    db.User.hasMany(db.Commty);
     db.User.hasMany(db.Todo);
+    db.User.hasMany(db.Memo);
+    db.User.hasMany(db.Study);
   }
 };

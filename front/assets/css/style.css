@@ -364,3 +364,8 @@ body{
 .chart{
   height: 305px;
 }
+
+.main-container th.dot {
+  text-align: left;
+  padding-left: 2.5rem;
+}

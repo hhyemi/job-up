@@ -7,6 +7,7 @@ const memo = require('./memo');
 const comment = require('./comment');
 const commty = require('./commty');
 const hashtag = require('./hashtag');
+const study = require('./study');
 
 const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
@@ -24,6 +25,7 @@ db.Memo = memo;
 db.Comment = comment;
 db.Commty = commty;
 db.Hashtag = hashtag;
+db.Study = study;
 
 Object.keys(db).forEach((modelName) => {
   db[modelName].init(sequelize);
