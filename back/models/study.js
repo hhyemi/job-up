@@ -13,13 +13,13 @@ module.exports = class Study extends Model {
         createdAt: {
           type: DataTypes.DATE,
           get() {
-            return moment(this.getDataValue('createdAt')).format('YYYY.MM.DD HH:mm');
+            return moment(this.getDataValue('createdAt')).format('YYYY-MM-DD HH:mm');
           }
         },
         updatedAt: {
           type: DataTypes.DATE,
           get() {
-            return moment(this.getDataValue('updatedAt')).format('YYYY.MM.DD HH:mm');
+            return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm');
           }
         }
       },

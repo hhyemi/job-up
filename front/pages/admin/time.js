@@ -1,0 +1,257 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  Card,
+  CardHeader,
+  Col,
+  Container,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Row,
+  Table,
+  Label
+} from 'reactstrap';
+import axios from 'axios';
+import { END } from 'redux-saga';
+import SweetAlert from 'react-bootstrap-sweetalert';
+import { useDispatch, useSelector } from 'react-redux';
+import DatePicker from 'reactstrap-date-picker';
+
+import wrapper from '../../store/configureStore';
+import Header from '../../components/Headers/Header';
+import Admin from '../../layouts/Admin';
+import TimeList from '../../components/Time/TimeList';
+import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
+import { LOAD_STUDY_REQUEST } from '../../reducers/study';
+
+const Time = () => {
+  const dispatch = useDispatch();
+  const { studies, studyCnt, loadStudyDone } = useSelector((state) => state.study);
+  const [pages, setPages] = useState([]); // 페이지 개수
+  const [currentPage, setCurrentPage] = useState(1); // 현재페이지
+  const [checkItems, setCheckItems] = useState([]); // 체크한 데이터
+  const [startDate, onStartDate] = useState(''); // 시작일자
+  const [endDate, onEndDate] = useState(''); // 종료일자
+
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('default');
+
+  // 공부시간 가져오기
+  useEffect(() => {
+    dispatch({
+      type: LOAD_STUDY_REQUEST,
+      data: {
+        offset: 0
+      }
+    });
+  }, []);
+
+  // 공부시간 가져오기 성공
+  useEffect(() => {
+    if (loadStudyDone) {
+      const tmpCnt = Math.ceil(studyCnt / 9);
+      const studyPages = Array.from({ length: tmpCnt }, (v, i) => i + 1);
+      setPages(studyPages);
+    }
+  }, [loadStudyDone]);
+
+  // 날짜 선택
+  const onSearch = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch({
+        type: LOAD_STUDY_REQUEST,
+        data: {
+          offset: 0,
+          startDate,
+          endDate
+        }
+      });
+    },
+    [currentPage, startDate, endDate]
+  );
+
+  // 페이지 이동
+  const movePage = useCallback(
+    (e) => {
+      e.preventDefault();
+      const pageno = e.target.getAttribute('data-pageno');
+      setCurrentPage(pageno);
+      dispatch({
+        type: LOAD_STUDY_REQUEST,
+        data: {
+          offset: (pageno - 1) * 9,
+          startDate,
+          endDate
+        }
+      });
+    },
+    [currentPage, startDate, endDate]
+  );
+
+  // 체크박스 단일 개체 선택
+  const handleSingleCheck = (checked, id) => {
+    if (checked) {
+      setCheckItems([...checkItems, id]);
+    } else {
+      setCheckItems(checkItems.filter((el) => el !== id));
+    }
+  };
+
+  // 체크박스 전체 선택
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      const idArray = [];
+      studies.forEach((el) => idArray.push(el.id));
+      setCheckItems(idArray);
+    } else {
+      setCheckItems([]);
+    }
+  };
+
+  return (
+    <>
+      <Header />
+      <Container className="mt-4 stopwatch-container" fluid>
+        <Row>
+          <Col className="mb-5 mb-xl-0">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col" style={{ maxWidth: '57%' }}>
+                    <h3 className="mb-0">스탑워치</h3>
+                  </div>
+                  <div style={{ width: '13%' }}>
+                    <div>
+                      <div className="date-start-name">
+                        <Label>시작일자</Label>
+                      </div>
+                      <DatePicker
+                        id="example-datepicker"
+                        dateFormat="YYYY-MM-DD"
+                        value={startDate}
+                        onChange={onStartDate}
+                        required
+                      />
+                    </div>
+                    <div className="date-end-name">
+                      <Label>종료일자</Label>
+                    </div>
+                    <div className="end-date">
+                      <DatePicker
+                        id="example-datepicker"
+                        dateFormat="YYYY-MM-DD"
+                        value={endDate}
+                        onChange={onEndDate}
+                        required
+                      />
+                    </div>
+                    <button type="button" className="btn btn-primary btn-md search-button" onClick={onSearch}>
+                      검색
+                    </button>
+                  </div>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush" style={{ textAlign: 'center' }} responsive>
+                <colgroup>
+                  <col width="5%" />
+                  <col width="10%" />
+                  <col width="25%" />
+                  <col width="25%" />
+                  <col width="25%" />
+                </colgroup>
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">
+                      <div className="custom-control custom-control-alternative custom-checkbox">
+                        <input
+                          className="custom-control-input"
+                          type="checkbox"
+                          id="customCheckRegister"
+                          onChange={(e) => handleAllCheck(e.target.checked)}
+                          checked={checkItems.length === studies.length}
+                        />
+                        <label className="custom-control-label" htmlFor="customCheckRegister" />
+                      </div>
+                    </th>
+                    <th scope="col">No</th>
+                    <th scope="col">공부시간</th>
+                    <th scope="col">공부일자</th>
+                    <th scope="col">종료시간</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {studies.map((time, index) => (
+                    <TimeList
+                      key={time.id}
+                      time={time}
+                      num={studyCnt - 9 * (currentPage - 1) - index}
+                      checkItems={checkItems}
+                      handleSingleCheck={handleSingleCheck}
+                    />
+                  ))}
+                </tbody>
+              </Table>
+            </Card>
+          </Col>
+        </Row>
+        <Row className="pt-3">
+          <Col>
+            <nav aria-label="...">
+              <Pagination>
+                <PaginationItem className=" disabled">
+                  <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>
+                    <i className=" fa fa-angle-left" />
+                    <span className=" sr-only">Previous</span>
+                  </PaginationLink>
+                </PaginationItem>
+                {pages.map((page) =>
+                  page == currentPage ? (
+                    <PaginationItem className="active" key={page}>
+                      <PaginationLink data-pageno={page} href="#pablo" onClick={movePage}>
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ) : (
+                    <PaginationItem key={page}>
+                      <PaginationLink data-pageno={page} href="#pablo" onClick={movePage}>
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )
+                )}
+                <PaginationItem>
+                  <PaginationLink href="#pablo" onClick={(e) => e.preventDefault()}>
+                    <i className=" fa fa-angle-right" />
+                    <span className=" sr-only">Next</span>
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            </nav>
+          </Col>
+        </Row>
+      </Container>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
+    </>
+  );
+};
+
+Time.layout = Admin;
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  console.log('getServerSideProps start');
+  const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST
+  });
+  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
+  console.log('getServerSideProps end');
+  await context.store.sagaTask.toPromise();
+});
+
+export default Time;

@@ -15,20 +15,17 @@ import {
   LOAD_TODAY_STUDY_SUCCESS,
   LOAD_WEEK_STUDY_FAILURE,
   LOAD_WEEK_STUDY_REQUEST,
-  LOAD_WEEK_STUDY_SUCCESS,
-  UPT_STUDY_FAILURE,
-  UPT_STUDY_REQUEST,
-  UPT_STUDY_SUCCESS
+  LOAD_WEEK_STUDY_SUCCESS
 } from '../reducers/study';
 
 // 공부시간 가져오기
-function loadStudyAPI() {
-  return axios.get('/study');
+function loadStudyAPI(data) {
+  return axios.post('/study', data);
 }
 
-function* loadStudy() {
+function* loadStudy(action) {
   try {
-    const result = yield call(loadStudyAPI);
+    const result = yield call(loadStudyAPI, action.data);
     yield put({
       type: LOAD_STUDY_SUCCESS,
       data: result.data
@@ -126,27 +123,6 @@ function* delStudy(action) {
   }
 }
 
-// 공부시간 수정
-function uptStudyAPI(data) {
-  return axios.patch('/study/upt/', data);
-}
-
-function* uptStudy(action) {
-  try {
-    const result = yield call(uptStudyAPI, action.data);
-    yield put({
-      type: UPT_STUDY_SUCCESS,
-      data: result.data
-    });
-  } catch (err) {
-    console.error(err);
-    yield put({
-      type: UPT_STUDY_FAILURE,
-      error: err.response.data
-    });
-  }
-}
-
 function* watchLoadStudy() {
   yield takeLatest(LOAD_STUDY_REQUEST, loadStudy);
 }
@@ -167,17 +143,12 @@ function* watchDelStudy() {
   yield takeLatest(DEL_STUDY_REQUEST, delStudy);
 }
 
-function* watchUptStudy() {
-  yield takeLatest(UPT_STUDY_REQUEST, uptStudy);
-}
-
 export default function* userSaga() {
   yield all([
     fork(watchLoadStudy),
     fork(watchLoadTodayStudy),
     fork(watchLoadWeekStudy),
     fork(watchAddStudy),
-    fork(watchDelStudy),
-    fork(watchUptStudy)
+    fork(watchDelStudy)
   ]);
 }

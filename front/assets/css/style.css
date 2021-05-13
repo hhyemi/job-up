@@ -369,3 +369,35 @@ body{
   text-align: left;
   padding-left: 2.5rem;
 }
+
+.main-container a{
+  font-size: 0.7rem;
+  padding-top: 14px;
+  color: #929292;
+}
+
+/* stop watch */
+.stopwatch-container .date-start-name{
+  position: absolute;
+  top: 30px;
+  left: 51%;
+}
+
+.stopwatch-container .date-end-name{
+  position: absolute;
+  top: 30px;
+    left: 72%;
+}
+
+.stopwatch-container .end-date{
+  position: absolute;
+  width: 13%;
+  top: 22px;
+  right: 9%;
+}
+
+.stopwatch-container .search-button{
+  position: absolute;
+  top: 26px;
+  right: 3%;
+}

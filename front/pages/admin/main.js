@@ -292,7 +292,7 @@ const Main = () => {
                             onClick={(e) => toggleNavs(e, 1)}
                           >
                             <span className="d-none d-md-block">주간</span>
-                            <span className="d-md-none">M</span>
+                            <span className="d-md-none">W</span>
                           </NavLink>
                         </NavItem>
                         <NavItem>
@@ -305,9 +305,10 @@ const Main = () => {
                             onClick={(e) => toggleNavs(e, 2)}
                           >
                             <span className="d-none d-md-block">일간</span>
-                            <span className="d-md-none">W</span>
+                            <span className="d-md-none">D</span>
                           </NavLink>
                         </NavItem>
+                        <a href="/admin/time">+ 더보기</a>
                       </Nav>
                     </div>
                   </Row>

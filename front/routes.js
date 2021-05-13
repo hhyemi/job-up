@@ -2,7 +2,7 @@ const routes = [
   {
     path: '/main',
     name: 'Main',
-    icon: 'ni ni-tv-2 text-primary',
+    icon: 'ni ni-tv-2 text-purple',
     layout: '/admin'
   },
   {
@@ -21,6 +21,12 @@ const routes = [
     path: '/memo',
     name: 'Memo',
     icon: 'ni ni-book-bookmark text-yellow',
+    layout: '/admin'
+  },
+  {
+    path: '/time',
+    name: 'StopWatch',
+    icon: 'fas fa-stopwatch text-gray',
     layout: '/admin'
   }
 ];

@@ -2,6 +2,7 @@ import produce from '../util/produce';
 
 export const initialState = {
   studies: [],
+  studyCnt: 0,
   todayStudies: [],
   weekStudies: [],
   loadStudyLoading: false, // 공부시간 가져오기
@@ -18,10 +19,7 @@ export const initialState = {
   addStudyError: null,
   delStudyLoading: false, // 공부시간 삭제
   delStudyDone: false,
-  delStudyError: null,
-  uptStudyLoading: false, // 공부시간 수정
-  uptStudyDone: false,
-  uptStudyError: null
+  delStudyError: null
 };
 
 export const LOAD_STUDY_REQUEST = 'LOAD_STUDY_REQUEST';
@@ -35,10 +33,6 @@ export const ADD_STUDY_FAILURE = 'ADD_STUDY_FAILURE';
 export const DEL_STUDY_REQUEST = 'DEL_STUDY_REQUEST';
 export const DEL_STUDY_SUCCESS = 'DEL_STUDY_SUCCESS';
 export const DEL_STUDY_FAILURE = 'DEL_STUDY_FAILURE';
-
-export const UPT_STUDY_REQUEST = 'UPT_STUDY_REQUEST';
-export const UPT_STUDY_SUCCESS = 'UPT_STUDY_SUCCESS';
-export const UPT_STUDY_FAILURE = 'UPT_STUDY_FAILURE';
 
 export const LOAD_TODAY_STUDY_REQUEST = 'LOAD_TODAY_STUDY_REQUEST';
 export const LOAD_TODAY_STUDY_SUCCESS = 'LOAD_TODAY_STUDY_SUCCESS';
@@ -59,7 +53,8 @@ const reducer = (state = initialState, action) =>
       case LOAD_STUDY_SUCCESS:
         draft.loadStudyLoading = false;
         draft.loadStudyDone = true;
-        draft.studies = draft.studies.concat(action.data);
+        draft.studies = action.data.study;
+        draft.studyCnt = action.data.studyCnt.length;
         break;
       case LOAD_STUDY_FAILURE:
         draft.loadStudyLoading = false;
@@ -122,21 +117,6 @@ const reducer = (state = initialState, action) =>
         draft.delStudyLoading = false;
         draft.delStudyError = action.error;
         break;
-      case UPT_STUDY_REQUEST:
-        draft.uptStudyLoading = true;
-        draft.uptStudyError = null;
-        draft.uptStudyDone = false;
-        break;
-      case UPT_STUDY_SUCCESS:
-        draft.uptStudyLoading = false;
-        draft.uptStudyDone = true;
-        draft.studies = draft.studies.map((v) => (v.id === action.data.StudyId ? action.data.study : v));
-        break;
-      case UPT_STUDY_FAILURE:
-        draft.uptStudyLoading = false;
-        draft.uptStudyError = action.error;
-        break;
-
       default:
         break;
     }
