@@ -111,7 +111,7 @@ const reducer = (state = initialState, action) =>
       case DEL_STUDY_SUCCESS:
         draft.delStudyLoading = false;
         draft.delStudyDone = true;
-        draft.studies = draft.studies.filter((v) => v.id !== action.data.StudyId);
+        draft.studies = draft.studies.filter((v) => !action.data.id.includes(v.id));
         break;
       case DEL_STUDY_FAILURE:
         draft.delStudyLoading = false;

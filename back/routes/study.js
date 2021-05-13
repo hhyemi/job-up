@@ -88,15 +88,17 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
   }
 });
 
-// // DELETE /study/del : 공부시간 삭제
-// router.delete('/del/:studyId', isLoggedIn, async (req, res, next) => {
-//   try {
-//     await study.destroy({ where: { id: req.params.studyId, UserId: req.user.id } });
-//     res.json({ studyId: parseInt(req.params.studyId, 10) });
-//   } catch (error) {
-//     console.error(error);
-//     next(error);
-//   }
-// });
+// DELETE /study/del : 공부시간 삭제
+router.delete('/del', isLoggedIn, async (req, res, next) => {
+  try {
+    await Study.destroy({
+      where: { id: req.body.checkItems }
+    });
+    res.status(201).json({ id: req.body.checkItems });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 
 module.exports = router;

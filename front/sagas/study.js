@@ -104,7 +104,7 @@ function* addStudy(action) {
 
 // 공부시간 삭제
 function delStudyAPI(data) {
-  return axios.delete(`/study/del/${data}`);
+  return axios.delete('/study/del', { data });
 }
 
 function* delStudy(action) {

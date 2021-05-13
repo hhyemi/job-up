@@ -22,11 +22,11 @@ import Header from '../../components/Headers/Header';
 import Admin from '../../layouts/Admin';
 import TimeList from '../../components/Time/TimeList';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
-import { LOAD_STUDY_REQUEST } from '../../reducers/study';
+import { DEL_STUDY_REQUEST, LOAD_STUDY_REQUEST } from '../../reducers/study';
 
 const Time = () => {
   const dispatch = useDispatch();
-  const { studies, studyCnt, loadStudyDone } = useSelector((state) => state.study);
+  const { studies, studyCnt, loadStudyDone, delStudyDone } = useSelector((state) => state.study);
   const [pages, setPages] = useState([]); // 페이지 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재페이지
   const [checkItems, setCheckItems] = useState([]); // 체크한 데이터
@@ -36,6 +36,7 @@ const Time = () => {
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
+  const [delAlertShow, setDelAlertShow] = useState(false);
 
   // 공부시간 가져오기
   useEffect(() => {
@@ -109,6 +110,43 @@ const Time = () => {
       setCheckItems([]);
     }
   };
+
+  // 공부시간 삭제
+  const deleteTimeCheck = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (checkItems.length === 0) {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('삭제할 공부시간을 선택해주세요.');
+        return;
+      }
+      setDelAlertShow(true);
+    },
+    [checkItems, studies, delStudyDone]
+  );
+
+  const deleteTime = useCallback(() => {
+    dispatch({
+      type: DEL_STUDY_REQUEST,
+      data: { checkItems }
+    });
+    setDelAlertShow(false);
+    setCheckItems([]);
+  }, [checkItems]);
+
+  // 공부시간 삭제완료
+  useEffect(() => {
+    setCurrentPage(1);
+    if (delStudyDone) {
+      dispatch({
+        type: LOAD_STUDY_REQUEST,
+        data: {
+          offset: 0
+        }
+      });
+    }
+  }, [delStudyDone]);
 
   return (
     <>
@@ -198,6 +236,14 @@ const Time = () => {
         </Row>
         <Row className="pt-3">
           <Col>
+            <button
+              type="button"
+              className="btn btn-danger btn-sm mb-2"
+              style={{ position: 'absolute' }}
+              onClick={deleteTimeCheck}
+            >
+              삭제
+            </button>
             <nav aria-label="...">
               <Pagination>
                 <PaginationItem className=" disabled">
@@ -233,6 +279,18 @@ const Time = () => {
         </Row>
       </Container>
       <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
+      <SweetAlert
+        warning
+        showCancel
+        show={delAlertShow}
+        cancelBtnText="취소"
+        confirmBtnText="삭제"
+        confirmBtnBsStyle="danger"
+        title="삭제하시겠습니까?"
+        onConfirm={() => deleteTime()}
+        onCancel={() => setDelAlertShow(false)}
+        focusCancelBtn
+      />
     </>
   );
 };
