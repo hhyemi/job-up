@@ -292,52 +292,7 @@ function parseOptions(parent, options) {
   }
 }
 
-// Example 2 of Chart inside src/views/Index.js (Total orders - Card)
-let chartExample2 = {
-  options: {
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            callback: function (value) {
-              if (!(value % 10)) {
-                //return '$' + value + 'k'
-                return value;
-              }
-            }
-          }
-        }
-      ]
-    },
-    tooltips: {
-      callbacks: {
-        label: function (item, data) {
-          let label = data.datasets[item.datasetIndex].label || '';
-          let yLabel = item.yLabel;
-          let content = '';
-          if (data.datasets.length > 1) {
-            content += label;
-          }
-          content += yLabel;
-          return content;
-        }
-      }
-    }
-  },
-  data: {
-    labels: ['월', '화', '수', '목', '금', '토', '일'],
-    datasets: [
-      {
-        label: 'Sales',
-        data: [205, 200, 300, 220, 107, 290, 300],
-        maxBarThickness: 14
-      }
-    ]
-  }
-};
-
 module.exports = {
   chartOptions, // used inside src/views/Index.js
-  parseOptions, // used inside src/views/Index.js
-  chartExample2 // used inside src/views/Index.js
+  parseOptions // used inside src/views/Index.js
 };

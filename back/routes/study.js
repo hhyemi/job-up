@@ -27,10 +27,10 @@ const router = express.Router();
 //   }
 // });
 
-// GET /study : 최근 일주일 공부시간 가져오기
-router.get('/', isLoggedIn, async (req, res, next) => {
+// GET /study : 주간 공부시간 가져오기
+router.get('/week', isLoggedIn, async (req, res, next) => {
   try {
-    let query = `SELECT SUM(time), DATE_FORMAT(createdAt , "%Y-%m-%d") 
+    let query = `SELECT SUM(time) AS time, DATE_FORMAT(createdAt , "%Y-%m-%d")  AS day
                   FROM study WHERE DATE_FORMAT(createdAt , "%Y-%m-%d") > DATE_ADD(NOW(),INTERVAL -7 DAY) 
                     GROUP BY DATE_FORMAT(createdAt , "%Y-%m-%d")`;
     const study = await db.sequelize.query(query, {
@@ -44,7 +44,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
   }
 });
 
-// GET /study/today : 오늘 공부시간 가져오기
+// GET /study/today : 일간 공부시간 가져오기
 router.get('/today', isLoggedIn, async (req, res, next) => {
   try {
     let query = `SELECT * FROM study
