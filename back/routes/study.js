@@ -64,7 +64,7 @@ router.get('/week', isLoggedIn, async (req, res, next) => {
 // GET /study/today : 일간 공부시간 가져오기
 router.get('/today', isLoggedIn, async (req, res, next) => {
   try {
-    let query = `SELECT * FROM study
+    let query = `SELECT id, time, DATE_FORMAT(createdAt , "%Y-%m-%d %H:%i") AS createdAt FROM study
                 WHERE UserId = ${req.user.id} AND DATE_FORMAT(createdAt , "%Y-%m-%d") = CURDATE()`;
     const study = await db.sequelize.query(query, {
       type: db.Sequelize.QueryTypes.SELECT,

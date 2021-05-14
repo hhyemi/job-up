@@ -48,7 +48,7 @@ function Sidebar(props) {
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
       return (
-        <>
+        <div key={key}>
           {prop.icon && (
             <NavItem key={key} active={activeRoute(prop.layout + prop.path)}>
               <Link href={prop.layout + prop.path}>
@@ -59,7 +59,7 @@ function Sidebar(props) {
               </Link>
             </NavItem>
           )}
-        </>
+        </div>
       );
     });
   };

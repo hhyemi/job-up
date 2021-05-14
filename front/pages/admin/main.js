@@ -7,7 +7,6 @@ import axios from 'axios';
 import { END } from 'redux-saga';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import 'moment/locale/ko';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import Router from 'next/router';
 
@@ -265,9 +264,6 @@ const Main = () => {
                         <span className="text-md sw-start" onClick={onStart}>
                           <span className="text-white font-weight-bold">시작</span>
                         </span>
-                        <span className="text-md sw-reset" onClick={onReset}>
-                          <span className="text-white font-weight-bold">재설정</span>
-                        </span>
                       </>
                     ) : isPaused ? (
                       <>
@@ -278,7 +274,7 @@ const Main = () => {
                     ) : (
                       <>
                         <span className="text-md sw-resume" onClick={onResume}>
-                          <span className="text-white font-weight-bold">시작</span>
+                          <span className="text-white font-weight-bold">재시작</span>
                         </span>
                         <span className="text-md sw-reset" onClick={onReset}>
                           <span className="text-white font-weight-bold">재설정</span>
@@ -354,7 +350,7 @@ const Main = () => {
                           </colgroup>
                           <tbody>
                             {todayStudies.map((dayStudy, index) => (
-                              <tr>
+                              <tr key={dayStudy.id}>
                                 <th>{index + 1}</th>
                                 <th>
                                   {`0${Math.floor(dayStudy.time / 3600)}`.slice(-2)}:
