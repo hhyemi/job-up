@@ -107,7 +107,7 @@ const Login = () => {
   return (
     <>
       <Col lg="5" md="7">
-        <Card className="bg-secondary shadow border-0">
+        <Card className="bg-secondary dark-shadow border-0">
           <CardHeader className="bg-transparent pb-5">
             <div className="text-muted text-center mt-2 mb-3">
               <small>다른계정으로 로그인</small>
@@ -119,7 +119,7 @@ const Login = () => {
                 buttonText="Github"
                 onSuccess={responseGithub}
                 onFailure={responseFail}
-                className="btn-neutral btn-icon mr-4 btn btn-default"
+                className="btn-neutral btn-icon mr-4 btn"
               >
                 <span className="btn-inner--icon">
                   <img alt="..." src={require('assets/img/icons/common/github.svg')} />
@@ -127,6 +127,7 @@ const Login = () => {
                 <span className="btn-inner--text">Github</span>
               </GitHubLogin>
               <GoogleLogin
+                className="goole-btn btn btn-neutral btn-icon"
                 clientId={process.env.GOOGLE_KEY}
                 buttonText="Google"
                 onSuccess={responseGoogle}
@@ -174,7 +175,7 @@ const Login = () => {
               </FormGroup>
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit">
-                  LOGIN
+                  로그인
                 </Button>
                 <br />
                 <a className="text-muted" href="#pablo" onClick={onClickFindPassword}>

@@ -159,9 +159,9 @@ const Profile = () => {
                 <Row className="align-items-center">
                   <Col xs="8" />
                   <Col className="text-right" xs="4">
-                    <Button color="primary" href="#pablo" onClick={onSubmit} size="sm">
+                    <button type="button" className="btn-md btn btn-primary" onClick={onSubmit}>
                       수정
-                    </Button>
+                    </button>
                   </Col>
                 </Row>
               </CardHeader>

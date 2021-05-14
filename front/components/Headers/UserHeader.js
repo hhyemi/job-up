@@ -13,7 +13,7 @@ function UserHeader() {
         }}
       >
         {/* Mask */}
-        <span className="mask bg-gradient-default opacity-8" />
+        <span className="mask opacity-8" style={{ background: '#172b4d' }} />
         {/* Header container */}
         <Container className="d-flex align-items-center" fluid>
           <Row>

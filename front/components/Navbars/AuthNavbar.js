@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { UncontrolledCollapse, Navbar, NavItem, NavLink, Nav, Container, Row, Col } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 
-function AuthNavbar({ brandText }) {
-  const { me, logOutDone } = useSelector((state) => state.user);
-  brandText = brandText || 'Main';
+function AuthNavbar() {
+  const { logOutDone } = useSelector((state) => state.user);
 
   // 로그아웃 성공
   useEffect(() => {
@@ -21,7 +19,7 @@ function AuthNavbar({ brandText }) {
       <Navbar className="navbar-top navbar-dark" style={{ top: '-5px !important' }} expand="md" id="navbar-main">
         <Container fluid>
           <Link href="/admin/main">
-            <a className="h4 mb-0 text-white d-none d-lg-inline-block">{brandText}</a>
+            <a className="h4 mb-0 text-black d-none d-lg-inline-block"></a>
           </Link>
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledCollapse navbar toggler="#navbar-collapse-main">
@@ -43,7 +41,7 @@ function AuthNavbar({ brandText }) {
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <Link href="/auth/register">
-                    <NavLink href="#pablo" className="nav-link-icon">
+                    <NavLink href="#pablo" className="nav-link-icon text-black">
                       <i className="ni ni-circle-08" />
                       <span className="nav-link-inner--text">회원가입</span>
                     </NavLink>
@@ -51,7 +49,7 @@ function AuthNavbar({ brandText }) {
                 </NavItem>
                 <NavItem>
                   <Link href="/auth/login">
-                    <NavLink href="#pablo" className="nav-link-icon">
+                    <NavLink href="#pablo" className="nav-link-icon text-black">
                       <i className="ni ni-key-25" />
                       <span className="nav-link-inner--text">로그인</span>
                     </NavLink>
@@ -65,13 +63,5 @@ function AuthNavbar({ brandText }) {
     </>
   );
 }
-
-AuthNavbar.defaultProps = {
-  brandText: ''
-};
-
-AuthNavbar.propTypes = {
-  brandText: PropTypes.string
-};
 
 export default AuthNavbar;

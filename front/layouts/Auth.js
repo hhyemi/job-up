@@ -1,19 +1,9 @@
-import React, { useEffect } from 'react';
-// reactstrap components
+import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
-
-// core components
 import AuthNavbar from '../components/Navbars/AuthNavbar';
 import Footer from '../components/Footers/Footer';
 
-function Auth(props) {
-  useEffect(() => {
-    document.body.classList.add('bg-default');
-    // Specify how to clean up after this effect:
-    return function cleanup() {
-      document.body.classList.remove('bg-default');
-    };
-  }, []);
+function Auth({ children }) {
   return (
     <>
       <div className="main-content">
@@ -23,16 +13,21 @@ function Auth(props) {
             <div className="header-body text-center mb-5">
               <Row className="justify-content-center">
                 <Col lg="5" md="6">
-                  <h1 className="text-white">{props.children.type.name}</h1>
+                  <h1 className="text-primary">{children.type.name}</h1>
                 </Col>
               </Row>
             </div>
           </Container>
         </div>
-        {/* Page content */}
-        <Container className="mt--8 pb-5">
-          <Row className="justify-content-center">{props.children}</Row>
-        </Container>
+        {children.type.name === 'FindPassword' ? (
+          <Container className="mt--8 pb-8">
+            <Row className="justify-content-center">{children}</Row>
+          </Container>
+        ) : (
+          <Container className="mt--8 pb-5">
+            <Row className="justify-content-center">{children}</Row>
+          </Container>
+        )}
       </div>
       <Footer />
     </>

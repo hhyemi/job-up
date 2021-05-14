@@ -19,10 +19,13 @@ import Router from 'next/router';
 import GitHubLogin from 'react-github-login';
 import GoogleLogin from 'react-google-login';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import axios from 'axios';
+import { END } from 'redux-saga';
+import wrapper from '../../store/configureStore';
 
 import useInput from '../../hooks/useInput';
 import Auth from '../../layouts/Auth';
-import { GIT_LOG_IN_REQUEST, SEND_EMAIL_REQUEST, SIGN_UP_REQUEST } from '../../reducers/user';
+import { GIT_LOG_IN_REQUEST, LOAD_MY_INFO_REQUEST, SEND_EMAIL_REQUEST, SIGN_UP_REQUEST } from '../../reducers/user';
 
 // styled
 const ErrorMessage = styled.div`
@@ -48,10 +51,13 @@ const Register = () => {
   // 약관
   const [term, setTerm] = useState('');
   const [termError, setTermError] = useState('');
-  const onChangeTerm = useCallback((e) => {
-    setTermError(false);
-    setTerm(e.target.checked);
-  }, []);
+  const onChangeTerm = useCallback(
+    (e) => {
+      setTermError(false);
+      setTerm(e.target.checked);
+    },
+    [term]
+  );
 
   // 회원가입 버튼
   const onSubmit = useCallback(() => {
@@ -73,13 +79,6 @@ const Register = () => {
       }
     });
   }, [name, email, password, term, emailPass]);
-
-  // 로그인일때 회원가입 막기
-  useEffect(() => {
-    if (me && me.id) {
-      Router.replace('/');
-    }
-  }, [me && me.id]);
 
   // 회원가입 성공
   useEffect(() => {
@@ -202,6 +201,7 @@ const Register = () => {
                 <span className="btn-inner--text">Github</span>
               </GitHubLogin>
               <GoogleLogin
+                className="goole-btn btn btn-neutral btn-icon"
                 clientId={process.env.GOOGLE_KEY}
                 buttonText="Google"
                 onSuccess={responseGoogle}
@@ -230,29 +230,31 @@ const Register = () => {
                   />
                 </InputGroup>
               </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative mb-3">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="ni ni-email-83" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <AvField
-                    placeholder="이메일"
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={onChangeEmail}
-                    errorMessage="이메일 형식으로 입력해주세요."
-                    validate={{
-                      required: { value: true, errorMessage: '이메일을 입력해주세요.' }
-                    }}
-                  />
-                </InputGroup>
-              </FormGroup>
-              <Button type="button" onClick={sendEmail} style={{ marginBottom: '10px' }}>
-                이메일 인증
-              </Button>
+              <div className="posit-rel">
+                <FormGroup className="w-70">
+                  <InputGroup className="input-group-alternative mb-3">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-email-83" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <AvField
+                      placeholder="이메일"
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={onChangeEmail}
+                      errorMessage="이메일 형식으로 입력해주세요."
+                      validate={{
+                        required: { value: true, errorMessage: '이메일을 입력해주세요.' }
+                      }}
+                    />
+                  </InputGroup>
+                </FormGroup>
+                <Button type="button" onClick={sendEmail} className="email-btn">
+                  이메일 인증
+                </Button>
+              </div>
               <FormGroup>
                 {emailVisible && (
                   <InputGroup className="input-group-alternative mb-3">
@@ -344,5 +346,18 @@ const Register = () => {
 };
 
 Register.layout = Auth;
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST
+  });
+  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
+  await context.store.sagaTask.toPromise();
+});
 
 export default Register;

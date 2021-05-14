@@ -62,13 +62,13 @@ const FindPassword = () => {
 
   return (
     <>
-      <Col lg="5" md="7">
+      <Col lg="5" md="8">
         <Card className="bg-secondary shadow border-0">
           {!findPasswordDone ? (
             <>
               <CardHeader className="bg-transparent ">
                 <div className="text-muted text-center mt-2">
-                  <small>등록된 정보를 입력해주세요.</small>
+                  <small>가입할때 등록된 정보를 입력해주세요.</small>
                 </div>
               </CardHeader>
               <CardBody className="px-lg-5 py-lg-5">
@@ -114,6 +114,9 @@ const FindPassword = () => {
                       비밀번호 찾기
                     </Button>
                     <br />
+                    <small>
+                      등록된 이메일로 <b>임시비밀번호</b>가 보내집니다.
+                    </small>
                   </div>
                 </Form>
               </CardBody>

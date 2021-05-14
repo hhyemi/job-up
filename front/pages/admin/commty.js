@@ -40,7 +40,7 @@ const Commty = () => {
   return (
     <>
       <Header />
-      <Container className="mt-4 community-container" fluid>
+      <Container className="mt-4 community-container pb-5" fluid>
         {!addPostOpen ? (
           <CommtyList
             setAddPostOpen={setAddPostOpen}

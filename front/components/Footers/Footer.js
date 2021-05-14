@@ -1,20 +1,17 @@
-/*eslint-disable*/
 import React from 'react';
-
-// reactstrap components
 import { NavItem, NavLink, Nav, Container, Row, Col } from 'reactstrap';
 
-function Login() {
+function Footer() {
   return (
     <>
-      <footer className="py-5">
-        <Container>
+      <footer style={{ padding: '2rem 0rem' }}>
+        <Container style={{ maxWidth: '97%' }}>
           <Row className="align-items-center justify-content-xl-between">
             <Col xl="6">
               <div className="copyright text-center text-xl-left text-muted">
                 © {new Date().getFullYear()}{' '}
-                <a className="font-weight-bold ml-1" href="https://github.com/hhyemi" target="_blank">
-                  Hyemi
+                <a className="font-weight-bold ml-1" href="https://github.com/hhyemi" target="_blank" rel="noreferrer">
+                  Job-Up
                 </a>
               </div>
             </Col>
@@ -39,4 +36,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Footer;

@@ -244,14 +244,14 @@ const Calendar = () => {
             <button type="button" className="btn btn-danger btn-sm" onClick={moveToday}>
               Today
             </button>
-            <button type="button" className="btn btn-primary btn-sm" onClick={movePrev}>
+            <button type="button" className="btn btn-warning btn-sm" onClick={movePrev}>
               <i className="ni ni-bold-left" />
             </button>
-            <button type="button" className="btn btn-primary btn-sm" onClick={moveNext}>
+            <button type="button" className="btn btn-warning btn-sm" onClick={moveNext}>
               <i className="ni ni-bold-right" />
             </button>
             <RenderDateSpan>{renderDate}</RenderDateSpan>
-            <button type="button" className="btn btn-warning btn-sm" style={{ float: 'right' }} onClick={addCategory}>
+            <button type="button" className="btn btn-primary btn-sm f-r" onClick={addCategory}>
               카테고리 추가
             </button>
             <Modal open={modalOpen} close={closeModal} header="카테고리 추가">

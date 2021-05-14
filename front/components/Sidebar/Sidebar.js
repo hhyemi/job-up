@@ -3,7 +3,6 @@ import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { PropTypes } from 'prop-types';
-
 import {
   Collapse,
   DropdownMenu,
@@ -25,37 +24,42 @@ import {
   Row,
   Col
 } from 'reactstrap';
-
+import { useSelector } from 'react-redux';
+import { backUrl } from '../../config/config';
 var ps;
 
 function Sidebar(props) {
-  // used for checking current route
   const router = useRouter();
   const [collapseOpen, setCollapseOpen] = React.useState(false);
-  // verifies if routeName is the one active (in browser input)
+  const { me } = useSelector((state) => state.user);
+
   const activeRoute = (routeName) => {
     return router.route.indexOf(routeName) > -1;
   };
-  // toggles collapse between opened and closed (true/false)
+
   const toggleCollapse = () => {
     setCollapseOpen(!collapseOpen);
   };
-  // closes the collapse
+
   const closeCollapse = () => {
     setCollapseOpen(false);
   };
-  // creates the links that appear in the left menu / Sidebar
+
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
       return (
-        <NavItem key={key} active={activeRoute(prop.layout + prop.path)}>
-          <Link href={prop.layout + prop.path}>
-            <NavLink href="#pablo" active={activeRoute(prop.layout + prop.path)} onClick={closeCollapse}>
-              <i className={prop.icon} />
-              {prop.name}
-            </NavLink>
-          </Link>
-        </NavItem>
+        <>
+          {prop.icon && (
+            <NavItem key={key} active={activeRoute(prop.layout + prop.path)}>
+              <Link href={prop.layout + prop.path}>
+                <NavLink href="#pablo" active={activeRoute(prop.layout + prop.path)} onClick={closeCollapse}>
+                  <i className={prop.icon} />
+                  {prop.name}
+                </NavLink>
+              </Link>
+            </NavItem>
+          )}
+        </>
       );
     });
   };
@@ -92,9 +96,7 @@ function Sidebar(props) {
         {/* User */}
         <Nav className="align-items-center d-md-none">
           <UncontrolledDropdown nav>
-            <DropdownToggle nav className="nav-link-icon">
-              <i className="ni ni-bell-55" />
-            </DropdownToggle>
+            <DropdownToggle nav className="nav-link-icon"></DropdownToggle>
             <DropdownMenu aria-labelledby="navbar-default_dropdown_1" className="dropdown-menu-arrow" right>
               <DropdownItem>Action</DropdownItem>
               <DropdownItem>Another action</DropdownItem>
@@ -106,7 +108,7 @@ function Sidebar(props) {
             <DropdownToggle nav>
               <Media className="align-items-center">
                 <span className="avatar avatar-sm rounded-circle">
-                  <img alt="..." src={require('assets/img/theme/team-1-800x800.jpg')} />
+                  <img alt="..." src={me && me.src && `${backUrl}/${me.src}`} />
                 </span>
               </Media>
             </DropdownToggle>

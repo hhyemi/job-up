@@ -134,7 +134,7 @@ const TodoModal = ({ clickCategory, todo }) => {
             <Label>마감일자</Label>
             <DatePicker
               id="example-datepicker"
-              dateFormat="YYYY/MM/DD"
+              dateFormat="YYYY-MM-DD"
               value={Tododate}
               onChange={onChangeDate}
               required
@@ -142,15 +142,15 @@ const TodoModal = ({ clickCategory, todo }) => {
           </FormGroup>
           <div className="text-center">
             {clickCategory ? (
-              <Button color="primary" type="button" onClick={onAddTodo}>
+              <Button color="primary" type="button" className="btn-md" onClick={onAddTodo}>
                 추가
               </Button>
             ) : (
               <>
-                <Button color="primary" type="button" onClick={onUptTodo}>
+                <Button color="primary" type="button" className="btn-md" onClick={onUptTodo}>
                   수정
                 </Button>
-                <Button color="default" type="button" onClick={onDelTodoCheck}>
+                <Button color="default" type="button" className="btn-md" onClick={onDelTodoCheck}>
                   삭제
                 </Button>
               </>

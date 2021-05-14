@@ -154,7 +154,7 @@ const Time = () => {
   return (
     <>
       <Header />
-      <Container className="mt-4 stopwatch-container" fluid>
+      <Container className="mt-4 stopwatch-container pb-5" fluid>
         <Row>
           <Col className="mb-5 mb-xl-0">
             <Card className="shadow">
@@ -241,7 +241,7 @@ const Time = () => {
           <Col>
             <button
               type="button"
-              className="btn btn-danger btn-sm mb-2"
+              className="btn btn-default btn-sm mb-2"
               style={{ position: 'absolute' }}
               onClick={deleteTimeCheck}
             >

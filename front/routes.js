@@ -28,6 +28,16 @@ const routes = [
     name: 'StopWatch',
     icon: 'fas fa-stopwatch text-gray',
     layout: '/admin'
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    layout: '/admin'
+  },
+  {
+    path: '/commty',
+    name: 'Commty',
+    layout: '/commty'
   }
 ];
 export default routes;
