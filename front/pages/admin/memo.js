@@ -134,7 +134,7 @@ const Memo = () => {
             <MemoCard key={memo.id} memo={memo} />
           )
         )}
-        {!memos && (
+        {memos.length === 0 && (
           <div style={{ textAlign: 'center', paddingTop: '15%' }}>
             <i className="fas fa-exclamation-circle fa-4x pl-0 pb-2 text-gray" />
             <br />

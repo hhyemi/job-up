@@ -48,7 +48,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
 router.get('/week', isLoggedIn, async (req, res, next) => {
   try {
     let query = `SELECT SUM(time) AS time, DATE_FORMAT(createdAt , "%Y-%m-%d")  AS day
-                  FROM study WHERE DATE_FORMAT(createdAt , "%Y-%m-%d") > DATE_ADD(NOW(),INTERVAL -7 DAY) 
+                  FROM study WHERE UserId = ${req.user.id} DATE_FORMAT(createdAt , "%Y-%m-%d") > DATE_ADD(NOW(),INTERVAL -7 DAY) 
                     GROUP BY DATE_FORMAT(createdAt , "%Y-%m-%d")`;
     const study = await db.sequelize.query(query, {
       type: db.Sequelize.QueryTypes.SELECT,
