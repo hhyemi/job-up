@@ -4,13 +4,12 @@ import { GithubPicker } from 'react-color';
 import { Form, CardBody, FormGroup, Input } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
-import 'react-quill/dist/quill.snow.css';
 
 import useInput from '../../hooks/useInput';
 import { ADD_MEMO_REQUEST, DEL_MEMO_REQUEST, UPT_MEMO_REQUEST } from '../../reducers/memo';
 import QuillWrapper from './QuillWrapper';
 
-const MemoModal = ({ memo, content }) => {
+const MemoModal = ({ memo, content, setAlertShow, setAlertTitle, setAlertType }) => {
   const { id, title, bookmard, secret, color, createdAt } = memo;
   const dispatch = useDispatch();
   const [memoTitle, onMemoTitle] = useInput(title); // 제목
@@ -77,6 +76,12 @@ const MemoModal = ({ memo, content }) => {
   const onAddMemo = useCallback(
     (e) => {
       e.preventDefault();
+      if (!memoTitle || memoContent === '') {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('모든 칸을 입력해주세요.');
+        return;
+      }
       dispatch({
         type: ADD_MEMO_REQUEST,
         data: {
@@ -107,6 +112,12 @@ const MemoModal = ({ memo, content }) => {
   const onUptMemo = useCallback(
     (e) => {
       e.preventDefault();
+      if (!memoTitle || memoContent === '') {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('모든 칸을 입력해주세요.');
+        return;
+      }
       dispatch({
         type: UPT_MEMO_REQUEST,
         data: {

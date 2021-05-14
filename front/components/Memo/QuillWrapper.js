@@ -1,6 +1,5 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import 'react-quill/dist/quill.snow.css';
 
 // editor 설정
 const Quill = dynamic(import('react-quill'), {

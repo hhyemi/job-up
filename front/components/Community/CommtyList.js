@@ -23,7 +23,7 @@ import useInput from '../../hooks/useInput';
 const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertTitle }) => {
   const dispatch = useDispatch();
   const { commties, commtyCnt, loadCommtiesDone, loadCommtiesError } = useSelector((state) => state.commty);
-  const [pages, setPages] = useState([]); // 페이지 개수
+  const [pages, setPages] = useState([1]); // 페이지 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재페이지
   const [searchWord, onSearchWord] = useInput(''); // 검색어
 
@@ -61,7 +61,7 @@ const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertT
     if (loadCommtiesDone) {
       const tmpCnt = Math.ceil(commtyCnt / 20);
       const commtyPages = Array.from({ length: tmpCnt }, (v, i) => i + 1);
-      setPages(commtyPages);
+      setPages(commtyPages.length === 0 ? [1] : commtyPages);
     }
   }, [loadCommtiesDone]);
 
@@ -133,7 +133,7 @@ const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertT
     <>
       <Row>
         <Col className="mb-5 mb-xl-0">
-          <Card className="shadow">
+          <Card className="shadow" style={{ minHeight: '625px' }}>
             <CardHeader className="border-0">
               <Row className="align-items-center">
                 <div className="col" style={{ maxWidth: '65%' }}>
@@ -180,6 +180,13 @@ const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertT
                 {commties.map((commty, index) => (
                   <CommtyOne key={commty.id} commty={commty} num={commtyCnt - 20 * (currentPage - 1) - index} />
                 ))}
+                {commties.length === 0 && (
+                  <tr>
+                    <td colSpan="5" className="py-15">
+                      등록된 글이 없습니다.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </Table>
           </Card>

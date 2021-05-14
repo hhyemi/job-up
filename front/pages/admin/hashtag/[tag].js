@@ -54,7 +54,12 @@ const HashTag = () => {
             setAlertTitle={setAlertTitle}
           />
         ) : (
-          <EditCommty setEditOpen={setAddPostOpen} />
+          <EditCommty
+            setEditOpen={setAddPostOpen}
+            setAlertShow={setAlertShow}
+            setAlertTitle={setAlertTitle}
+            setAlertType={setAlertType}
+          />
         )}
       </Container>
       <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />

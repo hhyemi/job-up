@@ -57,7 +57,7 @@ const AdminNavbar = ({ brandText }) => {
                 </Link>
                 <DropdownItem divider />
                 <DropdownItem href="#pablo" onClick={onLogOut}>
-                  <i className="ni ni-user-run" />
+                  <i className="ni ni-button-power" />
                   <span>로그아웃</span>
                 </DropdownItem>
               </DropdownMenu>

@@ -124,7 +124,7 @@ const Memo = () => {
             메모 추가
           </button>
           <Modal open={modalOpen} close={closeModal} header="메모 추가">
-            <MemoModal />
+            <MemoModal setAlertShow={setAlertShow} setAlertTitle={setAlertTitle} setAlertType={setAlertType} />
           </Modal>
         </div>
         {memos.map((memo) =>
@@ -133,6 +133,13 @@ const Memo = () => {
           ) : (
             <MemoCard key={memo.id} memo={memo} />
           )
+        )}
+        {!memos && (
+          <div style={{ textAlign: 'center', paddingTop: '15%' }}>
+            <i className="fas fa-exclamation-circle fa-4x pl-0 pb-2 text-gray" />
+            <br />
+            등록된 메모가 없습니다.
+          </div>
         )}
         <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
       </Container>
@@ -143,7 +150,6 @@ const Memo = () => {
 Memo.layout = Admin;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  console.log('getServerSideProps start');
   const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
   axios.defaults.headers.Cookie = '';
   if (context.req && cookie) {
@@ -155,8 +161,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   context.store.dispatch({
     type: LOAD_MEMO_REQUEST
   });
-  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
-  console.log('getServerSideProps end');
+  context.store.dispatch(END);
   await context.store.sagaTask.toPromise();
 });
 

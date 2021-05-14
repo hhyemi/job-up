@@ -10,7 +10,7 @@ const router = express.Router();
 // GET /study : 공부시간 가져오기
 router.post('/', isLoggedIn, async (req, res, next) => {
   try {
-    let query = `SELECT * FROM study WHERE UserId = ${req.user.id}`;
+    let query = `SELECT id, time, DATE_FORMAT(createdAt , "%Y-%m-%d %H:%i") AS createdAt FROM study WHERE UserId = ${req.user.id}`;
     let countQuery = '';
 
     if (req.body.startDate) {

@@ -7,7 +7,7 @@ import QuillWrapper from '../Memo/QuillWrapper';
 import useInput from '../../hooks/useInput';
 import { ADD_COMMTY_REQUEST, UPT_COMMTY_REQUEST } from '../../reducers/commty';
 
-const EditCommty = ({ setEditOpen, commty }) => {
+const EditCommty = ({ setEditOpen, commty, setAlertShow, setAlertTitle, setAlertType }) => {
   const dispatch = useDispatch();
   const [commtyTitle, onCommtyTitle] = useInput(commty ? commty.title : ''); // 제목
   const [commtyContent, setCommtyContent] = useState(commty ? commty.content : ''); // 내용
@@ -30,6 +30,12 @@ const EditCommty = ({ setEditOpen, commty }) => {
   const onAddPost = useCallback(
     (e) => {
       e.preventDefault();
+      if (!commtyTitle && commtyContent === '') {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('모든 칸을 입력해주세요.');
+        return;
+      }
       dispatch({
         type: ADD_COMMTY_REQUEST,
         data: {
@@ -46,6 +52,12 @@ const EditCommty = ({ setEditOpen, commty }) => {
   const onUptPost = useCallback(
     (e) => {
       e.preventDefault();
+      if (!commtyTitle && commtyContent === '') {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('모든 칸을 입력해주세요.');
+        return;
+      }
       dispatch({
         type: UPT_COMMTY_REQUEST,
         data: {

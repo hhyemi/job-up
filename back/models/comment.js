@@ -13,13 +13,13 @@ module.exports = class Comment extends Model {
         createdAt: {
           type: DataTypes.DATE,
           get() {
-            return moment(this.getDataValue('createdAt')).format('YYYY.DD.MM HH:mm');
+            return moment(this.getDataValue('createdAt')).format('YYYY-DD-MM HH:mm');
           }
         },
         updatedAt: {
           type: DataTypes.DATE,
           get() {
-            return moment(this.getDataValue('updatedAt')).format('YYYY.DD.MM HH:mm');
+            return moment(this.getDataValue('updatedAt')).format('YYYY-DD-MM HH:mm');
           }
         }
       },

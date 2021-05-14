@@ -202,13 +202,13 @@
 }
 
 /* COMMUNITY */
-.community-container th,.community-containe td:not(.comm-title) {
+.community-container th,.community-container td:not(.comm-title) {
   text-align: center;
 }
 
 .pagination {
   position: absolute;
-  left: 40%;
+  left: 42%
 }
 
 .add-commty-row .quill{
@@ -452,4 +452,10 @@ body{
 
 .posit-rel{
   position: relative;
+}
+
+.py-15{
+  padding-top: 15rem !important;
+  padding-bottom: 15rem !important;
+  text-align: center;
 }

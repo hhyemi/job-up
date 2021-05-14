@@ -46,10 +46,10 @@ const SingleCommty = () => {
         type: LOAD_COMMTY_REQUEST,
         data: id
       });
-      dispatch({
-        type: UPT_COMMTY_REQUEST,
-        data: { views: 1, id }
-      });
+      // dispatch({
+      //   type: UPT_COMMTY_REQUEST,
+      //   data: { views: 1, id }
+      // });
     }
   }, [me]);
 
@@ -217,7 +217,13 @@ const SingleCommty = () => {
             </Col>
           </Row>
         ) : (
-          <EditCommty setEditOpen={setUptCommtyOpen} commty={singleCommty && singleCommty} />
+          <EditCommty
+            setEditOpen={setUptCommtyOpen}
+            commty={singleCommty && singleCommty}
+            setAlertShow={setAlertShow}
+            setAlertTitle={setAlertTitle}
+            setAlertType={setAlertType}
+          />
         )}
       </Container>
       <SweetAlert

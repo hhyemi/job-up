@@ -29,7 +29,7 @@ const Time = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
   const { studies, studyCnt, loadStudyDone, delStudyDone } = useSelector((state) => state.study);
-  const [pages, setPages] = useState([]); // 페이지 개수
+  const [pages, setPages] = useState([1]); // 페이지 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재페이지
   const [checkItems, setCheckItems] = useState([]); // 체크한 데이터
   const [startDate, onStartDate] = useState(''); // 시작일자
@@ -58,7 +58,7 @@ const Time = () => {
     if (loadStudyDone) {
       const tmpCnt = Math.ceil(studyCnt / 9);
       const studyPages = Array.from({ length: tmpCnt }, (v, i) => i + 1);
-      setPages(studyPages);
+      setPages(studyPages.length === 0 ? [1] : studyPages);
     }
   }, [loadStudyDone]);
 
@@ -159,7 +159,7 @@ const Time = () => {
       <Container className="mt-4 stopwatch-container pb-5" fluid>
         <Row>
           <Col className="mb-5 mb-xl-0">
-            <Card className="shadow">
+            <Card className="shadow" style={{ minHeight: '625px' }}>
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col" style={{ maxWidth: '57%' }}>
@@ -175,6 +175,7 @@ const Time = () => {
                         dateFormat="YYYY-MM-DD"
                         value={startDate}
                         onChange={onStartDate}
+                        minDate={now}
                         required
                       />
                     </div>
@@ -235,6 +236,13 @@ const Time = () => {
                       handleSingleCheck={handleSingleCheck}
                     />
                   ))}
+                  {studies.length === 0 && (
+                    <tr>
+                      <td colSpan="5" className="pr-8 py-15">
+                        저장된 공부시간이 없습니다.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </Card>

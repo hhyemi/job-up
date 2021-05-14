@@ -14,6 +14,7 @@ import 'assets/css/modal.css';
 import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
+import 'react-quill/dist/quill.snow.css';
 
 class MyApp extends App {
   componentDidMount() {

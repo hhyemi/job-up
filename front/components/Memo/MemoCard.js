@@ -133,8 +133,8 @@ const MemoCard = ({ memo }) => {
                 <b>{title}</b>
               </CardTitle>
               <pre>
-                {content.replace(/<(\/br|br)([^>]*)>/gi, '\r\n').replace(/(<([^>]+)>)/gi, '')}{' '}
                 {content.indexOf('<img') != -1 ? <CardImg alt="..." src={imgContent && imgContent[1]} top /> : <div />}
+                {content.replace(/<(\/br|br)([^>]*)>/gi, '\r\n').replace(/(<([^>]+)>)/gi, '')}{' '}
               </pre>
               <div className="memo-date">
                 <small className="text-muted">{createdAt.substring(0, 10)}</small>
@@ -144,7 +144,13 @@ const MemoCard = ({ memo }) => {
         )}
       </Card>
       <Modal open={modalOpen} close={closeModal} header="메모 수정">
-        <MemoModal memo={memo} content={content} />
+        <MemoModal
+          memo={memo}
+          content={content}
+          setAlertShow={setAlertShow}
+          setAlertTitle={setAlertTitle}
+          setAlertType={setAlertType}
+        />
       </Modal>
       <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>

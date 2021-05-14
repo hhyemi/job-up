@@ -36,7 +36,7 @@ const TimeList = ({ time, num, handleSingleCheck, checkItems }) => {
 
 TimeList.propTypes = {
   time: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     time: PropTypes.string,
     createdAt: PropTypes.string
   }).isRequired,

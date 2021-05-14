@@ -128,6 +128,9 @@ const Main = () => {
       setAlertType('success');
       setAlertTitle('공부시간이 저장되었습니다. 일간에서 확인가능합니다.');
       setTimer(0);
+      dispatch({
+        type: LOAD_WEEK_STUDY_REQUEST
+      });
     }
   }, [addStudyDone]);
 
@@ -407,7 +410,7 @@ const Main = () => {
                           {cal.name}
                         </th>
                         <th>{cal.title}</th>
-                        <th>{moment(cal.start).format('YYYY.MM.DD HH:mm')}</th>
+                        <th>{moment(cal.start).format('YYYY-MM-DD HH:mm')}</th>
                       </tr>
                     ))}
                   </tbody>
