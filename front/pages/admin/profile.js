@@ -42,13 +42,6 @@ const Profile = () => {
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
 
-  // 로그인 풀리면
-  useEffect(() => {
-    if (!me) {
-      Router.replace('/');
-    }
-  }, [me]);
-
   // 프로필 사진 변경
   const onClickProfileImg = useCallback(() => {
     imageInput.current.click();

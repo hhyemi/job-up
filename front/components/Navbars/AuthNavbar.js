@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-// reactstrap components
 import { UncontrolledCollapse, Navbar, NavItem, NavLink, Nav, Container, Row, Col } from 'reactstrap';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 function AuthNavbar({ brandText }) {
+  const { me, logOutDone } = useSelector((state) => state.user);
+  const router = useRouter();
   brandText = brandText || 'Main';
+
+  // 로그아웃 성공
+  useEffect(() => {
+    if (logOutDone) {
+      router.push('/auth/login');
+    }
+  }, [logOutDone]);
+
+  // 로그인이 없으면 로그인페이지로
+  useEffect(() => {
+    if (!me) {
+      router.replace('/auth/login');
+    }
+  }, [me]);
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" style={{ top: '-5px !important' }} expand="md" id="navbar-main">

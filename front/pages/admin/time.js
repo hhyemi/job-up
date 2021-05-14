@@ -26,6 +26,7 @@ import { DEL_STUDY_REQUEST, LOAD_STUDY_REQUEST } from '../../reducers/study';
 
 const Time = () => {
   const dispatch = useDispatch();
+  const { me } = useSelector((state) => state.user);
   const { studies, studyCnt, loadStudyDone, delStudyDone } = useSelector((state) => state.study);
   const [pages, setPages] = useState([]); // 페이지 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재페이지
@@ -40,13 +41,15 @@ const Time = () => {
 
   // 공부시간 가져오기
   useEffect(() => {
-    dispatch({
-      type: LOAD_STUDY_REQUEST,
-      data: {
-        offset: 0
-      }
-    });
-  }, []);
+    if (me) {
+      dispatch({
+        type: LOAD_STUDY_REQUEST,
+        data: {
+          offset: 0
+        }
+      });
+    }
+  }, [me]);
 
   // 공부시간 가져오기 성공
   useEffect(() => {

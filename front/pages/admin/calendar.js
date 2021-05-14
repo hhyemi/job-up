@@ -46,19 +46,21 @@ const Calendar = () => {
   const [renderDate, setRenderDate] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const { categories, loadCategoryError } = useSelector((state) => state.category);
-  const { calendars, loadCalendarError, addCalendarDone, uptCalendarDone } = useSelector((state) => state.calendar);
+  const { me, calendars, loadCalendarError, addCalendarDone, uptCalendarDone } = useSelector((state) => state.calendar);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
 
   useEffect(() => {
-    dispatch({
-      type: LOAD_CALENDAR_REQUEST
-    });
-    dispatch({
-      type: LOAD_CATEGORY_REQUEST
-    });
-  }, []);
+    if (me) {
+      dispatch({
+        type: LOAD_CALENDAR_REQUEST
+      });
+      dispatch({
+        type: LOAD_CATEGORY_REQUEST
+      });
+    }
+  }, [me]);
 
   useEffect(() => {
     if (addCalendarDone || uptCalendarDone) {

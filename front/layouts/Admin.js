@@ -9,7 +9,7 @@ import Footer from '../components/Footers/Footer';
 import Sidebar from '../components/Sidebar/Sidebar';
 import routes from '../routes';
 
-function Admin(props) {
+function Admin({ children }) {
   const router = useRouter();
   const { me } = useSelector((state) => state.user);
 
@@ -31,7 +31,6 @@ function Admin(props) {
   return (
     <>
       <Sidebar
-        {...props}
         routes={routes}
         logo={{
           innerLink: '/admin/index',
@@ -40,12 +39,8 @@ function Admin(props) {
         }}
       />
       <div className="main-content" ref={mainContentRef}>
-        {me ? (
-          <AdminNavbar {...props} brandText={getBrandText()} />
-        ) : (
-          <AuthNavbar {...props} brandText={getBrandText()} />
-        )}
-        {props.children}
+        {me ? <AdminNavbar brandText={getBrandText()} /> : <AuthNavbar brandText={getBrandText()} />}
+        {children}
         <Container fluid>{/*     <footer className="py-5" />*/}</Container>
       </div>
     </>

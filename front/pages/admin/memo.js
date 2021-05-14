@@ -17,6 +17,7 @@ import { LOAD_MEMO_REQUEST } from '../../reducers/memo';
 const Memo = () => {
   const dispatch = useDispatch();
   const [onlyBookmark, setOnlyBookmark] = useState(false); // 즐겨찾기만 보기
+  const { me } = useSelector((state) => state.user);
   const { memos, hasMoreMemos, loadMemoLoading, addMemoDone, addMemoError, uptMemoDone } = useSelector(
     (state) => state.memo
   );
@@ -27,10 +28,12 @@ const Memo = () => {
   const [alertType, setAlertType] = useState('default');
 
   useEffect(() => {
-    dispatch({
-      type: LOAD_MEMO_REQUEST
-    });
-  }, []);
+    if (me) {
+      dispatch({
+        type: LOAD_MEMO_REQUEST
+      });
+    }
+  }, [me]);
 
   useEffect(() => {
     function onScroll() {

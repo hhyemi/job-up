@@ -12,12 +12,15 @@ router.post('/', isLoggedIn, async (req, res, next) => {
   try {
     let query = `SELECT * FROM study WHERE UserId = ${req.user.id}`;
     let countQuery = '';
+
     if (req.body.startDate) {
       query += ` AND DATE_FORMAT(createdAt , "%Y-%m-%d") >= '${req.body.startDate.substring(0, 10)}'`;
     }
+
     if (req.body.endDate) {
       query += ` AND DATE_FORMAT(createdAt , "%Y-%m-%d") <= '${req.body.endDate.substring(0, 10)}'`;
     }
+
     query += ' ORDER BY createdAt DESC';
     countQuery = query;
     query += ` LIMIT 9 OFFSET ${req.body.offset}`;

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,24 +7,18 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
   Navbar,
   Nav,
   Container,
   Media
 } from 'reactstrap';
-import Router from 'next/router';
-
+import { useRouter } from 'next/router';
 import { backUrl } from '../../config/config';
 import { logoutRequestAction } from '../../reducers/user';
 
 const AdminNavbar = ({ brandText }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { me } = useSelector((state) => state.user);
 
   // 로그아웃 버튼
@@ -32,6 +26,13 @@ const AdminNavbar = ({ brandText }) => {
     e.preventDefault();
     dispatch(logoutRequestAction());
   }, []);
+
+  // 로그인이 없으면 로그인페이지로
+  useEffect(() => {
+    if (!me) {
+      router.replace('/auth/login');
+    }
+  }, [me]);
 
   return (
     <>
@@ -60,24 +61,6 @@ const AdminNavbar = ({ brandText }) => {
                   <DropdownItem>
                     <i className="ni ni-single-02" />
                     <span>내 정보</span>
-                  </DropdownItem>
-                </Link>
-                <Link href="/admin/profile">
-                  <DropdownItem>
-                    <i className="ni ni-settings-gear-65" />
-                    <span>Settings</span>
-                  </DropdownItem>
-                </Link>
-                <Link href="/admin/profile">
-                  <DropdownItem>
-                    <i className="ni ni-calendar-grid-58" />
-                    <span>Activity</span>
-                  </DropdownItem>
-                </Link>
-                <Link href="/admin/profile">
-                  <DropdownItem>
-                    <i className="ni ni-support-16" />
-                    <span>Support</span>
                   </DropdownItem>
                 </Link>
                 <DropdownItem divider />

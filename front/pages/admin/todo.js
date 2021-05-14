@@ -20,6 +20,7 @@ const Todo = () => {
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const [clickCategory, setClickCategory] = useState(1);
+  const { me } = useSelector((state) => state.user);
   const { todos, addTodoDone, addTodoError, loadTodoError, uptTodoDone, uptTodoError } = useSelector(
     (state) => state.todo
   );
@@ -28,10 +29,12 @@ const Todo = () => {
   const [alertType, setAlertType] = useState('default');
 
   useEffect(() => {
-    dispatch({
-      type: LOAD_TODO_REQUEST
-    });
-  }, []);
+    if (me) {
+      dispatch({
+        type: LOAD_TODO_REQUEST
+      });
+    }
+  }, [me]);
 
   // 일정 가져오기 실패
   useEffect(() => {

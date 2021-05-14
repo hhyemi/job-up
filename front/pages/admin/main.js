@@ -21,6 +21,7 @@ import { ADD_STUDY_REQUEST, LOAD_TODAY_STUDY_REQUEST, LOAD_WEEK_STUDY_REQUEST } 
 
 const Main = () => {
   const dispatch = useDispatch();
+  const { me } = useSelector((state) => state.user);
   const { calendars } = useSelector((state) => state.calendar);
   const { todos } = useSelector((state) => state.todo);
   const { weekStudies, todayStudies, addStudyError, addStudyDone } = useSelector((state) => state.study);
@@ -126,19 +127,21 @@ const Main = () => {
 
   // 메인 데이터 가져오기
   useEffect(() => {
-    dispatch({
-      type: LOAD_TODAY_CAL_REQUEST
-    });
-    dispatch({
-      type: LOAD_TODAY_TODO_REQUEST
-    });
-    dispatch({
-      type: LOAD_TODAY_STUDY_REQUEST
-    });
-    dispatch({
-      type: LOAD_WEEK_STUDY_REQUEST
-    });
-  }, []);
+    if (me) {
+      dispatch({
+        type: LOAD_TODAY_CAL_REQUEST
+      });
+      dispatch({
+        type: LOAD_TODAY_TODO_REQUEST
+      });
+      dispatch({
+        type: LOAD_TODAY_STUDY_REQUEST
+      });
+      dispatch({
+        type: LOAD_WEEK_STUDY_REQUEST
+      });
+    }
+  }, [me]);
 
   const todoCategory = {
     1: { title: '할일', color: '#f5365c' },

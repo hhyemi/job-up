@@ -12,7 +12,7 @@ import {
   InputGroup,
   Col
 } from 'reactstrap';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import GitHubLogin from 'react-github-login';
 import GoogleLogin from 'react-google-login';
@@ -30,18 +30,19 @@ const Login = () => {
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
   const { me, git } = useSelector((state) => state.user);
-  const { logInLoading, logInError } = useSelector((state) => state.user);
+  const router = useRouter();
+  const { logInDone, logInError } = useSelector((state) => state.user);
   const { findPasswordDone, findPasswordError } = useSelector((state) => state.user);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
 
-  // 로그인 되어있으면 메인페이지로 이동
+  // 로그인 성공, 로그인 되어있으면 메인페이지로 이동
   useEffect(() => {
     if (me) {
-      Router.replace('/admin/main');
+      router.replace('/admin/main');
     }
-  }, []);
+  }, [me]);
 
   // 로그인 버튼 클릭
   const onSubmitForm = useCallback(
@@ -52,13 +53,6 @@ const Login = () => {
     },
     [email, password]
   );
-
-  // 로그인 성공
-  useEffect(() => {
-    if (me) {
-      Router.replace('/admin/main');
-    }
-  }, [me]);
 
   // 로그인 실패
   useEffect(() => {
@@ -107,7 +101,7 @@ const Login = () => {
   // 비밀번호 찾기
   const onClickFindPassword = useCallback((e) => {
     e.preventDefault();
-    Router.replace('/auth/findpassword');
+    router.replace('/auth/findpassword');
   });
 
   return (
@@ -198,17 +192,17 @@ const Login = () => {
 
 Login.layout = Auth;
 
-export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
-  axios.defaults.headers.Cookie = '';
-  if (context.req && cookie) {
-    axios.defaults.headers.Cookie = cookie;
-  }
-  context.store.dispatch({
-    type: LOAD_MY_INFO_REQUEST
-  });
-  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
-  await context.store.sagaTask.toPromise();
-});
+// export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+//   const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
+//   axios.defaults.headers.Cookie = '';
+//   if (context.req && cookie) {
+//     axios.defaults.headers.Cookie = cookie;
+//   }
+//   context.store.dispatch({
+//     type: LOAD_MY_INFO_REQUEST
+//   });
+//   context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
+//   await context.store.sagaTask.toPromise();
+// });
 
 export default Login;

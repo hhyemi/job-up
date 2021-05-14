@@ -27,6 +27,7 @@ const SingleCommty = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = router.query;
+  const { me } = useSelector((state) => state.user);
   const { singleCommty, delCommtyDone } = useSelector((state) => state.commty);
   const userId = useSelector((state) => state.user.me?.id);
   const { comments, addCommentDone, addCommentError } = useSelector((state) => state.comment);
@@ -40,15 +41,17 @@ const SingleCommty = () => {
   const [delAlertShow, setDelAlertShow] = useState(false);
 
   useEffect(() => {
-    dispatch({
-      type: LOAD_COMMTY_REQUEST,
-      data: id
-    });
-    dispatch({
-      type: UPT_COMMTY_REQUEST,
-      data: { views: 1, id }
-    });
-  }, []);
+    if (me) {
+      dispatch({
+        type: LOAD_COMMTY_REQUEST,
+        data: id
+      });
+      dispatch({
+        type: UPT_COMMTY_REQUEST,
+        data: { views: 1, id }
+      });
+    }
+  }, [me]);
 
   // 커뮤니티 삭제
   const onDelCommtyCheck = useCallback((e) => {
