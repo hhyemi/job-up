@@ -12,13 +12,12 @@ import {
   Container,
   Media
 } from 'reactstrap';
-import { useRouter } from 'next/router';
+import Router from 'next/router';
 import { backUrl } from '../../config/config';
 import { logoutRequestAction } from '../../reducers/user';
 
 const AdminNavbar = ({ brandText }) => {
   const dispatch = useDispatch();
-  const router = useRouter();
   const { me } = useSelector((state) => state.user);
 
   // 로그아웃 버튼
@@ -26,13 +25,6 @@ const AdminNavbar = ({ brandText }) => {
     e.preventDefault();
     dispatch(logoutRequestAction());
   }, []);
-
-  // 로그인이 없으면 로그인페이지로
-  useEffect(() => {
-    if (!me) {
-      router.replace('/auth/login');
-    }
-  }, [me]);
 
   return (
     <>

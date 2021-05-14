@@ -10,10 +10,10 @@ import Sidebar from '../components/Sidebar/Sidebar';
 import routes from '../routes';
 
 function Admin({ children }) {
-  const router = useRouter();
   const { me } = useSelector((state) => state.user);
+  const router = useRouter();
 
-  let mainContentRef = React.createRef();
+  const mainContentRef = React.createRef();
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;

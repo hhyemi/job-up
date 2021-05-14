@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Button, Card, CardHeader, CardBody, FormGroup, Form, Input, Container, Row, Col } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Router from 'next/router';
 import SweetAlert from 'react-bootstrap-sweetalert';
 
 import { backUrl } from '../../config/config';

@@ -130,9 +130,9 @@ router.post('/logout', isLoggedIn, async (req, res, next) => {
 
 // 로그인 유지
 router.get('/', async (req, res, next) => {
-  console.log(req.headers);
   try {
     if (req.user) {
+      console.log('그럼여기?');
       const fullUserWithoutPassword = await User.findOne({
         where: { id: req.user.id },
         attributes: {
@@ -141,6 +141,7 @@ router.get('/', async (req, res, next) => {
       });
       res.status(200).json(fullUserWithoutPassword);
     } else {
+      console.log('null!!');
       res.status(200).json(null);
     }
   } catch (error) {

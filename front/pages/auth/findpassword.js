@@ -57,7 +57,7 @@ const FindPassword = () => {
 
   // 로그인 버튼
   const onClickLogin = useCallback(() => {
-    Router.replace('/auth/login');
+    Router.push('/auth/login');
   }, []);
 
   return (

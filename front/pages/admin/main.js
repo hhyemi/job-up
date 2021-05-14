@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import 'moment/locale/ko';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import Router from 'next/router';
 
 import { chartOptions, parseOptions } from '../../variables/charts';
 import wrapper from '../../store/configureStore';
@@ -38,6 +39,13 @@ const Main = () => {
   const [activeNav, setActiveNav] = React.useState(1);
   const [dayArr, setDayArr] = useState([]); // 주간 날짜
   const [dayArrData, setDayArrData] = useState([]); // 주간 날짜 데이터
+
+  // 로그인이 없으면 로그인페이지로
+  useEffect(() => {
+    if (!me) {
+      Router.push('/auth/login');
+    }
+  }, [me]);
 
   if (window.Chart) {
     parseOptions(Chart, chartOptions());
