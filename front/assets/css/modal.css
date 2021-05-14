@@ -94,7 +94,7 @@
   width: 9% !important;
   padding: 0.3rem 0.3rem !important;
   float: left;
-  margin: 0px 10px 10px 0px !important;
+  margin: -6px 10px 10px 0px !important;
 }
 
 .modal .table{
@@ -103,7 +103,6 @@
 
 .modal .scroll {
   overflow-x: hidden;
-  overflow-y: scroll;
   max-height: 300px;
   min-height: 300px;
 }

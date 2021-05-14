@@ -267,7 +267,7 @@ const Register = () => {
                         required: { value: true, errorMessage: '인증번호를 입력해주세요.' }
                       }}
                     />
-                    <Button type="button" onClick={checkEmail}>
+                    <Button type="button" color="default" onClick={checkEmail}>
                       인증확인
                     </Button>
                   </InputGroup>

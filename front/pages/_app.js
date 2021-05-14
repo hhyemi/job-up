@@ -9,6 +9,11 @@ import 'assets/plugins/nucleo/css/nucleo.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'assets/scss/nextjs-argon-dashboard.scss';
 import 'assets/css/style.css';
+import 'assets/css/modal.css';
+
+import 'tui-calendar/dist/tui-calendar.css';
+import 'tui-date-picker/dist/tui-date-picker.css';
+import 'tui-time-picker/dist/tui-time-picker.css';
 
 class MyApp extends App {
   componentDidMount() {

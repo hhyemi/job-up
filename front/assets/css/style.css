@@ -202,7 +202,7 @@
 }
 
 /* COMMUNITY */
-.community-container th, td:not(.comm-title) {
+.community-container th,.community-containe td:not(.comm-title) {
   text-align: center;
 }
 

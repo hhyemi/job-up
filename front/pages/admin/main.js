@@ -80,7 +80,6 @@ const Main = () => {
     e.preventDefault();
     clearInterval(countRef.current);
     setIsPaused(false);
-    console.log(timer);
   });
 
   // 스탑워치 - 재시작
@@ -482,7 +481,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   context.store.dispatch({
     type: LOAD_MY_INFO_REQUEST
   });
-  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
+  context.store.dispatch(END);
   await context.store.sagaTask.toPromise();
 });
 

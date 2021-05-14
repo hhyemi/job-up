@@ -30,7 +30,7 @@ router.get('/today', isLoggedIn, async (req, res, next) => {
     let query = `SELECT 
                   calendar.* , category.bgColor, category.name
                 FROM category, calendar 
-                WHERE calendar.calendarId = category.id AND DATE_FORMAT(DATE_ADD(calendar.start, INTERVAL 9 HOUR) , "%Y-%m-%d") = CURDATE() AND calendar.UserId = ${req.user.id}`;
+                WHERE calendar.calendarId = category.id AND DATE_FORMAT(calendar.start, "%Y-%m-%d") = CURDATE() AND calendar.UserId = ${req.user.id}`;
     const calendar = await db.sequelize.query(query, {
       type: db.Sequelize.QueryTypes.SELECT,
       raw: true

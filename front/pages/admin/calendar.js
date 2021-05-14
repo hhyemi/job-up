@@ -7,10 +7,6 @@ import dynamic from 'next/dynamic';
 import axios from 'axios';
 import { END } from 'redux-saga';
 
-import 'tui-calendar/dist/tui-calendar.css';
-import 'tui-date-picker/dist/tui-date-picker.css';
-import 'tui-time-picker/dist/tui-time-picker.css';
-
 import wrapper from '../../store/configureStore';
 import Admin from '../../layouts/Admin';
 import Header from '../../components/Headers/Header';
@@ -45,12 +41,15 @@ const Calendar = () => {
   const dispatch = useDispatch();
   const [renderDate, setRenderDate] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
-  const { categories, loadCategoryError } = useSelector((state) => state.category);
-  const { me, calendars, loadCalendarError, addCalendarDone, uptCalendarDone } = useSelector((state) => state.calendar);
+  const { categories, loadCategoryError, delCategoryDone } = useSelector((state) => state.category);
+  const { me } = useSelector((state) => state.user);
+  const { calendars, loadCalendarError, addCalendarDone, uptCalendarDone } = useSelector((state) => state.calendar);
+
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
 
+  // 첫 로딩 데이터
   useEffect(() => {
     if (me) {
       dispatch({
@@ -62,13 +61,14 @@ const Calendar = () => {
     }
   }, [me]);
 
+  // 추가 수정 완료 시
   useEffect(() => {
-    if (addCalendarDone || uptCalendarDone) {
+    if (addCalendarDone || uptCalendarDone || delCategoryDone) {
       dispatch({
         type: LOAD_CALENDAR_REQUEST
       });
     }
-  }, [addCalendarDone, uptCalendarDone]);
+  }, [addCalendarDone, uptCalendarDone, delCategoryDone]);
 
   // 카테고리 가져오기 실패
   useEffect(() => {
@@ -197,9 +197,7 @@ const Calendar = () => {
   // 초기 세팅 (일정, 현재날짜)
   const templates = {
     time(schedule) {
-      // console.log(schedule);
       renderChange();
-      console.log(schedule);
       return _getTimeTemplate(schedule, false);
     }
   };
@@ -281,7 +279,6 @@ const Calendar = () => {
 Calendar.layout = Admin;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  console.log('getServerSideProps start');
   const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달
   axios.defaults.headers.Cookie = '';
   if (context.req && cookie) {
@@ -296,9 +293,8 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   context.store.dispatch({
     type: LOAD_CATEGORY_REQUEST
   });
-  context.store.dispatch(END); // 데이터를 success될때까지 기다려줌
-  console.log('getServerSideProps end');
-  await context.store.sagaTask.toPromise(); // 이건..사용방법 하라고
+  context.store.dispatch(END);
+  await context.store.sagaTask.toPromise();
 });
 
 export default Calendar;

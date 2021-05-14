@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../../assets/css/modal.css';
 
 const Modal = (props) => {
   const { open, close, header, children } = props;

@@ -165,7 +165,7 @@ const Category = () => {
           </tbody>
         </Table>
       </div>
-      <button type="button" className="btn btn-danger btn-md mb-2" onClick={deleteCategoryCheck}>
+      <button type="button" className="btn btn-default btn-md mb-2" onClick={deleteCategoryCheck}>
         삭제
       </button>
       <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
