@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Form,
@@ -12,10 +12,11 @@ import {
   Button
 } from 'reactstrap';
 import DatePicker from 'reactstrap-date-picker';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
 
 import useInput from '../../hooks/useInput';
+import todayDate from '../../util/todayDate';
 import { ADD_TODO_REQUEST, DEL_TODO_REQUEST, UPT_TODO_REQUEST } from '../../reducers/todo';
 
 // eslint-disable-next-line react/prop-types
@@ -27,9 +28,14 @@ const TodoModal = ({ clickCategory, todo }) => {
   const [Todotitle, onChangeTitle] = useInput(title); // 제목
   const [Todocontent, onChangeContent] = useInput(content); // 내용
   const [Tododate, onChangeDate] = useState(deadline); // 마감일자
+  const now = todayDate(); // 오늘 날짜
 
   const [delAlertShow, setDelAlertShow] = useState(false);
+  const [alertShow, setAlertShow] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertType, setAlertType] = useState('default');
 
+  // 선택한 카테고리 적용
   const onCategory = useCallback(
     (e) => {
       setCategory(e.target.value);
@@ -41,6 +47,12 @@ const TodoModal = ({ clickCategory, todo }) => {
   const onAddTodo = useCallback(
     (e) => {
       e.preventDefault();
+      if (!Todotitle || !Todocontent || !Tododate) {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('모든 칸을 입력해주세요.');
+        return;
+      }
       dispatch({
         type: ADD_TODO_REQUEST,
         data: { category: Todocategory, title: Todotitle, content: Todocontent, deadline: Tododate }
@@ -53,6 +65,12 @@ const TodoModal = ({ clickCategory, todo }) => {
   const onUptTodo = useCallback(
     (e) => {
       e.preventDefault();
+      if (!Todotitle || !Todocontent || !Tododate) {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('모든 칸을 입력해주세요.');
+        return;
+      }
       dispatch({
         type: UPT_TODO_REQUEST,
         data: { id, category: Todocategory, title: Todotitle, content: Todocontent, deadline: Tododate }
@@ -125,7 +143,7 @@ const TodoModal = ({ clickCategory, todo }) => {
                 type="textarea"
                 value={Todocontent}
                 onChange={onChangeContent}
-                autoComplete="new-email"
+                autoComplete="new-content"
                 style={{ minHeight: '150px' }}
               />
             </InputGroup>
@@ -137,6 +155,7 @@ const TodoModal = ({ clickCategory, todo }) => {
               dateFormat="YYYY-MM-DD"
               value={Tododate}
               onChange={onChangeDate}
+              minDate={now}
               required
             />
           </FormGroup>
@@ -158,6 +177,7 @@ const TodoModal = ({ clickCategory, todo }) => {
           </div>
         </Form>
       </CardBody>
+      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
       <SweetAlert
         warning
         showCancel

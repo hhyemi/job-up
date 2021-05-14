@@ -51,7 +51,7 @@ const Todo = () => {
     const msg = e.target.getAttribute('data-msg');
     setClickCategory(msg);
     setModalOpen(true);
-  });
+  }, []);
 
   // 일정 추가 성공
   useEffect(() => {

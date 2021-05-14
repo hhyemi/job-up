@@ -23,6 +23,7 @@ import Admin from '../../layouts/Admin';
 import TimeList from '../../components/Time/TimeList';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import { DEL_STUDY_REQUEST, LOAD_STUDY_REQUEST } from '../../reducers/study';
+import todayDate from '../../util/todayDate';
 
 const Time = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const Time = () => {
   const [checkItems, setCheckItems] = useState([]); // 체크한 데이터
   const [startDate, onStartDate] = useState(''); // 시작일자
   const [endDate, onEndDate] = useState(''); // 종료일자
+  const now = todayDate(); // 오늘 날짜
 
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
@@ -185,6 +187,7 @@ const Time = () => {
                         dateFormat="YYYY-MM-DD"
                         value={endDate}
                         onChange={onEndDate}
+                        minDate={now}
                         required
                       />
                     </div>
