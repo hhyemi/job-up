@@ -17,7 +17,7 @@ const TodoCard = ({ todo, index, setItems, moveCard }) => {
   const ref = useRef(null);
 
   const day = new Date().getTime() - new Date(todo.deadline).getTime(); // 마감 디데이 계산
-  const dDay = Math.floor(day / (1000 * 60 * 60 * 24)) * -1;
+  const dDay = Math.floor(day / (1000 * 60 * 60 * 24)) * -1 - 1;
   const bgColor = dDay === 0 ? 'warning' : 'primary';
 
   // 일정 수정, 삭제 (모달창열기)

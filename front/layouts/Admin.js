@@ -33,7 +33,7 @@ function Admin({ children }) {
       <Sidebar
         routes={routes}
         logo={{
-          innerLink: '/admin/index',
+          innerLink: '/admin/main',
           imgSrc: require('assets/img/brand/logoUp.png'),
           imgAlt: '...'
         }}

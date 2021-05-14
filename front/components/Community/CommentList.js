@@ -38,6 +38,12 @@ const CommentList = ({ comment, setAlertType, setAlertShow, setAlertTitle }) => 
   const uptComment = useCallback(
     (e) => {
       e.preventDefault();
+      if (!uptContent) {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('댓글 내용을 입력해주세요.');
+        return;
+      }
       dispatch({
         type: UPT_COMMENT_REQUEST,
         data: { id, content: uptContent }
@@ -90,11 +96,11 @@ const CommentList = ({ comment, setAlertType, setAlertShow, setAlertTitle }) => 
                   <InputGroup className="upt-comment-input">
                     <Input type="textarea" value={uptContent} onChange={onUptContent} />
                   </InputGroup>
-                  <button className="btn btn-sm btn-default mt-2 f-r" type="button" onClick={uptComment}>
+                  <button className="btn btn-sm btn-outline-primary mt-2 f-r" type="button" onClick={uptComment}>
                     수정
                   </button>
-                  <button className="btn btn-sm btn-secondary m-2 f-r" type="button" onClick={onUptCancel}>
-                    최소
+                  <button className="btn btn-sm btn-outline-default m-2 f-r" type="button" onClick={onUptCancel}>
+                    취소
                   </button>
                 </>
               ) : (

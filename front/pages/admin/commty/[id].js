@@ -28,7 +28,7 @@ const SingleCommty = () => {
   const dispatch = useDispatch();
   const { id } = router.query;
   const { me } = useSelector((state) => state.user);
-  const { singleCommty, delCommtyDone } = useSelector((state) => state.commty);
+  const { singleCommty, delCommtyDone, loadCommtyDone } = useSelector((state) => state.commty);
   const userId = useSelector((state) => state.user.me?.id);
   const { comments, addCommentDone, addCommentError } = useSelector((state) => state.comment);
   const [commentContent, onCommentContent, setCommentText] = useInput(''); // 댓글 내용
@@ -46,12 +46,22 @@ const SingleCommty = () => {
         type: LOAD_COMMTY_REQUEST,
         data: id
       });
-      // dispatch({
-      //   type: UPT_COMMTY_REQUEST,
-      //   data: { views: 1, id }
-      // });
+      dispatch({
+        type: LOAD_COMMENT_REQUEST,
+        data: { commtyId: id }
+      });
     }
   }, [me]);
+
+  // 커뮤니티 로딩 후
+  useEffect(() => {
+    if (loadCommtyDone) {
+      dispatch({
+        type: UPT_COMMTY_REQUEST,
+        data: { views: 1, id }
+      });
+    }
+  }, [loadCommtyDone]);
 
   // 커뮤니티 삭제
   const onDelCommtyCheck = useCallback((e) => {
@@ -63,6 +73,7 @@ const SingleCommty = () => {
       type: DEL_COMMTY_REQUEST,
       data: id
     });
+    setDelAlertShow(false);
   }, [id]);
 
   // 커뮤니티 삭제 성공
@@ -85,13 +96,22 @@ const SingleCommty = () => {
   });
 
   // 댓글 추가
-  const addComment = useCallback((e) => {
-    e.preventDefault();
-    dispatch({
-      type: ADD_COMMENT_REQUEST,
-      data: { content: commentContent, commtyId: singleCommty && singleCommty.id }
-    });
-  });
+  const addComment = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (!commentContent) {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('댓글 내용을 입력해주세요.');
+        return;
+      }
+      dispatch({
+        type: ADD_COMMENT_REQUEST,
+        data: { content: commentContent, commtyId: singleCommty && singleCommty.id }
+      });
+    },
+    [commentContent, singleCommty]
+  );
 
   // 댓글 추가 성공
   useEffect(() => {
@@ -179,10 +199,10 @@ const SingleCommty = () => {
                     좋아요{' '}
                     <span className="text-dark font-weight-bold">{singleCommty && singleCommty.Likers.length}</span>
                   </span>
-                  <button type="button" className="btn btn-md btn-default f-r" onClick={onDelCommtyCheck}>
+                  <button type="button" className="btn btn-md btn-danger f-r" onClick={onDelCommtyCheck}>
                     삭제
                   </button>
-                  <button type="button" className="btn btn-md btn-primary f-r" onClick={onUptCommtyOpen}>
+                  <button type="button" className="btn btn-md btn-warning f-r" onClick={onUptCommtyOpen}>
                     수정
                   </button>
                   <button type="button" className="btn btn-md btn-white f-r" onClick={onListCommty}>

@@ -34,6 +34,7 @@ const Main = () => {
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
+  const [delAlertShow, setDelAlertShow] = useState(false);
 
   const [activeNav, setActiveNav] = React.useState(1);
   const [dayArr, setDayArr] = useState([]); // 주간 날짜
@@ -101,16 +102,26 @@ const Main = () => {
   });
 
   // 스탑워치 - 저장
-  const onTimeSave = useCallback(
+  const onTimeSaveCheck = useCallback(
     (e) => {
       e.preventDefault();
-      dispatch({
-        type: ADD_STUDY_REQUEST,
-        data: { time: timer }
-      });
+      if (timer === 0) {
+        setAlertShow(true);
+        setAlertType('warning');
+        setAlertTitle('공부시간 0초이상만 저장 가능합니다.');
+        return;
+      }
+      setDelAlertShow(true);
     },
     [timer]
   );
+  const onTimeSave = useCallback(() => {
+    dispatch({
+      type: ADD_STUDY_REQUEST,
+      data: { time: timer }
+    });
+    setDelAlertShow(false);
+  }, [timer]);
 
   // 스탑워치 저장 실패
   useEffect(() => {
@@ -281,7 +292,7 @@ const Main = () => {
                         <span className="text-md sw-reset" onClick={onReset}>
                           <span className="text-white font-weight-bold">재설정</span>
                         </span>
-                        <span className="text-md sw-save" onClick={onTimeSave}>
+                        <span className="text-md sw-save" onClick={onTimeSaveCheck}>
                           <span className="text-white font-weight-bold">저장</span>
                         </span>
                       </>
@@ -468,6 +479,18 @@ const Main = () => {
           </Col>
         </Row>
       </Container>
+      <SweetAlert
+        warning
+        showCancel
+        show={delAlertShow}
+        cancelBtnText="취소"
+        confirmBtnText="저장"
+        confirmBtnBsStyle="danger"
+        title="저장 시 공부시간이 초기화 됩니다. 저장하시겠습니까?"
+        onConfirm={() => onTimeSave()}
+        onCancel={() => setDelAlertShow(false)}
+        focusCancelBtn
+      />
       <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
     </>
   );
