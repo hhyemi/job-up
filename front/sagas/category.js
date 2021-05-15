@@ -9,7 +9,10 @@ import {
   DEL_CATEGORY_SUCCESS,
   LOAD_CATEGORY_FAILURE,
   LOAD_CATEGORY_REQUEST,
-  LOAD_CATEGORY_SUCCESS
+  LOAD_CATEGORY_SUCCESS,
+  UPTL_CATEGORY_FAILURE,
+  UPTL_CATEGORY_REQUEST,
+  UPTL_CATEGORY_SUCCESS
 } from '../reducers/category';
 
 // 카테고리 가져오기
@@ -75,6 +78,27 @@ function* delCategory(action) {
   }
 }
 
+// 카테고리 수정
+function uptCategoryAPI(data) {
+  return axios.patch('/cat/upt', data);
+}
+
+function* uptCategory(action) {
+  try {
+    const result = yield call(uptCategoryAPI, action.data);
+    yield put({
+      type: UPTL_CATEGORY_SUCCESS,
+      data: result.data
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPTL_CATEGORY_FAILURE,
+      error: err.response.data
+    });
+  }
+}
+
 function* watchLoadCategory() {
   yield takeLatest(LOAD_CATEGORY_REQUEST, loadCategory);
 }
@@ -87,6 +111,10 @@ function* watchDelCategory() {
   yield takeLatest(DEL_CATEGORY_REQUEST, delCategory);
 }
 
+function* watchUptCategory() {
+  yield takeLatest(UPTL_CATEGORY_REQUEST, uptCategory);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLoadCategory), fork(watchAddCategory), fork(watchDelCategory)]);
+  yield all([fork(watchLoadCategory), fork(watchAddCategory), fork(watchDelCategory), fork(watchUptCategory)]);
 }

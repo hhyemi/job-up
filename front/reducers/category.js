@@ -10,7 +10,10 @@ export const initialState = {
   addCategoryError: null,
   delCategoryLoading: false, // 카테고리 삭제
   delCategoryDone: false,
-  delCategoryError: null
+  delCategoryError: null,
+  uptCategoryLoading: false, // 카테고리 수정
+  uptCategoryDone: false,
+  uptCategoryError: null
 };
 
 export const LOAD_CATEGORY_REQUEST = 'LOAD_CATEGORY_REQUEST';
@@ -24,6 +27,10 @@ export const ADD_CATEGORY_FAILURE = 'ADD_CATEGORY_FAILURE';
 export const DEL_CATEGORY_REQUEST = 'DEL_CATEGORY_REQUEST';
 export const DEL_CATEGORY_SUCCESS = 'DEL_CATEGORY_SUCCESS';
 export const DEL_CATEGORY_FAILURE = 'DEL_CATEGORY_FAILURE';
+
+export const UPTL_CATEGORY_REQUEST = 'UPTL_CATEGORY_REQUEST';
+export const UPTL_CATEGORY_SUCCESS = 'UPTL_CATEGORY_SUCCESS';
+export const UPTL_CATEGORY_FAILURE = 'UPTL_CATEGORY_FAILURE';
 
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
@@ -69,6 +76,20 @@ const reducer = (state = initialState, action) =>
       case DEL_CATEGORY_FAILURE:
         draft.delCategoryLoading = false;
         draft.delCategoryError = action.error;
+        break;
+      case UPTL_CATEGORY_REQUEST:
+        draft.uptCategoryLoading = true;
+        draft.uptCategoryError = null;
+        draft.uptCategoryDone = false;
+        break;
+      case UPTL_CATEGORY_SUCCESS:
+        draft.uptCategoryLoading = false;
+        draft.uptCategoryDone = true;
+        draft.categories = draft.categories.map((v) => (v.id === action.data.CategoryId ? action.data.category : v));
+        break;
+      case UPTL_CATEGORY_FAILURE:
+        draft.uptCategoryLoading = false;
+        draft.uptCategoryError = action.error;
         break;
       default:
         break;

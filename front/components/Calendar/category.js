@@ -117,11 +117,12 @@ const Category = () => {
       <button type="button" className="btn btn-primary btn-md mb-2" style={{ float: 'right' }} onClick={addCategory}>
         추가
       </button>
-      <Table className="align-items-center table-flush" responsive>
+      <Table className="align-items-center table-flush txt-center" responsive>
         <colgroup>
           <col width="5%" />
-          <col width="20%" />
-          <col width="35%" />
+          <col width="5%" />
+          <col width="25%" />
+          <col width="26%" />
           <col />
         </colgroup>
         <thead className="thead-light">
@@ -141,15 +142,17 @@ const Category = () => {
             <th scope="col">No</th>
             <th scope="col">카테고리명</th>
             <th scope="col">색상</th>
+            <th scope="col">수정</th>
           </tr>
         </thead>
       </Table>
       <div className="scroll">
-        <Table>
+        <Table className="txt-center">
           <colgroup>
             <col width="5%" />
-            <col width="20%" />
-            <col width="35%" />
+            <col width="5%" />
+            <col width="25%" />
+            <col width="26%" />
             <col />
           </colgroup>
           <tbody className="cat-tbody">

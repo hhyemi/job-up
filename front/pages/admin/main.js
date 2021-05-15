@@ -120,6 +120,10 @@ const Main = () => {
       type: ADD_STUDY_REQUEST,
       data: { time: timer }
     });
+    clearInterval(countRef.current);
+    setIsActive(false);
+    setIsPaused(false);
+    setTimer(0);
     setDelAlertShow(false);
   }, [timer]);
 
@@ -364,8 +368,9 @@ const Main = () => {
                           <tbody>
                             {todayStudies.map((dayStudy, index) => (
                               <tr key={dayStudy.id}>
-                                <th>{index + 1}</th>
+                                <th>{todayStudies.length - index}</th>
                                 <th>
+                                  <i className="far fa-clock mr-2" />
                                   {`0${Math.floor(dayStudy.time / 3600)}`.slice(-2)}:
                                   {`0${Math.floor(dayStudy.time / 60) % 60}`.slice(-2)}:
                                   {`0${dayStudy.time % 60}`.slice(-2)}

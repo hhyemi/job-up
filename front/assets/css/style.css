@@ -459,3 +459,12 @@ body{
   padding-bottom: 15rem !important;
   text-align: center;
 }
+
+.txt-center{
+  text-align: center;
+}
+
+.cat-tr input[type=text]{
+  height: 2rem !important;
+  padding: 0rem 0.3rem !important;
+}

@@ -47,6 +47,26 @@ router.post('/add', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// PATCH /cat/upt : 카테고리 수정
+router.patch('/upt', isLoggedIn, async (req, res, next) => {
+  try {
+    await Category.update(
+      {
+        name: req.body.name,
+        bgColor: req.body.color,
+        borderColor: req.body.color,
+        dragBgColor: req.body.color
+      },
+      { where: { id: req.body.id } }
+    );
+    const category = await Category.findOne({ where: { id: req.body.id } });
+    res.status(200).json({ category, CategoryId: req.body.id });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // DELETE /cat/del : 카테고리 삭제
 router.delete('/del', isLoggedIn, async (req, res, next) => {
   try {

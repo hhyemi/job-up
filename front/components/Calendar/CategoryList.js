@@ -1,12 +1,60 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { Input } from 'reactstrap';
 
-// eslint-disable-next-line arrow-body-style
+import useInput from '../../hooks/useInput';
+import { UPTL_CATEGORY_REQUEST } from '../../reducers/category';
+
 const CategoryList = ({ category, index, handleSingleCheck, checkItems }) => {
+  const dispatch = useDispatch();
+  const { uptCategoryDone } = useSelector((state) => state.category);
+
+  const [uptState, setUptState] = useState(false); // 수정 상태
+  const [name, onChangeName] = useInput(category.name); // 카테고리명
+  const [color, onChangeColor] = useInput(category.bgColor); // 카테고리 색상
+
+  // 카테고리 수정 창
+  const onUptCatShow = useCallback(
+    (e) => {
+      e.preventDefault();
+      setUptState(true);
+    },
+    [uptState]
+  );
+
+  // 카테고리 수정
+  const onUptCat = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch({
+        type: UPTL_CATEGORY_REQUEST,
+        data: { color, name, id: category.id }
+      });
+    },
+    [color, name, category.id]
+  );
+
+  // 수정 완료
+  useEffect(() => {
+    if (uptCategoryDone) {
+      setUptState(false);
+    }
+  }, [uptCategoryDone]);
+
+  // 카테고리 수정 취소
+  const onCancel = useCallback(
+    (e) => {
+      e.preventDefault();
+      setUptState(false);
+    },
+    [uptState]
+  );
+
   return (
     <>
       <tr className="cat-tr">
-        <th>
+        <td>
           <div className="custom-control custom-control-alternative custom-checkbox">
             <input
               className="custom-control-input"
@@ -17,11 +65,32 @@ const CategoryList = ({ category, index, handleSingleCheck, checkItems }) => {
             />
             <label className="custom-control-label" htmlFor={category.id} />
           </div>
-        </th>
+        </td>
         <td>{index + 1}</td>
-        <td>{category.name}</td>
+        <td>{uptState ? <Input type="text" value={name} onChange={onChangeName} /> : <>{category.name}</>}</td>
         <td>
-          <input type="color" value={category.bgColor} disabled />
+          <input type="color" value={color} onChange={onChangeColor} disabled={!uptState} />
+        </td>
+        <td>
+          {uptState ? (
+            <>
+              <button type="button" className="btn btn-white btn-sm " onClick={onUptCat}>
+                수정
+              </button>
+              <button
+                type="button"
+                className="btn btn-white btn-sm"
+                onClick={onCancel}
+                style={{ backgroundColor: ' #e9e7e7' }}
+              >
+                취소
+              </button>
+            </>
+          ) : (
+            <button type="button" className="btn btn-white btn-sm " onClick={onUptCatShow}>
+              수정
+            </button>
+          )}
         </td>
       </tr>
     </>
