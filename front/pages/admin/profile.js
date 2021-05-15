@@ -17,8 +17,7 @@ const ErrorMessage = styled.div`
 
 const UploadImg = styled.img`
   width: 50px;
-  top: 95px !important;
-  left: 225px !important;
+  transform: translate(100%, 128%) !important;
   cursor: pointer;
 `;
 

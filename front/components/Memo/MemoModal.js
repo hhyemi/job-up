@@ -136,12 +136,12 @@ const MemoModal = ({ memo, content, setAlertShow, setAlertTitle, setAlertType })
     <>
       <CardBody className="px-lg-1 py-lg-1">
         <Form role="form" className="memo-add-form">
-          <FormGroup className="mb-3">
-            <div className="mr-3 memo-color">
+          <FormGroup className="mb-3 color-form">
+            <div className="memo-color">
               <div className="memo-back" onClick={handleClick}>
                 <div
                   style={{
-                    width: '30px',
+                    width: '100%',
                     height: '30px',
                     borderRadius: '2px',
                     background: `${memoColor.color}`
@@ -156,7 +156,8 @@ const MemoModal = ({ memo, content, setAlertShow, setAlertTitle, setAlertType })
               ) : null}
             </div>
             <Input
-              style={{ width: '94%' }}
+              style={{ width: '94%', position: 'relative' }}
+              className="meme-title-input"
               placeholder="제목을 입력해주세요."
               name="memo-title"
               type="text"
@@ -171,7 +172,7 @@ const MemoModal = ({ memo, content, setAlertShow, setAlertTitle, setAlertType })
           </FormGroup>
         </Form>
       </CardBody>
-      <div className="pt-3">
+      <div>
         <span>
           <input
             className="custom-control-input"
@@ -194,7 +195,7 @@ const MemoModal = ({ memo, content, setAlertShow, setAlertTitle, setAlertType })
           />
         </span>
       </div>
-      <div className="text-center">
+      <div className="text-center mt-2">
         {id === undefined ? (
           <button color="primary" type="button" onClick={onAddMemo} className="btn btn-primary btn-md">
             추가

@@ -11,7 +11,6 @@ import {
   Label,
   Button
 } from 'reactstrap';
-import DatePicker from 'reactstrap-date-picker';
 import { useDispatch } from 'react-redux';
 import SweetAlert from 'react-bootstrap-sweetalert';
 
@@ -27,7 +26,7 @@ const TodoModal = ({ clickCategory, todo }) => {
   const [Todocategory, setCategory] = useState(clickCategory * 1 || category); // 카테고리
   const [Todotitle, onChangeTitle] = useInput(title); // 제목
   const [Todocontent, onChangeContent] = useInput(content); // 내용
-  const [Tododate, onChangeDate] = useState(deadline); // 마감일자
+  const [Tododate, onChangeDate] = useInput(deadline); // 마감일자
   const now = todayDate(); // 오늘 날짜
 
   const [delAlertShow, setDelAlertShow] = useState(false);
@@ -150,14 +149,7 @@ const TodoModal = ({ clickCategory, todo }) => {
           </FormGroup>
           <FormGroup>
             <Label>마감일자</Label>
-            <DatePicker
-              id="example-datepicker"
-              dateFormat="YYYY-MM-DD"
-              value={Tododate}
-              onChange={onChangeDate}
-              minDate={now}
-              required
-            />
+            <Input className="todo-date" value={Tododate} onChange={onChangeDate} type="date" />
           </FormGroup>
           <div className="text-center">
             {clickCategory ? (

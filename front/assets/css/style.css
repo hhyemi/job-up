@@ -39,9 +39,13 @@
   cursor: pointer;
 }
 
-.todo-add-form .form-control{
+.todo-add-form .form-control:not(.todo-date){
   padding: 0.625rem 1.75rem 0.625rem 0.75rem !important;
   border: 0px !important;
+}
+
+.todo-add-form .input-group-alternative{
+  box-shadow: 0px 0px !important;
 }
 
 .todo-add-form .input-group-text{
@@ -80,9 +84,27 @@
   cursor: pointer;
   max-height: 290px !important;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  width: 312px !important;
+  width: calc(23.333% - 8px);
   float: left !important;
   margin: 15px 13px 15px 14px !important;
+}
+
+@media (max-width: 1540px){
+  .memo-container .card {
+    width: calc(31% - 8px);
+  }
+}
+
+@media (max-width: 1340px){
+  .memo-container .card {
+    width: calc(47% - 8px);
+  }
+}
+
+@media (max-width: 1008px){
+  .memo-container .card {
+    width: calc(96% - 8px);
+  }
 }
 
 .memo-container .card-deck{
@@ -126,8 +148,20 @@
   padding: 10px  !important;
 }
 
-.memo-add-form .quill {
+.memo-add-form .ql-container {
   height: 400px;
+}
+
+.memo-add-form .form-group {
+  margin-bottom: 0rem;
+}
+
+.memo-add-form .color-form {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
 }
 
 .btn-md{
@@ -136,11 +170,14 @@
 }
 
 .memo-color{
-  float: left 
+  float: left;
+  width: 4%;
+  margin-right: 2%;
 }
 
 .memo-color .memo-back{
   padding: 5px;
+  width: 100%;
   background: #fff;
   border-radius: 1px;
   box-shadow: 0 0 0 1px rgba(0,0,0,.1);
@@ -201,6 +238,7 @@
   color: black;
 }
 
+
 /* COMMUNITY */
 .community-container th,.community-container td:not(.comm-title) {
   text-align: center;
@@ -211,7 +249,7 @@
   left: 42%
 }
 
-.add-commty-row .quill{
+.add-commty-row .ql-container {
   height: 440px;
 }
 .add-commty-row .card-header{
@@ -376,27 +414,43 @@ body{
   color: #929292;
 }
 
+.main-container .nav-pills .nav-item:not(:last-child) {
+  padding-right: 3%;
+}
+
+@media (max-width: 767.98px){
+  .main-container .nav-pills:not(.nav-pills-circle) .nav-item {
+    padding-right: 3%;
+  }
+}
+
 /* stop watch */
 .stopwatch-container .date-start-name{
   position: absolute;
   top: 30px;
-  left: 51%;
+  left: 48%;
 }
 
 .stopwatch-container .date-end-name{
   position: absolute;
   top: 30px;
-    left: 72%;
+  left: 68%;
 }
 
 .stopwatch-container .end-date{
   position: absolute;
-  width: 13%;
+  width: 12%;
   top: 22px;
-  right: 9%;
+  right: 14%;
 }
 
 .stopwatch-container .search-button{
+  position: absolute;
+  top: 26px;
+  right: 8%;
+}
+
+.stopwatch-container .reset-button{
   position: absolute;
   top: 26px;
   right: 3%;
@@ -468,3 +522,4 @@ body{
   height: 2rem !important;
   padding: 0rem 0.3rem !important;
 }
+

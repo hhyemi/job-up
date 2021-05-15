@@ -9,13 +9,13 @@ import {
   PaginationLink,
   Row,
   Table,
-  Label
+  Label,
+  Input
 } from 'reactstrap';
 import axios from 'axios';
 import { END } from 'redux-saga';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import { useDispatch, useSelector } from 'react-redux';
-import DatePicker from 'reactstrap-date-picker';
 
 import wrapper from '../../store/configureStore';
 import Header from '../../components/Headers/Header';
@@ -24,6 +24,7 @@ import TimeList from '../../components/Time/TimeList';
 import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import { DEL_STUDY_REQUEST, LOAD_STUDY_REQUEST } from '../../reducers/study';
 import todayDate from '../../util/todayDate';
+import useInput from '../../hooks/useInput';
 
 const Time = () => {
   const dispatch = useDispatch();
@@ -32,8 +33,8 @@ const Time = () => {
   const [pages, setPages] = useState([1]); // 페이지 개수
   const [currentPage, setCurrentPage] = useState(1); // 현재페이지
   const [checkItems, setCheckItems] = useState([]); // 체크한 데이터
-  const [startDate, onStartDate] = useState(''); // 시작일자
-  const [endDate, onEndDate] = useState(''); // 종료일자
+  const [startDate, onStartDate, setStartDate] = useInput(''); // 시작일자
+  const [endDate, onEndDate, setEndDate] = useInput(''); // 종료일자
   const now = todayDate(); // 오늘 날짜
 
   const [alertShow, setAlertShow] = useState(false);
@@ -77,6 +78,13 @@ const Time = () => {
     },
     [currentPage, startDate, endDate]
   );
+
+  // 날짜 초기화
+  const onReset = useCallback((e) => {
+    e.preventDefault();
+    setStartDate('');
+    setEndDate('');
+  }, []);
 
   // 페이지 이동
   const movePage = useCallback(
@@ -162,38 +170,27 @@ const Time = () => {
             <Card className="shadow" style={{ minHeight: '625px' }}>
               <CardHeader className="border-0">
                 <Row className="align-items-center">
-                  <div className="col" style={{ maxWidth: '57%' }}>
+                  <div className="col" style={{ maxWidth: '54%' }}>
                     <h3 className="mb-0">스탑워치</h3>
                   </div>
-                  <div style={{ width: '13%' }}>
+                  <div style={{ width: '12%' }}>
                     <div>
                       <div className="date-start-name">
                         <Label>시작일자</Label>
                       </div>
-                      <DatePicker
-                        id="example-datepicker"
-                        dateFormat="YYYY-MM-DD"
-                        value={startDate}
-                        onChange={onStartDate}
-                        minDate={now}
-                        required
-                      />
+                      <Input minValue={now} value={startDate} onChange={onStartDate} type="date" />
                     </div>
                     <div className="date-end-name">
                       <Label>종료일자</Label>
                     </div>
                     <div className="end-date">
-                      <DatePicker
-                        id="example-datepicker"
-                        dateFormat="YYYY-MM-DD"
-                        value={endDate}
-                        onChange={onEndDate}
-                        minDate={now}
-                        required
-                      />
+                      <Input value={endDate} onChange={onEndDate} type="date" />
                     </div>
                     <button type="button" className="btn btn-primary btn-md search-button" onClick={onSearch}>
                       검색
+                    </button>
+                    <button type="button" className="btn btn-white btn-md reset-button" onClick={onReset}>
+                      초기화
                     </button>
                   </div>
                 </Row>

@@ -172,8 +172,10 @@ const SingleCommty = () => {
                       <span className="avatar avatar-sm rounded-circle">
                         <img alt="..." src={`${backUrl}/${singleCommty && singleCommty.User.src}`} />
                       </span>
-                      <Media className="ml-2 d-none d-lg-block">
-                        <span className="mb-0 text-sm font-weight-bold">{singleCommty && singleCommty.User.name}</span>
+                      <Media className="ml-2 d-lg-block">
+                        <span className="mb-0 mr-2 text-sm font-weight-bold">
+                          {singleCommty && singleCommty.User.name}
+                        </span>
                         <div className="mb-0 text-sm text-muted">
                           {singleCommty && singleCommty.createdAt}
                           &ensp;조회 {singleCommty && singleCommty.views}

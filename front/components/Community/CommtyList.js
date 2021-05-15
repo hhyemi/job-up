@@ -141,13 +141,7 @@ const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertT
                 </div>
                 <div style={{ width: '33%' }}>
                   <InputGroup>
-                    <Input
-                      placeholder="검색어를 입력해주세요"
-                      type="text"
-                      value={searchWord}
-                      onChange={onSearchWord}
-                      onKeyPress={onSearchKey}
-                    />
+                    <Input type="text" value={searchWord} onChange={onSearchWord} onKeyPress={onSearchKey} />
                     <InputGroupAddon addonType="append">
                       <Button color="primary" id="button-addon2" type="button" onClick={onSearch}>
                         <i className="fas fa-search" />

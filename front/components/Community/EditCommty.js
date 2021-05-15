@@ -96,7 +96,7 @@ const EditCommty = ({ setEditOpen, commty, setAlertShow, setAlertTitle, setAlert
               <FormGroup>
                 <QuillWrapper value={commtyContent} onChange={(text) => onChangeContent(text)} />
               </FormGroup>
-              <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+              <div style={{ textAlign: 'center' }}>
                 <Button color="default" className="btn-md" type="submit" onClick={onCancle}>
                   취소
                 </Button>
