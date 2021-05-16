@@ -425,36 +425,34 @@ body{
 }
 
 /* stop watch */
-.stopwatch-container .date-start-name{
-  position: absolute;
-  top: 30px;
-  left: 48%;
-}
+.stopwatch-container .date-name{
+  display: inline-block;
 
-.stopwatch-container .date-end-name{
-  position: absolute;
-  top: 30px;
-  left: 68%;
 }
 
 .stopwatch-container .end-date{
-  position: absolute;
-  width: 12%;
-  top: 22px;
-  right: 14%;
+  display: inline-block;
+  margin: 0rem 1rem;
 }
 
-.stopwatch-container .search-button{
-  position: absolute;
-  top: 26px;
-  right: 8%;
+.timedate-from-group{
+  display: inline-block;
+  margin-bottom: 0rem;
 }
 
-.stopwatch-container .reset-button{
-  position: absolute;
-  top: 26px;
-  right: 3%;
+@media (max-width: 1150px){
+  .timedate-from-group .end-date{
+    display: block !important;
+    margin: 1rem 0rem !important;
+  }
 }
+
+@media (max-width: 1150px){
+  .stop-div{
+    max-width: calc(100% - 200px) !important;
+  }
+}
+
 
 /* login */
 .goole-btn{
@@ -494,15 +492,30 @@ body{
 
 /* 회원가입 */
 .email-btn{
-  position: absolute;
-  top: 6%;
-  right: 0%;
-  padding: 18px;
+  display: inline-block;
+  width: 25%;
+  padding: 14px;
+  margin-left: 1.3rem;
 }
 
-.w-70{
-  width: 70%;
+.email-form-group{
+  display: inline-block;
+  margin-bottom: 0rem;
+  width: 68%;
 }
+
+.email-check-form{
+  display: inline-block;
+}
+
+.email-check-form .input-group{
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.email-check-form .input-group input{
+  padding: 0.625rem 3.75rem 0.625rem 3rem;
+} 
 
 .posit-rel{
   position: relative;

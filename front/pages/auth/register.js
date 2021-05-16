@@ -230,9 +230,9 @@ const Register = () => {
                   />
                 </InputGroup>
               </FormGroup>
-              <div className="posit-rel">
-                <FormGroup className="w-70">
-                  <InputGroup className="input-group-alternative mb-3">
+              <div>
+                <FormGroup className="email-form-group">
+                  <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
                         <i className="ni ni-email-83" />
@@ -255,9 +255,9 @@ const Register = () => {
                   이메일 인증
                 </Button>
               </div>
-              <FormGroup>
+              <FormGroup className="email-check-form">
                 {emailVisible && (
-                  <InputGroup className="input-group-alternative mb-3">
+                  <InputGroup className="input-group-alternative">
                     <Input
                       placeholder="인증번호"
                       name="emailCheck"

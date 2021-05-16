@@ -10,7 +10,8 @@ import {
   Row,
   Table,
   Label,
-  Input
+  Input,
+  FormGroup
 } from 'reactstrap';
 import axios from 'axios';
 import { END } from 'redux-saga';
@@ -170,17 +171,17 @@ const Time = () => {
             <Card className="shadow" style={{ minHeight: '625px' }}>
               <CardHeader className="border-0">
                 <Row className="align-items-center">
-                  <div className="col" style={{ maxWidth: '54%' }}>
+                  <div className="col stop-div" style={{ maxWidth: 'calc(100% - 635px)' }}>
                     <h3 className="mb-0">스탑워치</h3>
                   </div>
-                  <div style={{ width: '12%' }}>
-                    <div>
-                      <div className="date-start-name">
-                        <Label>시작일자</Label>
-                      </div>
+                  <FormGroup className="timedate-from-group" style={{ display: 'inline-block' }}>
+                    <div className="date-name">
+                      <Label>시작일자</Label>
+                    </div>
+                    <div className="end-date">
                       <Input minValue={now} value={startDate} onChange={onStartDate} type="date" />
                     </div>
-                    <div className="date-end-name">
+                    <div className="date-name">
                       <Label>종료일자</Label>
                     </div>
                     <div className="end-date">
@@ -192,7 +193,7 @@ const Time = () => {
                     <button type="button" className="btn btn-white btn-md reset-button" onClick={onReset}>
                       초기화
                     </button>
-                  </div>
+                  </FormGroup>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" style={{ textAlign: 'center' }} responsive>
