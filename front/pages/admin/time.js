@@ -175,8 +175,8 @@ const Time = () => {
       <Container className="mt-4 stopwatch-container pb-5" fluid>
         <Row>
           <Col className="mb-5 mb-xl-0">
-            <Card className="shadow" style={{ minHeight: '645px' }}>
-              <CardHeader className="border-0">
+            <Card className="shadow" style={{ minHeight: '673px' }}>
+              <CardHeader className="border-0 pt-4 pb-4">
                 <Row className="align-items-center">
                   <div className="col stop-div" style={{ maxWidth: 'calc(100% - 635px)' }}>
                     <h3 className="mb-0">스탑워치</h3>
@@ -203,7 +203,7 @@ const Time = () => {
                   </FormGroup>
                 </Row>
               </CardHeader>
-              <Table className="align-items-center table-flush" style={{ textAlign: 'center' }} responsive>
+              <Table className="align-items-center table-flush pt-1" style={{ textAlign: 'center' }} responsive>
                 <colgroup>
                   <col width="5%" />
                   <col width="10%" />

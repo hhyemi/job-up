@@ -133,7 +133,7 @@ const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertT
     <>
       <Row>
         <Col className="mb-5 mb-xl-0">
-          <Card className="shadow" style={{ minHeight: '625px' }}>
+          <Card className="shadow" style={{ minHeight: '673px' }}>
             <CardHeader className="border-0">
               <Row className="align-items-center">
                 <div className="col" style={{ maxWidth: '65%' }}>
