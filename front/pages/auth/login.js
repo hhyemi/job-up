@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Container,
   Button,
   Card,
   CardHeader,
@@ -10,7 +11,8 @@ import {
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Col
+  Col,
+  Row
 } from 'reactstrap';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +26,8 @@ import wrapper from '../../store/configureStore';
 import Auth from '../../layouts/Auth';
 import useInput from '../../hooks/useInput';
 import { GIT_LOG_IN_REQUEST, LOAD_MY_INFO_REQUEST, loginRequestAction, LOG_IN_REQUEST } from '../../reducers/user';
+import Footer from '../../components/Footers/Footer';
+import AuthNavbar from '../../components/Navbars/AuthNavbar';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -31,7 +35,6 @@ const Login = () => {
   const [password, onChangePassword] = useInput('');
   const { me, git } = useSelector((state) => state.user);
   const { logInDone, logInError } = useSelector((state) => state.user);
-  const { findPasswordDone, findPasswordError } = useSelector((state) => state.user);
   const [alertShow, setAlertShow] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertType, setAlertType] = useState('default');
@@ -106,92 +109,109 @@ const Login = () => {
 
   return (
     <>
-      <Col lg="5" md="7">
-        <Card className="bg-secondary dark-shadow border-0">
-          <CardHeader className="bg-transparent pb-5">
-            <div className="text-muted text-center mt-2 mb-3">
-              <small>다른계정으로 로그인</small>
+      <div className="main-content">
+        <AuthNavbar />
+        <div className="header py-7">
+          <Container>
+            <div className="header-body text-center mb-5">
+              <Row className="justify-content-center">
+                <Col lg="5" md="6">
+                  <h1 className="text-primary">로그인</h1>
+                </Col>
+              </Row>
             </div>
-            <div className="btn-wrapper text-center">
-              <GitHubLogin
-                clientId={process.env.GITHUB_KEY}
-                redirectUri="http://localhost:3000"
-                buttonText="Github"
-                onSuccess={responseGithub}
-                onFailure={responseFail}
-                className="btn-neutral btn-icon mr-4 btn"
-              >
-                <span className="btn-inner--icon">
-                  <img alt="..." src={require('assets/img/icons/common/github.svg')} />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </GitHubLogin>
-              <GoogleLogin
-                className="goole-btn btn btn-neutral btn-icon"
-                clientId={process.env.GOOGLE_KEY}
-                buttonText="Google"
-                onSuccess={responseGoogle}
-                onFailure={responseFail}
-              />
-            </div>
-          </CardHeader>
-          <CardBody className="px-lg-5 py-lg-5">
-            <Form role="form" onSubmit={onSubmitForm}>
-              <FormGroup className="mb-3">
-                <InputGroup className="input-group-alternative">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="ni ni-email-83" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input
-                    placeholder="이메일"
-                    name="user-email"
-                    type="email"
-                    value={email}
-                    onChange={onChangeEmail}
-                    required
-                    autoComplete="new-email"
-                  />
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <InputGroup className="input-group-alternative">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="ni ni-lock-circle-open" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input
-                    placeholder="비밀번호"
-                    name="user-password"
-                    type="password"
-                    value={password}
-                    onChange={onChangePassword}
-                    required
-                    autoComplete="new-password"
-                  />
-                </InputGroup>
-              </FormGroup>
-              <div className="text-center">
-                <Button className="my-4" color="primary" type="submit">
-                  로그인
-                </Button>
-                <br />
-                <a className="text-muted" href="#pablo" onClick={onClickFindPassword}>
-                  <small>비밀번호 찾기</small>
-                </a>
-              </div>
-            </Form>
-          </CardBody>
-        </Card>
-      </Col>
-      <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
+          </Container>
+        </div>
+        <Container className="mt--8 pb-5">
+          <Row className="justify-content-center">
+            <Col lg="5" md="7">
+              <Card className="bg-secondary dark-shadow border-0">
+                <CardHeader className="bg-transparent pb-5">
+                  <div className="text-muted text-center mt-2 mb-3">
+                    <small>다른계정으로 로그인</small>
+                  </div>
+                  <div className="btn-wrapper text-center">
+                    <GitHubLogin
+                      clientId={process.env.GITHUB_KEY}
+                      redirectUri="http://localhost:3000"
+                      buttonText="Github"
+                      onSuccess={responseGithub}
+                      onFailure={responseFail}
+                      className="btn-neutral btn-icon mr-4 btn"
+                    >
+                      <span className="btn-inner--icon">
+                        <img alt="..." src={require('assets/img/icons/common/github.svg')} />
+                      </span>
+                      <span className="btn-inner--text">Github</span>
+                    </GitHubLogin>
+                    <GoogleLogin
+                      className="goole-btn btn btn-neutral btn-icon"
+                      clientId={process.env.GOOGLE_KEY}
+                      buttonText="Google"
+                      onSuccess={responseGoogle}
+                      onFailure={responseFail}
+                    />
+                  </div>
+                </CardHeader>
+                <CardBody className="px-lg-5 py-lg-5">
+                  <Form role="form" onSubmit={onSubmitForm}>
+                    <FormGroup className="mb-3">
+                      <InputGroup className="input-group-alternative">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="ni ni-email-83" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          placeholder="이메일"
+                          name="user-email"
+                          type="email"
+                          value={email}
+                          onChange={onChangeEmail}
+                          required
+                          autoComplete="new-email"
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                    <FormGroup>
+                      <InputGroup className="input-group-alternative">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="ni ni-lock-circle-open" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          placeholder="비밀번호"
+                          name="user-password"
+                          type="password"
+                          value={password}
+                          onChange={onChangePassword}
+                          required
+                          autoComplete="new-password"
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                    <div className="text-center">
+                      <Button className="my-4" color="primary" type="submit">
+                        로그인
+                      </Button>
+                      <br />
+                      <a className="text-muted" href="#pablo" onClick={onClickFindPassword}>
+                        <small>비밀번호 찾기</small>
+                      </a>
+                    </div>
+                  </Form>
+                </CardBody>
+              </Card>
+            </Col>
+            <SweetAlert type={alertType} show={alertShow} title={alertTitle} onConfirm={() => setAlertShow(false)} />
+          </Row>
+        </Container>
+      </div>
+      <Footer />
     </>
   );
 };
-
-Login.layout = Auth;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
   const cookie = context.req ? context.req.headers.cookie : ''; // 쿠키까지 전달

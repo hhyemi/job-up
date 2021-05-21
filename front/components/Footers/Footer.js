@@ -4,7 +4,7 @@ import { NavItem, NavLink, Nav, Container, Row, Col } from 'reactstrap';
 function Footer() {
   return (
     <>
-      <footer style={{ padding: '2rem 0rem' }}>
+      <footer style={{ padding: '3rem 0rem' }}>
         <Container style={{ maxWidth: '97%' }}>
           <Row className="align-items-center justify-content-xl-between">
             <Col xl="6">

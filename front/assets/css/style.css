@@ -314,6 +314,11 @@
 .community-container .table-responsive{
     overflow-x: hidden;
 }
+
+.community-container #button-addon2{
+  z-index:0 !important;
+}
+
 /* main */
 @font-face {
   font-family: 'LAB디지털';
