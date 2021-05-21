@@ -23,7 +23,7 @@ function AuthNavbar() {
           </Link>
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledCollapse navbar toggler="#navbar-collapse-main">
-              <div className="navbar-collapse-header d-md-none">
+              <div className=" d-md-none">
                 <Row>
                   <Col className="collapse-brand" xs="6">
                     <Link href="/admin/main">

@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 import AdminNavbar from '../components/Navbars/AdminNavbar';
 import AuthNavbar from '../components/Navbars/AuthNavbar';
-import Footer from '../components/Footers/Footer';
 import Sidebar from '../components/Sidebar/Sidebar';
 import routes from '../routes';
 

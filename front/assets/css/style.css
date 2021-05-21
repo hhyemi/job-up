@@ -311,6 +311,9 @@
   float: right;
 }
 
+.community-container .table-responsive{
+    overflow-x: hidden;
+}
 /* main */
 @font-face {
   font-family: 'LAB디지털';
@@ -445,11 +448,24 @@ body{
     display: block !important;
     margin: 1rem 0rem !important;
   }
+  .date-name label{
+    margin-bottom: 0rem !important;
+  }
+  .page-row{
+    padding-bottom: 4rem !important;
+  }
 }
+
 
 @media (max-width: 1150px){
   .stop-div{
     max-width: calc(100% - 200px) !important;
+  }
+  .date-name label{
+    margin-bottom: 0rem !important;
+  }  
+  .page-row{
+    padding-bottom: 4rem !important;
   }
 }
 
@@ -535,4 +551,3 @@ body{
   height: 2rem !important;
   padding: 0rem 0.3rem !important;
 }
-

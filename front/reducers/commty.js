@@ -101,7 +101,6 @@ const reducer = (state = initialState, action) =>
       case ADD_COMMTY_SUCCESS:
         draft.addCommtyLoading = false;
         draft.addCommtyDone = true;
-        draft.commties.unshift(action.data);
         break;
       case ADD_COMMTY_FAILURE:
         draft.addCommtyLoading = false;

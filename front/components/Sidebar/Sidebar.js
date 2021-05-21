@@ -9,11 +9,6 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
   Media,
   NavbarBrand,
   Navbar,
@@ -44,6 +39,12 @@ function Sidebar(props) {
   const closeCollapse = () => {
     setCollapseOpen(false);
   };
+
+  // 로그아웃 버튼
+  const onLogOut = useCallback((e) => {
+    e.preventDefault();
+    dispatch(logoutRequestAction());
+  }, []);
 
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
@@ -122,28 +123,10 @@ function Sidebar(props) {
                   <span>내 정보</span>
                 </DropdownItem>
               </Link>
-              <Link href="/admin/profile">
-                <DropdownItem>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
-              </Link>
-              <Link href="/admin/profile">
-                <DropdownItem>
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
-                </DropdownItem>
-              </Link>
-              <Link href="/admin/profile">
-                <DropdownItem>
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
-              </Link>
               <DropdownItem divider />
-              <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
-                <i className="ni ni-user-run" />
-                <span>Logou3t</span>
+              <DropdownItem href="#pablo" onClick={onLogOut}>
+                <i className="ni ni-button-power" />
+                <span>로그아웃</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
@@ -174,22 +157,6 @@ function Sidebar(props) {
               </Col>
             </Row>
           </div>
-          {/* Form */}
-          <Form className="mt-4 mb-3 d-md-none">
-            <InputGroup className="input-group-rounded input-group-merge">
-              <Input
-                aria-label="Search"
-                className="form-control-rounded form-control-prepended"
-                placeholder="Search"
-                type="search"
-              />
-              <InputGroupAddon addonType="prepend">
-                <InputGroupText>
-                  <span className="fa fa-search" />
-                </InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-          </Form>
           {/* Navigation */}
           <Nav navbar>{createLinks(routes)}</Nav>
           {/* Divider */}

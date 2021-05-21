@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,6 @@ import {
   Container,
   Media
 } from 'reactstrap';
-import Router from 'next/router';
 import { backUrl } from '../../config/config';
 import { logoutRequestAction } from '../../reducers/user';
 

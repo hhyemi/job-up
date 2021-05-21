@@ -236,7 +236,7 @@ const Calendar = () => {
   return (
     <>
       <Header />
-      <Container className="mt-3" fluid>
+      <Container className="mt-3 mb-5" fluid>
         <div className="mb-2">
           <span>
             <button type="button" className="btn btn-danger btn-sm" onClick={moveToday}>

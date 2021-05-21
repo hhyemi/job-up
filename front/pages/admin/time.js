@@ -85,6 +85,13 @@ const Time = () => {
     e.preventDefault();
     setStartDate('');
     setEndDate('');
+    setCheckItems([]);
+    dispatch({
+      type: LOAD_STUDY_REQUEST,
+      data: {
+        offset: 0
+      }
+    });
   }, []);
 
   // 페이지 이동
@@ -168,7 +175,7 @@ const Time = () => {
       <Container className="mt-4 stopwatch-container pb-5" fluid>
         <Row>
           <Col className="mb-5 mb-xl-0">
-            <Card className="shadow" style={{ minHeight: '625px' }}>
+            <Card className="shadow" style={{ minHeight: '645px' }}>
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col stop-div" style={{ maxWidth: 'calc(100% - 635px)' }}>
@@ -179,7 +186,7 @@ const Time = () => {
                       <Label>시작일자</Label>
                     </div>
                     <div className="end-date">
-                      <Input minValue={now} value={startDate} onChange={onStartDate} type="date" />
+                      <Input value={startDate} onChange={onStartDate} type="date" />
                     </div>
                     <div className="date-name">
                       <Label>종료일자</Label>
@@ -213,7 +220,7 @@ const Time = () => {
                           type="checkbox"
                           id="customCheckRegister"
                           onChange={(e) => handleAllCheck(e.target.checked)}
-                          checked={checkItems.length === studies.length}
+                          checked={studies.length !== 0 && checkItems.length === studies.length}
                         />
                         <label className="custom-control-label" htmlFor="customCheckRegister" />
                       </div>
@@ -246,7 +253,7 @@ const Time = () => {
             </Card>
           </Col>
         </Row>
-        <Row className="pt-3">
+        <Row className="pt-3 page-row">
           <Col>
             <button
               type="button"

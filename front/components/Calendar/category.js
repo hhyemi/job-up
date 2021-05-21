@@ -134,7 +134,7 @@ const Category = () => {
                   type="checkbox"
                   id="customCheckRegister"
                   onChange={(e) => handleAllCheck(e.target.checked)}
-                  checked={checkItems.length === categories.length}
+                  checked={categories.length !== 0 && checkItems.length === categories.length}
                 />
                 <label className="custom-control-label" htmlFor="customCheckRegister" />
               </div>

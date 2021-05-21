@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -83,30 +83,13 @@ const CommentList = ({ comment, setAlertType, setAlertShow, setAlertTitle }) => 
   return (
     <>
       <Row className="comment-list-row">
-        <Media className="align-items-center pl-3 mt-2">
+        <Media className="align-items-center pl-3">
           <span className="avatar avatar-sm rounded-circle">
             <img alt="..." src={`${backUrl}/${User.src}`} />
           </span>
-          <Media className="ml-2 d-none d-lg-block">
+          <Media className="ml-2d-lg-block">
             <span className="mb-0 text-md font-weight-bold">{User.name}</span>
-            <span className="mb-0 ml- text-sm text-muted ml-2">{createdAt}</span>
-            <div className="mb-0 text-md text-darker mt-1">
-              {uptFormOpen ? (
-                <>
-                  <InputGroup className="upt-comment-input">
-                    <Input type="textarea" value={uptContent} onChange={onUptContent} />
-                  </InputGroup>
-                  <button className="btn btn-sm btn-outline-primary mt-2 f-r" type="button" onClick={uptComment}>
-                    수정
-                  </button>
-                  <button className="btn btn-sm btn-outline-default m-2 f-r" type="button" onClick={onUptCancel}>
-                    취소
-                  </button>
-                </>
-              ) : (
-                content
-              )}
-            </div>
+            <span className="mb-0 ml- text-sm text-muted ml-2 pt-1">{createdAt}</span>
           </Media>
         </Media>
         {me.id === User.id && (
@@ -127,6 +110,23 @@ const CommentList = ({ comment, setAlertType, setAlertShow, setAlertTitle }) => 
           </UncontrolledDropdown>
         )}
       </Row>
+      {uptFormOpen ? (
+        <div className="mb-0 text-md text-darker mt-1 mb-5" style={{ paddingLeft: '2.3rem' }}>
+          <InputGroup className="upt-comment-input">
+            <Input type="textarea" value={uptContent} onChange={onUptContent} />
+          </InputGroup>
+          <button className="btn btn-sm btn-outline-primary mt-2 f-r" type="button" onClick={uptComment}>
+            수정
+          </button>
+          <button className="btn btn-sm btn-outline-default m-2 f-r" type="button" onClick={onUptCancel}>
+            취소
+          </button>
+        </div>
+      ) : (
+        <div className="mb-0 text-md text-darker mt-1" style={{ paddingLeft: '2.3rem' }}>
+          {content}
+        </div>
+      )}
       <SweetAlert
         warning
         showCancel
