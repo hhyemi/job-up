@@ -10,7 +10,7 @@
 * react, next
 * immer, faker, prop-types
 * redux, redux-saga
-* styled-components, ant-design, fortawesome, antd, bootstrap, reactstrap
+* styled-components, ant-design, fortawesome, antd, reactstrap
 * chart.js, tui-calendar
 * react-calendar, react-dnd, react-quill, react-color, react-bootstrap-sweetalert
 * react-github-login, react-google-login
@@ -39,5 +39,5 @@
 
 
 ## 6. 영상
-### 구현영상ㄴㅊㅌ
+### 구현영상
 
