@@ -40,4 +40,4 @@
 
 ## 6. 영상
 ### 구현영상
-
+https://www.youtube.com/watch?v=6afOpvRQCpc
