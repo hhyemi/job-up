@@ -35,6 +35,9 @@
 
 ## 4. 화면구성
 
+![스크린샷](https://user-images.githubusercontent.com/50124537/119265627-51aaf380-bc22-11eb-83f2-e67d6598b4be.png)
+
+
 ## 6. 영상
 ### 구현영상ㄴㅊㅌ
 
