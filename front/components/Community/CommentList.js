@@ -87,7 +87,7 @@ const CommentList = ({ comment, setAlertType, setAlertShow, setAlertTitle }) => 
           <span className="avatar avatar-sm rounded-circle">
             <img alt="..." src={`${backUrl}/${User.src}`} />
           </span>
-          <Media className="ml-2d-lg-block">
+          <Media className="ml-2d-lg-block" style={{ marginLeft: '7px' }}>
             <span className="mb-0 text-md font-weight-bold">{User.name}</span>
             <span className="mb-0 ml- text-sm text-muted ml-2 pt-1">{createdAt}</span>
           </Media>
@@ -111,7 +111,7 @@ const CommentList = ({ comment, setAlertType, setAlertShow, setAlertTitle }) => 
         )}
       </Row>
       {uptFormOpen ? (
-        <div className="mb-0 text-md text-darker mt-1 mb-5" style={{ paddingLeft: '2.3rem' }}>
+        <div className="mb-0 text-md text-darker mt-1 mb-5" style={{ marginLeft: '42px' }}>
           <InputGroup className="upt-comment-input">
             <Input type="textarea" value={uptContent} onChange={onUptContent} />
           </InputGroup>
@@ -123,7 +123,7 @@ const CommentList = ({ comment, setAlertType, setAlertShow, setAlertTitle }) => 
           </button>
         </div>
       ) : (
-        <div className="mb-0 text-md text-darker mt-1" style={{ paddingLeft: '2.3rem' }}>
+        <div className="mb-0 text-md text-darker mt-1" style={{ marginLeft: '42px' }}>
           {content}
         </div>
       )}

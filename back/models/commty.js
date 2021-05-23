@@ -7,7 +7,7 @@ module.exports = class Commty extends Model {
     return super.init(
       {
         title: {
-          type: DataTypes.STRING(30),
+          type: DataTypes.STRING(500),
           allowNull: false
         },
         content: {

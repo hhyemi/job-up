@@ -186,7 +186,7 @@ const CommtyList = ({ tag, setAddPostOpen, setAlertShow, setAlertType, setAlertT
           </Card>
         </Col>
       </Row>
-      <Row className="pt-3">
+      <Row className="pt-3 pb-4">
         <Col>
           <nav aria-label="...">
             <Pagination>

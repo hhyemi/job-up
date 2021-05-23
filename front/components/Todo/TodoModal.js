@@ -26,7 +26,7 @@ const TodoModal = ({ clickCategory, todo }) => {
   const [Todocategory, setCategory] = useState(clickCategory * 1 || category); // 카테고리
   const [Todotitle, onChangeTitle] = useInput(title); // 제목
   const [Todocontent, onChangeContent] = useInput(content); // 내용
-  const [Tododate, onChangeDate] = useInput(deadline); // 마감일자
+  const [Tododate, onChangeDate] = useInput(deadline && deadline.toString().substring(0, 10)); // 마감일자
   const now = todayDate(); // 오늘 날짜
 
   const [delAlertShow, setDelAlertShow] = useState(false);

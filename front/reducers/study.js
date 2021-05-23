@@ -96,8 +96,8 @@ const reducer = (state = initialState, action) =>
       case ADD_STUDY_SUCCESS:
         draft.addStudyLoading = false;
         draft.addStudyDone = true;
-        draft.studies.push(action.data);
-        draft.todayStudies.push(action.data);
+        draft.studies.unshift(action.data);
+        draft.todayStudies.unshift(action.data);
         break;
       case ADD_STUDY_FAILURE:
         draft.addStudyLoading = false;
