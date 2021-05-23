@@ -34,7 +34,7 @@
 * 정보공유를 위한 커뮤니티 기능
 
 ## 4. 화면구성
-
+https://github.com/hhyemi/job-up/issues/2#issue-899038397
 ![스크린샷](https://user-images.githubusercontent.com/50124537/119265627-51aaf380-bc22-11eb-83f2-e67d6598b4be.png)
 
 
