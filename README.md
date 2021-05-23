@@ -7,15 +7,24 @@
 ## 2. 사용기술
 ### Frontend
 
-* 
+* react, next
+* immer, faker, prop-types
+* redux, redux-saga
+* styled-components, ant-design, fortawesome, antd, bootstrap, reactstrap
+* chart.js, tui-calendar
+* react-calendar, react-dnd, react-quill, react-color, react-bootstrap-sweetalert
+* react-github-login, react-google-login
+* webpack, babel, eslint, dotenv-webpack
 
 ### Backend
 
-* 
-
-### API 
-
-* 
+* mysql, sequelize
+* node, express, nodemon
+* axios, cors, helmet, hpp
+* bcrypt, cookie-parser, passport
+* dotenv, morgan
+* multer, ejs
+* nodemailer
 
 ## 3. 기능
 * 달력형태로 일정을 기록할 수 있는 기능
@@ -27,5 +36,5 @@
 ## 4. 화면구성
 
 ## 6. 영상
-### 구현영상
+### 구현영상ㄴㅊㅌ
 
