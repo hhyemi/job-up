@@ -10,7 +10,7 @@
 * react, next
 * immer, faker, prop-types
 * redux, redux-saga
-* styled-components, ant-design, fortawesome, reactstrap
+* styled-components, fortawesome, reactstrap
 * chart.js, tui-calendar
 * react-calendar, react-dnd, react-quill, react-color, react-bootstrap-sweetalert
 * react-github-login, react-google-login
