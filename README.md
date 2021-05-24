@@ -1,4 +1,4 @@
-# job-up (직업을 잡아)
+# job-up (직업을 잡어)
 취업준비생을 위한 일정관리와 정보기록 및 공유를 위한 취업관리 웹사이트 :memo: ✏️
 
 ## 1. 개발기간
@@ -40,4 +40,4 @@
 
 ## 6. 영상
 ### 구현영상
-https://www.youtube.com/watch?v=6afOpvRQCpc
+https://www.youtube.com/watch?v=UpsirKm8t5c
